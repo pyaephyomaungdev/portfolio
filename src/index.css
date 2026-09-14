@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #fbfbfa;
+  --ink: #1a1a1a;
+  --muted: #6b6b6b;
+  --rule: #e8e8e6;
+  --soft: #f4f4f2;
+  --accent: #f54e00;
+  --accent-soft: #ffe8de;
+  --font: "DM Sans", system-ui, sans-serif;
+  --display: "Instrument Serif", Georgia, serif;
+}
+
+html {
+  color-scheme: light;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--ink) 22%, transparent) transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--ink) 22%, transparent);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--ink) 40%, transparent);
+}
+
+/* Desktop: hide page scrollbar (scroll still works) */
+@media (min-width: 640px) {
+  html {
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer base {
+  a {
+    color: inherit;
+  }
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.heatmap-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.heatmap-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.heatmap-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--ink) 25%, transparent);
+  border-radius: 999px;
+}
+
+@keyframes heatmap-in {
+  from {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.heatmap-cell {
+  animation: heatmap-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.heatmap-cell:hover,
+.heatmap-cell:focus-visible {
+  transform: scale(1.35);
+  filter: brightness(1.08);
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heatmap-cell {
+    animation: none;
+    transition: none;
+  }
+
+  .heatmap-cell:hover,
+  .heatmap-cell:focus-visible {
+    transform: none;
+  }
+}
