@@ -5,7 +5,7 @@ export const initialPortfolioData: Portfolio = {
     name: "Pyae Phyo Maung",
     handle: "pyaephyomaung",
     headline: "Full-stack engineer",
-    avatarUrl: "https://github.com/pyaephyomaungdev.png",
+    avatarUrl: "/avatar.jpg",
     location: "Thailand",
     emailPublic: "pyaephyomaung.dev@gmail.com",
     githubUrl: "https://github.com/pyaephyomaungdev",
