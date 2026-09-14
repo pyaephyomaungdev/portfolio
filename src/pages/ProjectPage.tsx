@@ -60,7 +60,20 @@ export function ProjectPage() {
         {error ? (
           <p className="mt-8 text-sm text-red-700">{error}</p>
         ) : !project ? (
-          <p className="mt-8 text-sm text-[var(--muted)]">Loading…</p>
+          <div className="mt-8 animate-pulse space-y-4">
+            <div className="h-4 w-16 rounded bg-[var(--soft)]" />
+            <div className="h-10 w-2/3 rounded-lg bg-[var(--soft)]" />
+            <div className="h-4 w-32 rounded bg-[var(--soft)]" />
+            <div className="mt-6 flex gap-3">
+              <div className="h-9 w-24 rounded-lg bg-[var(--soft)]" />
+              <div className="h-9 w-24 rounded-lg bg-[var(--soft)]" />
+            </div>
+            <div className="mt-8 space-y-2.5">
+              <div className="h-4 w-full rounded bg-[var(--soft)]" />
+              <div className="h-4 w-5/6 rounded bg-[var(--soft)]" />
+              <div className="h-4 w-4/6 rounded bg-[var(--soft)]" />
+            </div>
+          </div>
         ) : (
           <article className="mt-8">
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
@@ -73,15 +86,16 @@ export function ProjectPage() {
               <p className="mt-2 text-sm text-[var(--muted)]">{project.period}</p>
             ) : null}
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               {project.url ? (
                 <a
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-primary inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium transition"
+                  className="btn-primary inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition"
                 >
-                  View live
+                  <span>View live</span>
+                  <span aria-hidden>↗</span>
                 </a>
               ) : null}
               {project.repoUrl ? (
@@ -89,10 +103,16 @@ export function ProjectPage() {
                   href={project.repoUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center rounded-lg border border-[var(--rule)] bg-white px-4 py-2 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--rule)] bg-white px-4 py-2 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
                 >
-                  Source
+                  <span>Source code</span>
+                  <span aria-hidden>↗</span>
                 </a>
+              ) : null}
+              {!project.url && !project.repoUrl ? (
+                <span className="inline-flex items-center rounded-md border border-[var(--rule)] bg-[var(--soft)] px-3 py-1.5 text-xs font-medium text-[var(--muted)]">
+                  Internal Platform
+                </span>
               ) : null}
             </div>
 

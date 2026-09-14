@@ -84,7 +84,7 @@ export const initialPortfolioData: Portfolio = {
       title: "DeskKit",
       slug: "deskkit",
       summary:
-        "Local-first browser suite for private work — PII masking, PDF tools, image redact, metadata strip, and notes. Bytes stay on device.",
+        "Local-first privacy suite running sensitive tools entirely in-browser: PII masking, PDF tools, redact, and encrypted notes.",
       body: [
         "DeskKit is a local-first privacy suite that runs sensitive tools in the browser: SecureLens for PII masking in AI chats, PDF Pages / Stamp / Merge / Split / Compress, Image Redact, Metadata Strip, and Notes.",
         "",
@@ -95,7 +95,7 @@ export const initialPortfolioData: Portfolio = {
         "A hosted PII mask/unmask API with daily free quota is also available for agents and backends that need Zero Data Retention-style processing.",
       ].join("\n"),
       period: null,
-      url: "https://deskkit.space/",
+      url: null,
       repoUrl: "https://github.com/pyaephyomaungdev/secure-lens",
       language: "TypeScript",
       techStack: [
@@ -117,7 +117,7 @@ export const initialPortfolioData: Portfolio = {
       title: "JSON Link",
       slug: "json-link",
       summary:
-        "Local-first localization workspace and spreadsheet studio for software teams and AI coding assistants with two-way disk sync and MCP server.",
+        "Local-first localization workspace and spreadsheet studio with two-way disk sync and native MCP server for AI coding assistants.",
       body: [
         "JSON Link is a local-first localization workspace and spreadsheet studio designed for software teams and AI coding assistants.",
         "",

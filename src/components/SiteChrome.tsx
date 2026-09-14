@@ -6,6 +6,7 @@ const NAV = [
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
+  { id: "contact", label: "Contact" },
 ] as const;
 
 export function SiteHeader({ name }: { name?: string | null }) {
@@ -51,10 +52,10 @@ export function SiteHeader({ name }: { name?: string | null }) {
           className="font-semibold tracking-tight"
           onClick={() => setOpen(false)}
         >
-          {name || "Portfolio"}
+          {name || "Pyae Phyo Maung"}
         </Link>
 
-        <nav className="hidden gap-4 text-sm text-[var(--muted)] sm:flex">
+        <nav className="hidden gap-5 text-sm text-[var(--muted)] sm:flex">
           {NAV.map((item) => (
             <button
               key={item.id}
@@ -119,7 +120,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
 export function SiteFooter({ name }: { name?: string | null }) {
   return (
     <footer className="border-t border-[var(--rule)] py-8 text-center text-sm text-[var(--muted)]">
-      © {new Date().getFullYear()} {name || "PPM"}
+      © {new Date().getFullYear()} {name || "Pyae Phyo Maung"}
     </footer>
   );
 }

@@ -110,14 +110,17 @@ export function ContributionHeatmap() {
             {loading ? "…" : `${(data?.total ?? 0).toLocaleString()} contributions`}
             <span className="ml-2 text-base font-normal text-[var(--muted)]">in {year}</span>
           </h2>
+          <p className="mt-0.5 text-xs text-[var(--muted)]">
+            Verified public activity on GitHub
+          </p>
         </div>
-        <div className="flex rounded-lg border border-[var(--rule)] bg-white p-0.5">
+        <div className="flex rounded-lg border border-[var(--rule)] bg-white p-1">
           {years.map((y) => (
             <button
               key={y}
               type="button"
               onClick={() => setYear(y)}
-              className={`rounded-md px-2.5 py-1 text-sm transition-colors ${
+              className={`flex min-h-[44px] min-w-[48px] items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors sm:min-h-0 sm:min-w-0 sm:px-2.5 sm:py-1 ${
                 y === year ? "btn-primary" : "text-[var(--muted)] hover:text-[var(--ink)]"
               }`}
             >
@@ -216,7 +219,11 @@ export function ContributionHeatmap() {
         </div>
 
         {needsScroll ? (
-          <p className="mt-2 text-[11px] text-[var(--muted)] sm:hidden">Swipe sideways to see the full year</p>
+          <div className="mt-2.5 flex items-center justify-start text-[11px] text-[var(--muted)] sm:hidden">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-[var(--rule)] bg-white px-2.5 py-1 text-[11px] font-medium text-[var(--muted)] shadow-xs">
+              <span aria-hidden>↔</span> Swipe horizontally to view full year
+            </span>
+          </div>
         ) : null}
 
         <div className="mt-3 flex items-center justify-between gap-3 text-[11px] text-[var(--muted)] sm:text-xs">
