@@ -10,11 +10,11 @@ export const initialPortfolioData: Portfolio = {
     emailPublic: "pyaephyomaung.dev@gmail.com",
     githubUrl: "https://github.com/pyaephyomaungdev",
     websiteUrl: "https://github.com/pyaephyomaungdev",
-    joinedLabel: "Joined recently",
+    joinedLabel: null,
     bio: "Full-stack engineer building web platforms, clinic systems, and privacy-minded tools across Thailand and remote teams.",
   },
   stats: [
-    { id: "stat-1", label: "Years building", value: "4+", sortOrder: 0 },
+    { id: "stat-1", label: "Years building", value: "6+", sortOrder: 0 },
     { id: "stat-2", label: "Focus", value: "Full-stack", sortOrder: 1 },
     { id: "stat-3", label: "Based in", value: "Thailand", sortOrder: 2 },
     { id: "stat-4", label: "Open to", value: "Remote", sortOrder: 3 },

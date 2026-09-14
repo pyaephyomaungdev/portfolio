@@ -27,15 +27,17 @@ export function HomePage() {
       <SiteHeader name={p?.name} />
 
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
-        <section className="flex flex-wrap items-start gap-5">
+        <section className="flex flex-wrap items-start gap-5 sm:gap-6">
           {p?.avatarUrl ? (
-            <img
-              src={p.avatarUrl}
-              alt={p.name}
-              className="h-20 w-20 rounded-2xl border border-[var(--rule)] object-cover"
-            />
+            <div className="relative shrink-0">
+              <img
+                src={p.avatarUrl}
+                alt={p.name}
+                className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-[var(--rule)] object-cover shadow-sm ring-1 ring-black/5"
+              />
+            </div>
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[var(--rule)] bg-[var(--soft)] text-2xl font-semibold text-[var(--muted)]">
+            <div className="flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl border border-[var(--rule)] bg-[var(--soft)] text-3xl font-semibold text-[var(--muted)]">
               {(p?.name || "?").slice(0, 1)}
             </div>
           )}
@@ -48,7 +50,6 @@ export function HomePage() {
               {p?.headline ? ` · ${p.headline}` : ""}
             </p>
             <div className="mt-3 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--muted)]">
-              {p?.joinedLabel ? <span>{p.joinedLabel}</span> : null}
               {p?.location ? <span>{p.location}</span> : null}
               {p?.githubUrl ? (
                 <a
