@@ -201,7 +201,7 @@ export const initialPortfolioData: Portfolio = {
     },
     {
       id: "exp-3",
-      name: "Ministry of Labour",
+      name: "Freelance Developer",
       logoUrl: null,
       location: null,
       sortOrder: 2,
@@ -209,14 +209,14 @@ export const initialPortfolioData: Portfolio = {
         {
           id: "role-4",
           companyId: "exp-3",
-          title: "IT Manager",
-          employmentType: "Full-time",
+          title: "Android Developer with Java Native",
+          employmentType: null,
           startDate: "Aug 2021",
           endDate: "Dec 2023",
           location: null,
           skills: [
-            "Information Technology Infrastructure",
-            "Technology Management",
+            "Java Native",
+            "Android Development",
           ],
           sortOrder: 0,
         },

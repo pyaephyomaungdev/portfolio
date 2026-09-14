@@ -27,7 +27,7 @@ export function HomePage() {
       <SiteHeader name={p?.name} />
 
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
-        <section className="flex flex-wrap items-start gap-5 sm:gap-6">
+        <section className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
           {p?.avatarUrl ? (
             <div className="relative shrink-0">
               <img

@@ -36,7 +36,7 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
                   </p>
                   {role.skills?.length ? (
                     <p className="mt-2 text-sm text-[var(--muted)]">
-                      <span className="mr-1 text-[var(--accent)]">◆</span>
+                      <span className="mr-1 text-[var(--ink)]">◆</span>
                       {role.skills.join(", ")}
                     </p>
                   ) : null}
@@ -59,7 +59,7 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
               <ol className="relative ml-5 mt-4 border-l border-[var(--rule)] pl-6">
                 {co.roles.map((role) => (
                   <li key={role.id} className="relative pb-5 last:pb-0">
-                    <span className="absolute -left-[1.91rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[var(--rule)] bg-white" />
+                    <span className="absolute -left-[calc(1.5rem+0.5px)] top-1.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-[var(--rule)] bg-white" />
                     <h4 className="font-semibold">{role.title}</h4>
                     {role.employmentType ? (
                       <p className="text-sm">{role.employmentType}</p>
@@ -70,7 +70,7 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
                     </p>
                     {role.skills?.length ? (
                       <p className="mt-1.5 text-sm text-[var(--muted)]">
-                        <span className="mr-1 text-[var(--accent)]">◆</span>
+                        <span className="mr-1 text-[var(--ink)]">◆</span>
                         {role.skills.join(", ")}
                       </p>
                     ) : null}
