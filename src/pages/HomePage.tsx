@@ -35,28 +35,28 @@ export function HomePage() {
               <img
                 src={p.avatarUrl}
                 alt={p.name}
-                className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-[var(--rule)] object-cover shadow-sm ring-1 ring-black/5"
+                className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
               />
             </div>
           ) : (
-            <div className="flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl border border-[var(--rule)] bg-[var(--soft)] text-3xl font-semibold text-[var(--muted)]">
+            <div className="flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl border border-rule bg-soft text-3xl font-semibold text-muted">
               {(p?.name || "P").slice(0, 1)}
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <h1 className="font-[family-name:var(--display)] text-4xl tracking-tight sm:text-5xl">
+            <h1 className="font-display text-4xl tracking-tight sm:text-5xl">
               {p?.name || "Pyae Phyo Maung"}
             </h1>
-            <p className="mt-1 text-[var(--muted)]">
+            <p className="mt-1 text-muted">
               @{p?.handle || "pyaephyomaung"}
               {p?.headline ? ` · ${p.headline}` : ""}
             </p>
-            <div className="mt-3 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-[var(--muted)]">
+            <div className="mt-3 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted">
               {p?.location ? <span>{p.location}</span> : null}
               {p?.githubUrl ? (
                 <a
                   href={p.githubUrl}
-                  className="underline-offset-2 hover:underline hover:text-[var(--ink)]"
+                  className="underline-offset-2 hover:underline hover:text-ink"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -67,13 +67,13 @@ export function HomePage() {
                 <a
                   href={`mailto:${p.emailPublic}`}
                   title={p.emailPublic}
-                  className="underline-offset-2 hover:underline hover:text-[var(--ink)]"
+                  className="underline-offset-2 hover:underline hover:text-ink"
                 >
                   {p.emailPublic}
                 </a>
               ) : null}
             </div>
-            {p?.bio ? <p className="mt-4 max-w-xl text-[15px] leading-relaxed">{p.bio}</p> : null}
+            {p?.bio ? <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-ink/90">{p.bio}</p> : null}
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
@@ -87,7 +87,7 @@ export function HomePage() {
               <button
                 type="button"
                 onClick={() => scrollToId("projects")}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--rule)] bg-white px-4 py-2 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)] cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
               >
                 <span>View work</span>
               </button>
@@ -99,7 +99,7 @@ export function HomePage() {
           <section className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {data.stats.map((s) => (
               <div key={s.id}>
-                <p className="text-xs font-medium text-[var(--muted)]">{s.label}</p>
+                <p className="text-xs font-medium text-muted">{s.label}</p>
                 <p className="mt-1 text-2xl font-semibold tracking-tight">{s.value}</p>
               </div>
             ))}
@@ -110,10 +110,10 @@ export function HomePage() {
 
         {data.projects?.length ? (
           <section id="projects" className="mt-16 scroll-mt-24">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Projects
             </p>
-            <h2 className="mt-1 font-[family-name:var(--display)] text-3xl tracking-tight">
+            <h2 className="mt-1 font-display text-3xl tracking-tight">
               Selected work
             </h2>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -121,24 +121,24 @@ export function HomePage() {
                 <Link
                   key={proj.id}
                   to={`/projects/${proj.slug}`}
-                  className="group relative flex flex-col justify-between rounded-xl border border-[var(--rule)] bg-white p-4 transition hover:border-[color-mix(in_oklab,var(--ink)_25%,var(--rule))]"
+                  className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition hover:border-ink/30"
                 >
                   <div>
-                    <span className="absolute right-3 top-3 text-xs text-[var(--muted)]">{i + 1}</span>
+                    <span className="absolute right-3 top-3 text-xs text-muted">{i + 1}</span>
                     <h3 className="pr-6 font-semibold tracking-tight group-hover:underline">
                       {proj.title}
                     </h3>
                     {proj.period ? (
-                      <p className="mt-1 text-xs text-[var(--muted)]">{proj.period}</p>
+                      <p className="mt-1 text-xs text-muted">{proj.period}</p>
                     ) : null}
                     {proj.summary ? (
-                      <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">{proj.summary}</p>
+                      <p className="mt-2 text-sm text-muted leading-relaxed">{proj.summary}</p>
                     ) : null}
                   </div>
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--rule)] pt-3">
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
                     {proj.language ? (
-                      <p className="text-xs text-[var(--muted)]">
-                        <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-[var(--ink)]" />
+                      <p className="text-xs text-muted">
+                        <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />
                         {proj.language}
                       </p>
                     ) : (
@@ -146,11 +146,11 @@ export function HomePage() {
                     )}
                     <div>
                       {proj.url ? (
-                        <span className="text-xs font-medium text-[var(--ink)]">Live ↗</span>
+                        <span className="text-xs font-medium text-ink">Live ↗</span>
                       ) : proj.repoUrl ? (
-                        <span className="text-xs font-medium text-[var(--muted)] group-hover:text-[var(--ink)]">Source ↗</span>
+                        <span className="text-xs font-medium text-muted group-hover:text-ink">Source ↗</span>
                       ) : (
-                        <span className="text-xs text-[var(--muted)]">Overview →</span>
+                        <span className="text-xs text-muted">Overview →</span>
                       )}
                     </div>
                   </div>
@@ -164,17 +164,17 @@ export function HomePage() {
 
         {data.education?.length ? (
           <section id="education" className="mt-16 scroll-mt-24">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Education
             </p>
             <ul className="mt-4 space-y-4">
               {data.education.map((e) => (
-                <li key={e.id} className="border-b border-[var(--rule)] pb-4 last:border-0">
+                <li key={e.id} className="border-b border-rule pb-4 last:border-0">
                   <h3 className="font-semibold">{e.school}</h3>
-                  <p className="text-sm text-[var(--muted)]">
+                  <p className="text-sm text-muted">
                     {[e.degree, e.field].filter(Boolean).join(" · ")}
                   </p>
-                  <p className="text-sm text-[var(--muted)]">
+                  <p className="text-sm text-muted">
                     {[e.startDate, e.endDate].filter(Boolean).join(" – ")}
                   </p>
                 </li>
@@ -185,17 +185,17 @@ export function HomePage() {
 
         {data.honors?.length ? (
           <section className="mt-16">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Honors & awards
             </p>
             <ul className="mt-4 space-y-4">
               {data.honors.map((h) => (
                 <li key={h.id}>
                   <h3 className="font-semibold">{h.title}</h3>
-                  <p className="text-sm text-[var(--muted)]">
+                  <p className="text-sm text-muted">
                     {[h.issuer, h.date].filter(Boolean).join(" · ")}
                   </p>
-                  {h.description ? <p className="mt-1 text-sm">{h.description}</p> : null}
+                  {h.description ? <p className="mt-1 text-sm text-ink/90">{h.description}</p> : null}
                 </li>
               ))}
             </ul>
@@ -204,14 +204,14 @@ export function HomePage() {
 
         {data.licenses?.length ? (
           <section className="mt-16">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Licenses & certifications
             </p>
             <ul className="mt-4 space-y-4">
               {data.licenses.map((l) => (
                 <li key={l.id}>
                   <h3 className="font-semibold">{l.name}</h3>
-                  <p className="text-sm text-[var(--muted)]">
+                  <p className="text-sm text-muted">
                     {[l.issuer, l.issueDate].filter(Boolean).join(" · ")}
                   </p>
                 </li>
@@ -221,18 +221,18 @@ export function HomePage() {
         ) : null}
 
         <section id="contact" className="mt-16 scroll-mt-24">
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted">
             Contact
           </p>
-          <h2 className="mt-1 font-[family-name:var(--display)] text-3xl tracking-tight">
+          <h2 className="mt-1 font-display text-3xl tracking-tight">
             Let's build together
           </h2>
 
-          <div className="mt-6 rounded-xl border border-[var(--rule)] bg-white p-6 sm:p-8">
-            <p className="text-base text-[var(--ink)]">
+          <div className="mt-6 rounded-xl border border-rule bg-white p-6 sm:p-8">
+            <p className="text-base text-ink">
               I'm open to full-stack engineering opportunities, web platform development, and technical collaboration.
             </p>
-            <p className="mt-1.5 text-sm text-[var(--muted)]">
+            <p className="mt-1.5 text-sm text-muted">
               Based in Thailand · Available for remote work across global teams.
             </p>
 
@@ -255,7 +255,7 @@ export function HomePage() {
                         setTimeout(() => setCopied(false), 2000);
                       }
                     }}
-                    className="inline-flex items-center gap-2 rounded-lg border border-[var(--rule)] bg-white px-4 py-2.5 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)] cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
                   >
                     <span>{copied ? "Copied to clipboard! ✓" : "Copy email address"}</span>
                   </button>
@@ -266,7 +266,7 @@ export function HomePage() {
                   href={p.githubUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--rule)] bg-white px-4 py-2.5 text-sm font-medium text-[var(--muted)] transition hover:border-[var(--ink)] hover:text-[var(--ink)]"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-muted transition hover:border-ink hover:text-ink"
                 >
                   <span>GitHub</span>
                   <span aria-hidden>↗</span>

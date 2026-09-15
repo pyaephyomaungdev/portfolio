@@ -87,7 +87,6 @@ export function ContributionHeatmap() {
 
   const showTip = (el: HTMLElement, text: string) => {
     const r = el.getBoundingClientRect();
-    // Near viewport top → show below so the tooltip isn't clipped
     const place: "above" | "below" = r.top < 96 ? "below" : "above";
     setTip({
       x: r.left + r.width / 2,
@@ -103,25 +102,25 @@ export function ContributionHeatmap() {
     <section className="mt-14">
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted">
             Contributions
           </p>
           <h2 className="mt-1 text-2xl font-semibold tracking-tight">
             {loading ? "…" : `${(data?.total ?? 0).toLocaleString()} contributions`}
-            <span className="ml-2 text-base font-normal text-[var(--muted)]">in {year}</span>
+            <span className="ml-2 text-base font-normal text-muted">in {year}</span>
           </h2>
-          <p className="mt-0.5 text-xs text-[var(--muted)]">
+          <p className="mt-0.5 text-xs text-muted">
             Verified public activity on GitHub
           </p>
         </div>
-        <div className="flex rounded-lg border border-[var(--rule)] bg-white p-1">
+        <div className="flex rounded-lg border border-rule bg-white p-1">
           {years.map((y) => (
             <button
               key={y}
               type="button"
               onClick={() => setYear(y)}
-              className={`flex min-h-[44px] min-w-[48px] items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors sm:min-h-0 sm:min-w-0 sm:px-2.5 sm:py-1 ${
-                y === year ? "btn-primary" : "text-[var(--muted)] hover:text-[var(--ink)]"
+              className={`flex min-h-11 min-w-12 items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors sm:min-h-0 sm:min-w-0 sm:px-2.5 sm:py-1 cursor-pointer ${
+                y === year ? "btn-primary" : "text-muted hover:text-ink"
               }`}
             >
               {y}
@@ -154,7 +153,7 @@ export function ContributionHeatmap() {
                   {monthLabels.map((label, i) => (
                     <div
                       key={i}
-                      className="overflow-visible text-[10px] leading-none text-[var(--muted)] sm:text-[11px]"
+                      className="overflow-visible text-[10px] sm:text-xs leading-none text-muted"
                     >
                       {label ?? ""}
                     </div>
@@ -195,7 +194,7 @@ export function ContributionHeatmap() {
                             onMouseLeave={() => setTip(null)}
                             onFocus={(e) => showTip(e.currentTarget, `${d.count} on ${d.date}`)}
                             onBlur={() => setTip(null)}
-                            className={`heatmap-cell rounded-[2px] border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink)] focus-visible:ring-offset-1 sm:rounded-[3px] ${
+                            className={`heatmap-cell rounded-xs border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-1 sm:rounded-xs cursor-pointer ${
                               needsScroll ? "" : "aspect-square w-full min-w-0"
                             }`}
                             style={{
@@ -212,21 +211,21 @@ export function ContributionHeatmap() {
               </div>
             </div>
           ) : (
-            <div className="flex h-24 items-center justify-center text-sm text-[var(--muted)]">
+            <div className="flex h-24 items-center justify-center text-sm text-muted">
               {loading ? "Loading…" : "No contribution data"}
             </div>
           )}
         </div>
 
         {needsScroll ? (
-          <div className="mt-2.5 flex items-center justify-start text-[11px] text-[var(--muted)] sm:hidden">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-[var(--rule)] bg-white px-2.5 py-1 text-[11px] font-medium text-[var(--muted)] shadow-xs">
+          <div className="mt-2.5 flex items-center justify-start text-xs text-muted sm:hidden">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-white px-2.5 py-1 text-xs font-medium text-muted shadow-xs">
               <span aria-hidden>↔</span> Swipe horizontally to view full year
             </span>
           </div>
         ) : null}
 
-        <div className="mt-3 flex items-center justify-between gap-3 text-[11px] text-[var(--muted)] sm:text-xs">
+        <div className="mt-3 flex items-center justify-between gap-3 text-xs text-muted">
           <span className="tabular-nums">
             {data?.source === "github" ? "Live from GitHub" : ""}
           </span>
@@ -235,7 +234,7 @@ export function ContributionHeatmap() {
             {LEVEL.map((c, i) => (
               <span
                 key={i}
-                className="inline-block h-2.5 w-2.5 rounded-[2px] sm:h-3 sm:w-3 sm:rounded-[3px]"
+                className="inline-block h-2.5 w-2.5 rounded-xs sm:h-3 sm:w-3 sm:rounded-xs"
                 style={{ backgroundColor: c }}
               />
             ))}
@@ -247,7 +246,7 @@ export function ContributionHeatmap() {
       {tip
         ? createPortal(
             <div
-              className="pointer-events-none fixed z-[100] whitespace-nowrap rounded-md bg-[var(--ink)] px-2 py-1 text-[11px] font-medium shadow-md"
+              className="pointer-events-none fixed z-50 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-xs font-medium shadow-md"
               style={{
                 left: tip.x,
                 top: tip.y,

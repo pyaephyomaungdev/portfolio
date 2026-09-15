@@ -45,7 +45,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-[var(--rule)] bg-[color-mix(in_oklab,var(--paper)_88%,transparent)] backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-rule bg-[color-mix(in_oklab,var(--paper)_88%,transparent)] backdrop-blur-md">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3">
         <Link
           to="/"
@@ -55,12 +55,12 @@ export function SiteHeader({ name }: { name?: string | null }) {
           {name || "Pyae Phyo Maung"}
         </Link>
 
-        <nav className="hidden gap-5 text-sm text-[var(--muted)] sm:flex">
+        <nav className="hidden gap-5 text-sm text-muted sm:flex">
           {NAV.map((item) => (
             <button
               key={item.id}
               type="button"
-              className="hover:text-[var(--ink)]"
+              className="hover:text-ink"
               onClick={() => goSection(item.id)}
             >
               {item.label}
@@ -70,7 +70,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
 
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-[var(--ink)] sm:hidden"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink sm:hidden"
           aria-expanded={open}
           aria-controls={menuId}
           aria-label={open ? "Close menu" : "Open menu"}
@@ -80,17 +80,17 @@ export function SiteHeader({ name }: { name?: string | null }) {
           <span className="relative block h-3.5 w-5" aria-hidden>
             <span
               className={`absolute left-0 top-0 block h-0.5 w-full rounded-full bg-current transition ${
-                open ? "translate-y-[6px] rotate-45" : ""
+                open ? "translate-y-1.5 rotate-45" : ""
               }`}
             />
             <span
-              className={`absolute left-0 top-[6px] block h-0.5 w-full rounded-full bg-current transition ${
+              className={`absolute left-0 top-1.5 block h-0.5 w-full rounded-full bg-current transition ${
                 open ? "opacity-0" : ""
               }`}
             />
             <span
-              className={`absolute left-0 top-[12px] block h-0.5 w-full rounded-full bg-current transition ${
-                open ? "-translate-y-[6px] -rotate-45" : ""
+              className={`absolute left-0 top-3 block h-0.5 w-full rounded-full bg-current transition ${
+                open ? "-translate-y-1.5 -rotate-45" : ""
               }`}
             />
           </span>
@@ -98,13 +98,13 @@ export function SiteHeader({ name }: { name?: string | null }) {
       </div>
 
       {open ? (
-        <div id={menuId} className="border-t border-[var(--rule)] bg-[var(--paper)] sm:hidden">
+        <div id={menuId} className="border-t border-rule bg-paper sm:hidden">
           <nav className="mx-auto flex max-w-3xl flex-col px-5 py-3">
             {NAV.map((item) => (
               <button
                 key={item.id}
                 type="button"
-                className="rounded-lg px-2 py-3 text-left text-base text-[var(--ink)] hover:bg-[var(--soft)]"
+                className="rounded-lg px-2 py-3 text-left text-base text-ink hover:bg-soft"
                 onClick={() => goSection(item.id)}
               >
                 {item.label}
@@ -119,7 +119,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
 
 export function SiteFooter({ name }: { name?: string | null }) {
   return (
-    <footer className="border-t border-[var(--rule)] py-8 text-center text-sm text-[var(--muted)]">
+    <footer className="border-t border-rule py-8 text-center text-sm text-muted">
       © {new Date().getFullYear()} {name || "Pyae Phyo Maung"}
     </footer>
   );

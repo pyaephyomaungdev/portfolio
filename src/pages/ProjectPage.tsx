@@ -9,7 +9,7 @@ export function ProjectPage() {
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [siteName, setSiteName] = useState<string | null>(null);
+  const [siteName, setSiteName] = useState<string | null>("Pyae Phyo Maung");
 
   useEffect(() => {
     if (!slug) return;
@@ -43,12 +43,12 @@ export function ProjectPage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader name={siteName} />
+      <SiteHeader name={siteName || "Pyae Phyo Maung"} />
 
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <button
           type="button"
-          className="text-sm text-[var(--muted)] underline-offset-2 hover:text-[var(--ink)] hover:underline"
+          className="text-sm text-muted underline-offset-2 hover:text-ink hover:underline cursor-pointer"
           onClick={() => {
             navigate({ pathname: "/", hash: "projects" });
             queueMicrotask(() => scrollToId("projects"));
@@ -58,32 +58,32 @@ export function ProjectPage() {
         </button>
 
         {error ? (
-          <p className="mt-8 text-sm text-red-700">{error}</p>
+          <p className="mt-8 text-sm text-destructive">{error}</p>
         ) : !project ? (
           <div className="mt-8 animate-pulse space-y-4">
-            <div className="h-4 w-16 rounded bg-[var(--soft)]" />
-            <div className="h-10 w-2/3 rounded-lg bg-[var(--soft)]" />
-            <div className="h-4 w-32 rounded bg-[var(--soft)]" />
+            <div className="h-4 w-16 rounded bg-soft" />
+            <div className="h-10 w-2/3 rounded-lg bg-soft" />
+            <div className="h-4 w-32 rounded bg-soft" />
             <div className="mt-6 flex gap-3">
-              <div className="h-9 w-24 rounded-lg bg-[var(--soft)]" />
-              <div className="h-9 w-24 rounded-lg bg-[var(--soft)]" />
+              <div className="h-9 w-24 rounded-lg bg-soft" />
+              <div className="h-9 w-24 rounded-lg bg-soft" />
             </div>
             <div className="mt-8 space-y-2.5">
-              <div className="h-4 w-full rounded bg-[var(--soft)]" />
-              <div className="h-4 w-5/6 rounded bg-[var(--soft)]" />
-              <div className="h-4 w-4/6 rounded bg-[var(--soft)]" />
+              <div className="h-4 w-full rounded bg-soft" />
+              <div className="h-4 w-5/6 rounded bg-soft" />
+              <div className="h-4 w-4/6 rounded bg-soft" />
             </div>
           </div>
         ) : (
           <article className="mt-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Project
             </p>
-            <h1 className="mt-2 font-[family-name:var(--display)] text-4xl tracking-tight sm:text-5xl">
+            <h1 className="mt-2 font-display text-4xl tracking-tight sm:text-5xl">
               {project.title}
             </h1>
             {project.period ? (
-              <p className="mt-2 text-sm text-[var(--muted)]">{project.period}</p>
+              <p className="mt-2 text-sm text-muted">{project.period}</p>
             ) : null}
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -92,7 +92,7 @@ export function ProjectPage() {
                   href={project.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-primary inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition"
+                  className="btn-primary inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer"
                 >
                   <span>View live</span>
                   <span aria-hidden>↗</span>
@@ -103,14 +103,14 @@ export function ProjectPage() {
                   href={project.repoUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--rule)] bg-white px-4 py-2 text-sm font-medium text-[var(--ink)] transition hover:border-[var(--ink)]"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
                 >
                   <span>Source code</span>
                   <span aria-hidden>↗</span>
                 </a>
               ) : null}
               {!project.url && !project.repoUrl ? (
-                <span className="inline-flex items-center rounded-md border border-[var(--rule)] bg-[var(--soft)] px-3 py-1.5 text-xs font-medium text-[var(--muted)]">
+                <span className="inline-flex items-center rounded-md border border-rule bg-soft px-3 py-1.5 text-xs font-medium text-muted">
                   Internal Platform
                 </span>
               ) : null}
@@ -123,7 +123,7 @@ export function ProjectPage() {
                   {project.techStack.map((t) => (
                     <li
                       key={t}
-                      className="rounded-md border border-[var(--rule)] bg-white px-2.5 py-1 text-xs font-medium text-[var(--ink)]"
+                      className="rounded-md border border-rule bg-white px-2.5 py-1 text-xs font-medium text-ink"
                     >
                       {t}
                     </li>
@@ -131,15 +131,15 @@ export function ProjectPage() {
                 </ul>
               </section>
             ) : project.language ? (
-              <p className="mt-8 text-sm text-[var(--muted)]">
-                <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-[var(--ink)]" />
+              <p className="mt-8 text-sm text-muted">
+                <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />
                 {project.language}
               </p>
             ) : null}
 
-            <section className="mt-10 space-y-4 text-[15px] leading-relaxed text-[var(--ink)]">
+            <section className="mt-10 space-y-4 text-base leading-relaxed text-ink">
               {paragraphs.map((para, i) => (
-                <p key={i} className="whitespace-pre-line text-[var(--muted)] first:text-[var(--ink)]">
+                <p key={i} className="whitespace-pre-line text-muted first:text-ink">
                   {para}
                 </p>
               ))}
@@ -148,7 +148,7 @@ export function ProjectPage() {
         )}
       </main>
 
-      <SiteFooter name={siteName} />
+      <SiteFooter name={siteName || "Pyae Phyo Maung"} />
     </div>
   );
 }

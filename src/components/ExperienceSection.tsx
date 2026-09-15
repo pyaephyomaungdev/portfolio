@@ -9,12 +9,12 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
 
   return (
     <section id="experience" className="mt-16 scroll-mt-24">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--muted)]">
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted">
         Experience
       </p>
-      <h2 className="mt-1 font-[family-name:var(--display)] text-3xl tracking-tight">Career</h2>
+      <h2 className="mt-1 font-display text-3xl tracking-tight">Career</h2>
 
-      <div className="mt-6 divide-y divide-[var(--rule)] rounded-xl border border-[var(--rule)] bg-white">
+      <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
         {companies.map((co) => {
           const multi = co.roles.length > 1;
           if (!multi && co.roles[0]) {
@@ -24,19 +24,19 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
                 <Logo name={co.name} url={co.logoUrl} />
                 <div className="min-w-0 flex-1">
                   <h3 className="text-base font-semibold">{role.title}</h3>
-                  <p className="text-sm text-[var(--ink)]">
+                  <p className="text-sm text-ink">
                     {co.name}
                     {role.employmentType ? ` · ${role.employmentType}` : ""}
                   </p>
-                  <p className="mt-0.5 text-sm text-[var(--muted)]">
+                  <p className="mt-0.5 text-sm text-muted">
                     {rolePeriod(role.startDate, role.endDate)}
                     {role.location || co.location
                       ? ` · ${role.location || co.location}`
                       : ""}
                   </p>
                   {role.skills?.length ? (
-                    <p className="mt-2 text-sm text-[var(--muted)]">
-                      <span className="mr-1 text-[var(--ink)]">◆</span>
+                    <p className="mt-2 text-sm text-muted">
+                      <span className="mr-1 text-ink">◆</span>
                       {role.skills.join(", ")}
                     </p>
                   ) : null}
@@ -52,25 +52,25 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
                 <div>
                   <h3 className="text-base font-semibold">{co.name}</h3>
                   {co.location ? (
-                    <p className="text-sm text-[var(--muted)]">{co.location}</p>
+                    <p className="text-sm text-muted">{co.location}</p>
                   ) : null}
                 </div>
               </div>
-              <ol className="relative ml-5 mt-4 border-l border-[var(--rule)] pl-6">
+              <ol className="relative ml-5 mt-4 border-l border-rule pl-6">
                 {co.roles.map((role) => (
                   <li key={role.id} className="relative pb-5 last:pb-0">
-                    <span className="absolute -left-[calc(1.5rem+0.5px)] top-1.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-[var(--rule)] bg-white" />
+                    <span className="absolute -left-[calc(1.5rem+0.5px)] top-1.5 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-rule bg-white" />
                     <h4 className="font-semibold">{role.title}</h4>
                     {role.employmentType ? (
                       <p className="text-sm">{role.employmentType}</p>
                     ) : null}
-                    <p className="text-sm text-[var(--muted)]">
+                    <p className="text-sm text-muted">
                       {rolePeriod(role.startDate, role.endDate)}
                       {role.location ? ` · ${role.location}` : ""}
                     </p>
                     {role.skills?.length ? (
-                      <p className="mt-1.5 text-sm text-[var(--muted)]">
-                        <span className="mr-1 text-[var(--ink)]">◆</span>
+                      <p className="mt-1.5 text-sm text-muted">
+                        <span className="mr-1 text-ink">◆</span>
                         {role.skills.join(", ")}
                       </p>
                     ) : null}
@@ -91,12 +91,12 @@ function Logo({ name, url }: { name: string; url: string | null }) {
       <img
         src={url}
         alt=""
-        className="h-12 w-12 shrink-0 rounded-lg border border-[var(--rule)] object-cover"
+        className="h-12 w-12 shrink-0 rounded-lg border border-rule object-cover"
       />
     );
   }
   return (
-    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[var(--rule)] bg-[var(--soft)] text-sm font-semibold text-[var(--muted)]">
+    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-rule bg-soft text-sm font-semibold text-muted">
       {name.slice(0, 1).toUpperCase()}
     </div>
   );

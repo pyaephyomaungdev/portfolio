@@ -12,6 +12,19 @@
   --display: "Instrument Serif", Georgia, serif;
 }
 
+@theme {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-soft: var(--soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-destructive: #b91c1c;
+  --font-display: var(--display);
+  --font-sans: var(--font);
+}
+
 html {
   color-scheme: light;
   scrollbar-width: thin;
