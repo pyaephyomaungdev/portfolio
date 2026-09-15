@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { GitHubStarButton } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
+import { TechIcon } from "../components/TechIcon";
 import { fetchPortfolio, fetchProject, type Project } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
 
@@ -264,9 +265,10 @@ export function ProjectPage() {
                   {project.techStack.map((t) => (
                     <li
                       key={t}
-                      className="rounded-md border border-rule bg-white px-2.5 py-1 text-xs font-medium text-ink"
+                      className="group inline-flex items-center gap-1.5 rounded-md border border-rule bg-white px-2.5 py-1.5 text-xs font-medium text-ink transition hover:border-ink/40"
                     >
-                      {t}
+                      <TechIcon name={t} className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-ink" />
+                      <span>{t}</span>
                     </li>
                   ))}
                 </ul>

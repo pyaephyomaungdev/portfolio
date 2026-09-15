@@ -4,6 +4,7 @@ import { ContributionHeatmap } from "../components/ContributionHeatmap";
 import { ExperienceSection } from "../components/ExperienceSection";
 import { GitHubStarBadge } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
+import { TechIcon } from "../components/TechIcon";
 import { initialPortfolioData } from "../data/portfolioData";
 import { fetchPortfolio, type Portfolio } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
@@ -139,9 +140,9 @@ export function HomePage() {
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
                     <div className="flex items-center gap-2.5">
                       {proj.language ? (
-                        <p className="text-xs text-muted">
-                          <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />
-                          {proj.language}
+                        <p className="inline-flex items-center gap-1.5 text-xs text-muted">
+                          <TechIcon name={proj.language} className="h-3 w-3 shrink-0 text-muted" />
+                          <span>{proj.language}</span>
                         </p>
                       ) : null}
                       {proj.isOpenSource && proj.repoUrl ? (
