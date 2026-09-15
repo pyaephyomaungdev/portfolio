@@ -45,7 +45,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-rule bg-[color-mix(in_oklab,var(--paper)_88%,transparent)] backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3">
         <Link
           to="/"

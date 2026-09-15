@@ -153,7 +153,7 @@ export function ContributionHeatmap() {
                   {monthLabels.map((label, i) => (
                     <div
                       key={i}
-                      className="overflow-visible text-[10px] sm:text-xs leading-none text-muted"
+                      className="overflow-visible text-xs leading-none text-muted"
                     >
                       {label ?? ""}
                     </div>
