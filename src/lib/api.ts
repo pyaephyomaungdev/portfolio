@@ -11,6 +11,18 @@ const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined)?.replace(
 const GITHUB_USERNAME = (import.meta.env.VITE_GITHUB_USERNAME as string | undefined) || "pyaephyomaungdev";
 
 export async function fetchPortfolio(): Promise<Portfolio> {
+  // In dev environment, check local admin API first if available
+  if (import.meta.env.DEV) {
+    try {
+      const res = await fetch("/api/admin/portfolio");
+      if (res.ok) {
+        return (await res.json()) as Portfolio;
+      }
+    } catch {
+      // Fall through
+    }
+  }
+
   if (API_BASE) {
     try {
       const res = await fetch(`${API_BASE}/api/public/portfolio`, { credentials: "include" });
@@ -22,6 +34,33 @@ export async function fetchPortfolio(): Promise<Portfolio> {
     }
   }
   return initialPortfolioData;
+}
+
+export async function savePortfolioJson(data: Portfolio): Promise<{ success: boolean; message: string }> {
+  const res = await fetch("/api/admin/portfolio", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Network error" }));
+    throw new Error(err.error || "Failed to save portfolio data");
+  }
+  return (await res.json()) as { success: boolean; message: string };
+}
+
+export async function uploadAvatarImage(dataUrl: string): Promise<string> {
+  const res = await fetch("/api/admin/upload-avatar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ dataUrl }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Upload failed" }));
+    throw new Error(err.error || "Failed to upload avatar");
+  }
+  const result = (await res.json()) as { success: boolean; url: string };
+  return result.url;
 }
 
 export async function fetchProject(slug: string): Promise<Project> {

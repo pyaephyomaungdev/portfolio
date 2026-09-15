@@ -209,9 +209,10 @@ export function ContributionHeatmap() {
                         const level = Math.min(4, Math.max(0, d.level)) as 0 | 1 | 2 | 3 | 4;
                         const delay = Math.min(wi * 8 + di * 4, 400);
                         return (
-                          <button
+                          <div
                             key={d.date}
-                            type="button"
+                            role="gridcell"
+                            tabIndex={0}
                             aria-label={`${d.date}: ${d.count} contribution${d.count === 1 ? "" : "s"}`}
                             onMouseEnter={(e) => showTip(e.currentTarget, `${d.count} on ${d.date}`)}
                             onMouseLeave={() => setTip(null)}

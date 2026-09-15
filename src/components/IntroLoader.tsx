@@ -6,6 +6,7 @@ export function IntroLoader() {
   const [isCurtainUp, setIsCurtainUp] = useState(false);
   const [isMounted, setIsMounted] = useState(() => {
     if (typeof window === "undefined") return false;
+    if (window.location.pathname.startsWith("/admin")) return false;
     return !sessionStorage.getItem("ppm_intro_seen");
   });
 
@@ -83,7 +84,7 @@ export function IntroLoader() {
     <aside
       role="status"
       aria-label="Loading portfolio"
-      className={`fixed inset-0 z-[100] flex flex-col justify-between bg-paper p-6 transition-all duration-800 ease-in-out sm:p-10 ${isCurtainUp
+      className={`fixed inset-0 z-loader flex flex-col justify-between bg-paper p-6 transition-all duration-800 ease-in-out sm:p-10 ${isCurtainUp
         ? "pointer-events-none -translate-y-full opacity-90"
         : "translate-y-0 opacity-100"
         }`}

@@ -1,5 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowRight, ExternalLink, Heart } from "lucide-react";
 import { scrollToId } from "../lib/scrollToId";
 
 const NAV = [
@@ -62,7 +63,11 @@ export function SiteHeader({ name }: { name?: string | null }) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-rule bg-paper/90 backdrop-blur-md">
+      <header
+        className={`sticky top-0 z-50 border-b border-rule backdrop-blur-md transition-colors ${
+          open ? "bg-paper" : "bg-paper/90"
+        }`}
+      >
         <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-3">
           <Link
             to="/"
@@ -141,9 +146,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
                   {item.sub}
                 </span>
               </div>
-              <span className="text-xl text-muted/50 transition-transform group-hover:translate-x-1 group-hover:text-ink">
-                →
-              </span>
+              <ArrowRight className="h-6 w-6 text-muted/50 transition-transform group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true" />
             </button>
           ))}
         </nav>
@@ -167,17 +170,19 @@ export function SiteHeader({ name }: { name?: string | null }) {
                 href="https://github.com/pyaephyomaungdev"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-ink transition"
+                className="inline-flex items-center gap-1 hover:text-ink transition"
               >
-                GitHub ↗
+                <span>GitHub</span>
+                <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
               </a>
               <a
                 href="https://www.linkedin.com/in/pyae-phyo-maung-052445217/"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-ink transition"
+                className="inline-flex items-center gap-1 hover:text-ink transition"
               >
-                LinkedIn ↗
+                <span>LinkedIn</span>
+                <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -190,7 +195,21 @@ export function SiteHeader({ name }: { name?: string | null }) {
 export function SiteFooter({ name }: { name?: string | null }) {
   return (
     <footer className="border-t border-rule py-8 text-center text-sm text-muted">
-      © {new Date().getFullYear()} {name || "Pyae Phyo Maung"}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 font-mono text-xs">
+        <span>© {new Date().getFullYear()} {name || "Pyae Phyo Maung"}</span>
+        <span className="hidden sm:inline text-muted/40">•</span>
+        <span className="inline-flex items-center gap-1.5">
+          Developed with <Heart className="h-3.5 w-3.5 fill-accent text-accent inline" aria-label="love" /> by{" "}
+          <a
+            href="https://pyaephyomaung.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="text-ink underline underline-offset-4 hover:text-accent transition font-medium"
+          >
+            Pyae Phyo Maung
+          </a>
+        </span>
+      </div>
     </footer>
   );
 }

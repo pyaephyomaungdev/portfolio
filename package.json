@@ -5,10 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "admin": "vite --port 5174 --open /admin",
+    "build": "node scripts/generate-seo.js && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "generate:icons": "python3 scripts/generate-favicons.py",
+    "generate:seo": "node scripts/generate-seo.js"
   },
   "dependencies": {
     "lucide-react": "^1.46.0",

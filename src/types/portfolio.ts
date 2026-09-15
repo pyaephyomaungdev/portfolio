@@ -7,6 +7,7 @@ export type Profile = {
   emailPublic: string | null;
   githubUrl: string | null;
   websiteUrl: string | null;
+  buyMeACoffeeUrl?: string | null;
   joinedLabel: string | null;
   bio: string | null;
 };
@@ -49,6 +50,7 @@ export type Project = {
   sortOrder: number;
   badge?: string;
   isOpenSource?: boolean;
+  buyMeACoffee?: boolean;
   caseStudy?: CaseStudy;
 };
 

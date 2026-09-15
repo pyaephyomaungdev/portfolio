@@ -5,7 +5,9 @@ import { ExperienceSection } from "../components/ExperienceSection";
 import { GitHubStarBadge } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { TechIcon } from "../components/TechIcon";
+import { ExpandableText } from "../components/ExpandableText";
 import { initialPortfolioData } from "../data/portfolioData";
+import { ArrowDown, ArrowRight, Check, ExternalLink } from "lucide-react";
 import { fetchPortfolio, type Portfolio } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
 
@@ -17,6 +19,16 @@ export function HomePage() {
   useEffect(() => {
     void fetchPortfolio().then(setData);
   }, []);
+
+  useEffect(() => {
+    if (data.profile?.name) {
+      document.title = `${data.profile.name} — ${data.profile.headline || "Software Engineer & Full-Stack Developer"}`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc && data.profile.bio) {
+        metaDesc.setAttribute("content", data.profile.bio);
+      }
+    }
+  }, [data.profile]);
 
   useEffect(() => {
     const id = location.hash.replace(/^#/, "");
@@ -37,6 +49,10 @@ export function HomePage() {
               <img
                 src={p.avatarUrl}
                 alt={p.name}
+                width={112}
+                height={112}
+                loading="eager"
+                decoding="async"
                 className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
               />
             </div>
@@ -75,7 +91,13 @@ export function HomePage() {
                 </a>
               ) : null}
             </div>
-            {p?.bio ? <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-ink/90">{p.bio}</p> : null}
+            {p?.bio ? (
+              <ExpandableText
+                text={p.bio}
+                bg="paper"
+                className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-ink/90"
+              />
+            ) : null}
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <button
@@ -84,7 +106,7 @@ export function HomePage() {
                 className="btn-primary inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer"
               >
                 <span>Get in touch</span>
-                <span aria-hidden>↓</span>
+                <ArrowDown className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               </button>
               <button
                 type="button"
@@ -134,7 +156,11 @@ export function HomePage() {
                       <p className="mt-1 text-xs text-muted">{proj.period}</p>
                     ) : null}
                     {proj.summary ? (
-                      <p className="mt-2 text-sm text-muted leading-relaxed">{proj.summary}</p>
+                      <ExpandableText
+                        text={proj.summary}
+                        className="mt-2 text-sm text-muted leading-relaxed"
+                        threshold={110}
+                      />
                     ) : null}
                   </div>
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
@@ -151,11 +177,20 @@ export function HomePage() {
                     </div>
                     <div>
                       {proj.url ? (
-                        <span className="text-xs font-medium text-ink">Live ↗</span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-ink">
+                          <span>Live</span>
+                          <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                        </span>
                       ) : proj.repoUrl ? (
-                        <span className="text-xs font-medium text-muted group-hover:text-ink">Source ↗</span>
+                        <span className="inline-flex items-center gap-1 text-xs font-medium text-muted group-hover:text-ink">
+                          <span>Source</span>
+                          <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                        </span>
                       ) : (
-                        <span className="text-xs text-muted">Overview →</span>
+                        <span className="inline-flex items-center gap-1 text-xs text-muted">
+                          <span>Overview</span>
+                          <ArrowRight className="h-3 w-3 shrink-0" aria-hidden="true" />
+                        </span>
                       )}
                     </div>
                   </div>
@@ -169,59 +204,117 @@ export function HomePage() {
 
         {data.education?.length ? (
           <section id="education" className="mt-16 scroll-mt-24">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+            <p className="font-mono text-xs uppercase tracking-widest text-muted">
               Education
             </p>
-            <ul className="mt-4 space-y-4">
+            <h2 className="mt-1 font-display text-3xl tracking-tight">
+              Academic background
+            </h2>
+            <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
               {data.education.map((e) => (
-                <li key={e.id} className="border-b border-rule pb-4 last:border-0">
-                  <h3 className="font-semibold">{e.school}</h3>
-                  <p className="text-sm text-muted">
-                    {[e.degree, e.field].filter(Boolean).join(" · ")}
-                  </p>
-                  <p className="text-sm text-muted">
+                <div key={e.id} className="p-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-ink">{e.school}</h3>
+                      {e.url ? (
+                        <a
+                          href={e.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-muted hover:text-ink transition"
+                          aria-label={`Visit ${e.school}`}
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      ) : null}
+                    </div>
+                    <p className="mt-0.5 text-sm text-muted">
+                      {[e.degree, e.field].filter(Boolean).join(" · ")}
+                    </p>
+                  </div>
+                  <p className="font-mono text-xs text-muted shrink-0">
                     {[e.startDate, e.endDate].filter(Boolean).join(" – ")}
                   </p>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         ) : null}
 
         {data.honors?.length ? (
           <section className="mt-16">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-              Honors & awards
+            <p className="font-mono text-xs uppercase tracking-widest text-muted">
+              Recognition
             </p>
-            <ul className="mt-4 space-y-4">
+            <h2 className="mt-1 font-display text-3xl tracking-tight">
+              Honors & awards
+            </h2>
+            <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
               {data.honors.map((h) => (
-                <li key={h.id}>
-                  <h3 className="font-semibold">{h.title}</h3>
-                  <p className="text-sm text-muted">
-                    {[h.issuer, h.date].filter(Boolean).join(" · ")}
-                  </p>
-                  {h.description ? <p className="mt-1 text-sm text-ink/90">{h.description}</p> : null}
-                </li>
+                <div key={h.id} className="p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1.5">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-ink">{h.title}</h3>
+                        {h.url ? (
+                          <a
+                            href={h.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-muted hover:text-ink transition"
+                            aria-label={`View honor details for ${h.title}`}
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        ) : null}
+                      </div>
+                      {h.issuer ? <p className="mt-0.5 text-xs text-muted">{h.issuer}</p> : null}
+                    </div>
+                    {h.date ? (
+                      <p className="font-mono text-xs text-muted shrink-0">{h.date}</p>
+                    ) : null}
+                  </div>
+                  {h.description ? <ExpandableText text={h.description} className="mt-2.5" /> : null}
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         ) : null}
 
         {data.licenses?.length ? (
           <section className="mt-16">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-              Licenses & certifications
+            <p className="font-mono text-xs uppercase tracking-widest text-muted">
+              Credentials
             </p>
-            <ul className="mt-4 space-y-4">
+            <h2 className="mt-1 font-display text-3xl tracking-tight">
+              Licenses & certifications
+            </h2>
+            <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
               {data.licenses.map((l) => (
-                <li key={l.id}>
-                  <h3 className="font-semibold">{l.name}</h3>
-                  <p className="text-sm text-muted">
-                    {[l.issuer, l.issueDate].filter(Boolean).join(" · ")}
-                  </p>
-                </li>
+                <div key={l.id} className="p-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-ink">{l.name}</h3>
+                      {l.url ? (
+                        <a
+                          href={l.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-muted hover:text-ink transition"
+                          aria-label={`Verify certification: ${l.name}`}
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      ) : null}
+                    </div>
+                    {l.issuer ? <p className="mt-0.5 text-sm text-muted">{l.issuer}</p> : null}
+                  </div>
+                  {l.issueDate ? (
+                    <p className="font-mono text-xs text-muted shrink-0">{l.issueDate}</p>
+                  ) : null}
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         ) : null}
 
@@ -249,7 +342,7 @@ export function HomePage() {
                     className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition cursor-pointer"
                   >
                     <span>Send email</span>
-                    <span aria-hidden>→</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
                   </a>
                   <button
                     type="button"
@@ -262,7 +355,14 @@ export function HomePage() {
                     }}
                     className="inline-flex items-center gap-2 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
                   >
-                    <span>{copied ? "Copied to clipboard! ✓" : "Copy email address"}</span>
+                    {copied ? (
+                      <>
+                        <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                        <span>Copied to clipboard!</span>
+                      </>
+                    ) : (
+                      <span>Copy email address</span>
+                    )}
                   </button>
                 </>
               ) : null}
@@ -274,7 +374,7 @@ export function HomePage() {
                   className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-muted transition hover:border-ink hover:text-ink"
                 >
                   <span>GitHub</span>
-                  <span aria-hidden>↗</span>
+                  <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 </a>
               ) : null}
             </div>

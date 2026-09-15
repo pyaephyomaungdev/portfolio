@@ -3,6 +3,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { GitHubStarButton } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { TechIcon } from "../components/TechIcon";
+import { ExpandableText } from "../components/ExpandableText";
+import { BuyMeACoffeeButton, BuyMeACoffeeCard } from "../components/BuyMeACoffeeButton";
+import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { fetchPortfolio, fetchProject, type Project } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
 
@@ -13,6 +16,7 @@ export function ProjectPage() {
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [siteName, setSiteName] = useState<string | null>("Pyae Phyo Maung");
+  const [buyMeACoffeeUrl, setBuyMeACoffeeUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -32,6 +36,7 @@ export function ProjectPage() {
       .then((d) => {
         if (!cancelled) {
           setSiteName(d.profile?.name ?? null);
+          setBuyMeACoffeeUrl(d.profile?.buyMeACoffeeUrl ?? null);
           setAllProjects(d.projects ?? []);
         }
       })
@@ -41,6 +46,25 @@ export function ProjectPage() {
       cancelled = true;
     };
   }, [slug]);
+
+  useEffect(() => {
+    if (!project) return;
+    const prevTitle = document.title;
+    document.title = `${project.title} — ${siteName || "Pyae Phyo Maung"}`;
+
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const prevDesc = metaDesc?.getAttribute("content") ?? "";
+    if (metaDesc && project.summary) {
+      metaDesc.setAttribute("content", project.summary);
+    }
+
+    return () => {
+      document.title = prevTitle;
+      if (metaDesc && prevDesc) {
+        metaDesc.setAttribute("content", prevDesc);
+      }
+    };
+  }, [project, siteName]);
 
   const currentIndex = allProjects.findIndex((p) => p.slug === slug);
   const nextProject =
@@ -62,13 +86,14 @@ export function ProjectPage() {
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <button
           type="button"
-          className="text-sm text-muted underline-offset-2 hover:text-ink hover:underline cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-sm text-muted underline-offset-2 hover:text-ink hover:underline cursor-pointer"
           onClick={() => {
             navigate({ pathname: "/", hash: "projects" });
             queueMicrotask(() => scrollToId("projects"));
           }}
         >
-          ← Back to Selected Work
+          <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <span>Back to Selected Work</span>
         </button>
 
         {error ? (
@@ -123,7 +148,7 @@ export function ProjectPage() {
                   className="btn-primary inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer"
                 >
                   <span>View live</span>
-                  <span aria-hidden>↗</span>
+                  <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 </a>
               ) : null}
               {project.repoUrl ? (
@@ -135,7 +160,7 @@ export function ProjectPage() {
                     className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
                   >
                     <span>Source code</span>
-                    <span aria-hidden>↗</span>
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   </a>
                   {project.isOpenSource ? (
                     <GitHubStarButton repoUrl={project.repoUrl} />
@@ -146,6 +171,9 @@ export function ProjectPage() {
                 <span className="inline-flex items-center rounded-md border border-rule bg-soft px-3 py-1.5 text-xs font-medium text-muted">
                   Internal Platform
                 </span>
+              ) : null}
+              {project.buyMeACoffee ? (
+                <BuyMeACoffeeButton size="sm" url={buyMeACoffeeUrl || undefined} />
               ) : null}
             </div>
 
@@ -185,9 +213,12 @@ export function ProjectPage() {
                   <h2 className="mt-1 font-display text-2xl tracking-tight text-ink">
                     The Problem & Status Quo
                   </h2>
-                  <p className="mt-3 text-base text-muted leading-relaxed">
-                    {cs.problem}
-                  </p>
+                  <ExpandableText
+                    text={cs.problem}
+                    bg="paper"
+                    className="mt-3 text-base text-muted leading-relaxed"
+                    threshold={180}
+                  />
                 </section>
 
                 {/* 2. Technical Constraints */}
@@ -198,9 +229,12 @@ export function ProjectPage() {
                   <h2 className="mt-1 font-display text-2xl tracking-tight text-ink">
                     Technical Constraints
                   </h2>
-                  <p className="mt-3 text-base text-muted leading-relaxed">
-                    {cs.constraints}
-                  </p>
+                  <ExpandableText
+                    text={cs.constraints}
+                    bg="paper"
+                    className="mt-3 text-base text-muted leading-relaxed"
+                    threshold={180}
+                  />
                 </section>
 
                 {/* 3. Core Decisions & Architecture */}
@@ -249,9 +283,12 @@ export function ProjectPage() {
                     Outcome & Measurable Impact
                   </h2>
                   <div className="mt-3 rounded-xl border border-rule bg-white p-5">
-                    <p className="text-base font-medium text-ink leading-relaxed">
-                      {cs.outcome}
-                    </p>
+                    <ExpandableText
+                      text={cs.outcome}
+                      bg="white"
+                      className="text-base font-medium text-ink leading-relaxed"
+                      threshold={180}
+                    />
                   </div>
                 </section>
               </div>
@@ -286,6 +323,11 @@ export function ProjectPage() {
               </section>
             ) : null}
 
+            {/* Support the Project Card */}
+            {project.buyMeACoffee ? (
+              <BuyMeACoffeeCard className="mt-14" url={buyMeACoffeeUrl || undefined} />
+            ) : null}
+
             {/* Next Case Study Navigation */}
             {nextProject ? (
               <div className="mt-16 border-t border-rule pt-8">
@@ -308,9 +350,7 @@ export function ProjectPage() {
                         {nextProject.caseStudy?.headline ?? nextProject.summary}
                       </p>
                     </div>
-                    <span className="text-xl text-muted group-hover:text-ink">
-                      →
-                    </span>
+                    <ArrowRight className="h-5 w-5 shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true" />
                   </div>
                 </Link>
               </div>
