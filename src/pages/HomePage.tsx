@@ -40,7 +40,7 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader name={p?.name || "Pyae Phyo Maung"} />
+      <SiteHeader name={p?.name} profile={p} />
 
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <section className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
@@ -130,7 +130,9 @@ export function HomePage() {
           </section>
         ) : null}
 
-        <ContributionHeatmap />
+        {p?.githubUrl?.trim() ? (
+          <ContributionHeatmap githubUrl={p.githubUrl} />
+        ) : null}
 
         {data.projects?.length ? (
           <section id="projects" className="mt-16 scroll-mt-24">
@@ -331,7 +333,12 @@ export function HomePage() {
               I'm open to full-stack engineering opportunities, web platform development, and technical collaboration.
             </p>
             <p className="mt-1.5 text-sm text-muted">
-              Based in Thailand · Available for remote work across global teams.
+              {[
+                p?.location ? `Based in ${p.location}` : null,
+                "Available for remote work across global teams.",
+              ]
+                .filter(Boolean)
+                .join(" · ")}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -382,7 +389,7 @@ export function HomePage() {
         </section>
       </main>
 
-      <SiteFooter name={p?.name || "Pyae Phyo Maung"} />
+      <SiteFooter name={p?.name} websiteUrl={p?.websiteUrl} />
     </div>
   );
 }

@@ -22,7 +22,24 @@ function monthLabelForWeek(week: ContributionDay[], weekIndex: number, weeks: Co
   return month !== prevMonth ? MONTHS[month] : null;
 }
 
-export function ContributionHeatmap() {
+function extractGitHubUsername(url?: string | null): string | undefined {
+  if (!url) return undefined;
+  const trimmed = url.trim().replace(/\/+$/, "");
+  const match = trimmed.match(/(?:github\.com\/|^@?)([^/]+)$/i);
+  return match ? match[1] : undefined;
+}
+
+interface ContributionHeatmapProps {
+  githubUrl?: string | null;
+}
+
+export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}) {
+  // If no githubUrl is provided, do not render contributions section
+  if (!githubUrl || !githubUrl.trim()) {
+    return null;
+  }
+
+  const username = extractGitHubUsername(githubUrl);
   const thisYear = new Date().getUTCFullYear();
   const years = useMemo(() => [thisYear, thisYear - 1, thisYear - 2, thisYear - 3], [thisYear]);
   const [year, setYear] = useState(thisYear);
@@ -54,7 +71,7 @@ export function ContributionHeatmap() {
     setLoading(true);
     // Re-trigger animation cleanly when switching years
     setAnimateCells(false);
-    void fetchContributions(year)
+    void fetchContributions(year, username)
       .then((d) => {
         if (!cancelled) setData(d);
       })

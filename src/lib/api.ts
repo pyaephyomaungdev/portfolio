@@ -82,11 +82,12 @@ export async function fetchProject(slug: string): Promise<Project> {
   throw new Error(`Project not found: ${slug}`);
 }
 
-export async function fetchContributions(year: number): Promise<ContributionYear> {
+export async function fetchContributions(year: number, customUsername?: string): Promise<ContributionYear> {
+  const username = customUsername || GITHUB_USERNAME;
   // If a custom API_BASE is configured, try it first
   if (API_BASE) {
     try {
-      const res = await fetch(`${API_BASE}/api/public/github/contributions?year=${year}`);
+      const res = await fetch(`${API_BASE}/api/public/github/contributions?year=${year}&username=${encodeURIComponent(username)}`);
       if (res.ok) {
         return (await res.json()) as ContributionYear;
       }
@@ -98,7 +99,7 @@ export async function fetchContributions(year: number): Promise<ContributionYear
   // Fetch directly from public GitHub contributions API
   try {
     const res = await fetch(
-      `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=${year}`,
+      `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=${year}`,
     );
     if (res.ok) {
       const json = await res.json();
@@ -109,7 +110,7 @@ export async function fetchContributions(year: number): Promise<ContributionYear
         total,
         days: Array.isArray(json.contributions) ? json.contributions : [],
         source: "github",
-        username: GITHUB_USERNAME,
+        username,
       };
     }
   } catch {
@@ -121,6 +122,6 @@ export async function fetchContributions(year: number): Promise<ContributionYear
     total: 0,
     days: [],
     source: "empty",
-    username: GITHUB_USERNAME,
+    username,
   };
 }

@@ -2,6 +2,8 @@ import { useEffect, useId, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowRight, ExternalLink, Heart } from "lucide-react";
 import { scrollToId } from "../lib/scrollToId";
+import { initialPortfolioData } from "../data/portfolioData";
+import type { Profile } from "../types/portfolio";
 
 const NAV = [
   {
@@ -26,7 +28,14 @@ const NAV = [
   },
 ] as const;
 
-export function SiteHeader({ name }: { name?: string | null }) {
+interface SiteHeaderProps {
+  name?: string | null;
+  profile?: Profile | null;
+}
+
+export function SiteHeader({ name, profile }: SiteHeaderProps) {
+  const p = profile ?? initialPortfolioData.profile;
+  const displayName = name || p?.name || "Portfolio";
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const location = useLocation();
@@ -74,7 +83,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
             className="font-semibold tracking-tight"
             onClick={() => setOpen(false)}
           >
-            {name || "Pyae Phyo Maung"}
+            {displayName}
           </Link>
 
           <nav className="hidden gap-5 text-sm text-muted sm:flex">
@@ -158,32 +167,38 @@ export function SiteHeader({ name }: { name?: string | null }) {
         >
           {/* Direct contact and quick links */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <a
-              href="mailto:pyaephyomaung.dev@gmail.com"
-              className="text-xs font-semibold text-ink underline-offset-2 hover:underline"
-            >
-              pyaephyomaung.dev@gmail.com
-            </a>
+            {p?.emailPublic ? (
+              <a
+                href={`mailto:${p.emailPublic}`}
+                className="text-xs font-semibold text-ink underline-offset-2 hover:underline"
+              >
+                {p.emailPublic}
+              </a>
+            ) : null}
 
             <div className="flex items-center gap-4 text-xs font-medium text-muted">
-              <a
-                href="https://github.com/pyaephyomaungdev"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 hover:text-ink transition"
-              >
-                <span>GitHub</span>
-                <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/pyae-phyo-maung-052445217/"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 hover:text-ink transition"
-              >
-                <span>LinkedIn</span>
-                <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
-              </a>
+              {p?.githubUrl ? (
+                <a
+                  href={p.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 hover:text-ink transition"
+                >
+                  <span>GitHub</span>
+                  <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                </a>
+              ) : null}
+              {p?.websiteUrl ? (
+                <a
+                  href={p.websiteUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 hover:text-ink transition"
+                >
+                  <span>Website</span>
+                  <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                </a>
+              ) : null}
             </div>
           </div>
         </div>
@@ -192,11 +207,19 @@ export function SiteHeader({ name }: { name?: string | null }) {
   );
 }
 
-export function SiteFooter({ name }: { name?: string | null }) {
+interface SiteFooterProps {
+  name?: string | null;
+  websiteUrl?: string | null;
+}
+
+export function SiteFooter({ name }: SiteFooterProps) {
+  const p = initialPortfolioData.profile;
+  const displayName = name || p?.name || "Portfolio";
+
   return (
     <footer className="border-t border-rule py-8 text-center text-sm text-muted">
       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 font-mono text-xs">
-        <span>© {new Date().getFullYear()} {name || "Pyae Phyo Maung"}</span>
+        <span>© {new Date().getFullYear()} {displayName}</span>
         <span className="hidden sm:inline text-muted/40">•</span>
         <span className="inline-flex items-center gap-1.5">
           Developed with <Heart className="h-3.5 w-3.5 fill-accent text-accent inline" aria-label="love" /> by{" "}

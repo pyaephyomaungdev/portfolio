@@ -1,3 +1,5 @@
+import { initialPortfolioData } from "../data/portfolioData";
+
 export function BuyMeACoffeeIcon({ className = "h-4 w-4 shrink-0" }: { className?: string }) {
   return (
     <svg
@@ -85,7 +87,7 @@ export function BuyMeACoffeeIcon({ className = "h-4 w-4 shrink-0" }: { className
 }
 
 export function BuyMeACoffeeButton({
-  url = "https://www.buymeacoffee.com/pyaephyomaa",
+  url,
   className = "",
   size = "default",
 }: {
@@ -93,11 +95,12 @@ export function BuyMeACoffeeButton({
   className?: string;
   size?: "default" | "sm";
 }) {
+  const targetUrl = url || initialPortfolioData.profile?.buyMeACoffeeUrl || "https://www.buymeacoffee.com/pyaephyomaa";
   const isSm = size === "sm";
 
   return (
     <a
-      href={url}
+      href={targetUrl}
       target="_blank"
       rel="noreferrer"
       aria-label="Buy me a coffee on BuyMeACoffee.com"

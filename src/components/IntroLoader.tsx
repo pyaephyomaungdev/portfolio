@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
+import { initialPortfolioData } from "../data/portfolioData";
+import { fetchPortfolio } from "../lib/api";
+import type { Profile } from "../types/portfolio";
 
 export function IntroLoader() {
+  const [profile, setProfile] = useState<Profile | null>(() => initialPortfolioData.profile);
   const [progress, setProgress] = useState(0);
   const [textVisible, setTextVisible] = useState(false);
   const [isCurtainUp, setIsCurtainUp] = useState(false);
@@ -9,6 +13,12 @@ export function IntroLoader() {
     if (window.location.pathname.startsWith("/admin")) return false;
     return !sessionStorage.getItem("ppm_intro_seen");
   });
+
+  useEffect(() => {
+    void fetchPortfolio().then((d) => {
+      if (d.profile) setProfile(d.profile);
+    });
+  }, []);
 
   useEffect(() => {
     if (!isMounted) {
@@ -20,7 +30,11 @@ export function IntroLoader() {
     const timer = setTimeout(() => setTextVisible(true), 100);
 
     // Step 2: Preload critical image assets
-    const imagesToPreload = ["/avatar.jpg", "/favicon.png", "/favicon.ico"];
+    const imagesToPreload = [
+      profile?.avatarUrl || "/avatar.jpg",
+      "/favicon.png",
+      "/favicon.ico",
+    ];
     imagesToPreload.forEach((src) => {
       const img = new Image();
       img.src = src;
@@ -60,7 +74,7 @@ export function IntroLoader() {
       clearTimeout(timer);
       cancelAnimationFrame(frameId);
     };
-  }, [isMounted]);
+  }, [isMounted, profile?.avatarUrl]);
 
   if (!isMounted) return null;
 
@@ -74,11 +88,26 @@ export function IntroLoader() {
           ? { step: "03", text: "Mounting local-first client workspace..." }
           : { step: "04", text: "Interface initialized." };
 
-  const words = [
-    { text: "PYAE", key: "pyae" },
-    { text: "PHYO", key: "phyo" },
-    { text: "MAUNG", key: "maung" },
-  ];
+  const words = (profile?.name || "Pyae Phyo Maung")
+    .trim()
+    .toUpperCase()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((text, idx) => ({ text, key: `${text}-${idx}` }));
+
+  const initials = (profile?.name || "Pyae Phyo Maung")
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase() || "PPM";
+
+  const headline = profile?.headline || "Software Engineer & Full-Stack";
+
+  const subtitle =
+    profile?.bio?.split("\n").map((s) => s.trim()).filter(Boolean)[0] ||
+    headline ||
+    "Building reliable web infrastructure, local-first tools & systems";
 
   return (
     <aside
@@ -115,7 +144,7 @@ export function IntroLoader() {
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
           <span className="font-mono text-xs uppercase tracking-widest text-ink font-semibold">
-            PPM // 2026
+            {initials} // {new Date().getFullYear()}
           </span>
         </div>
         <span className="font-mono text-xs uppercase tracking-widest text-muted hidden sm:inline">
@@ -134,7 +163,7 @@ export function IntroLoader() {
             }`}
         >
           <span className="text-xs font-semibold uppercase tracking-widest text-muted">
-            Software Engineer & Full-Stack
+            {headline}
           </span>
         </div>
 
@@ -169,7 +198,7 @@ export function IntroLoader() {
           className={`mt-3 font-sans text-sm text-muted transition-all duration-700 delay-300 ${textVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
             }`}
         >
-          Building reliable web infrastructure, local-first tools & systems
+          {subtitle}
         </p>
 
         {/* Circular Gauge + Status Block */}
@@ -225,8 +254,8 @@ export function IntroLoader() {
         className={`relative z-10 flex items-center justify-between font-mono text-xs text-muted transition-all duration-700 ${textVisible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
           }`}
       >
-        <span>Bangkok, Thailand</span>
-        <span>Local-First & Distributed</span>
+        <span>{profile?.location || "Bangkok, Thailand"}</span>
+        <span>{profile?.joinedLabel || "Local-First & Distributed"}</span>
       </div>
     </aside>
   );

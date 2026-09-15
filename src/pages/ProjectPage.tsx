@@ -6,17 +6,20 @@ import { TechIcon } from "../components/TechIcon";
 import { ExpandableText } from "../components/ExpandableText";
 import { BuyMeACoffeeButton, BuyMeACoffeeCard } from "../components/BuyMeACoffeeButton";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
-import { fetchPortfolio, fetchProject, type Project } from "../lib/api";
+import { fetchPortfolio, fetchProject, type Project, type Profile } from "../lib/api";
+import { initialPortfolioData } from "../data/portfolioData";
 import { scrollToId } from "../lib/scrollToId";
 
 export function ProjectPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
-  const [allProjects, setAllProjects] = useState<Project[]>([]);
+  const [allProjects, setAllProjects] = useState<Project[]>(() => initialPortfolioData.projects ?? []);
   const [error, setError] = useState<string | null>(null);
-  const [siteName, setSiteName] = useState<string | null>("Pyae Phyo Maung");
-  const [buyMeACoffeeUrl, setBuyMeACoffeeUrl] = useState<string | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(() => initialPortfolioData.profile);
+  const [siteName, setSiteName] = useState<string | null>(() => initialPortfolioData.profile?.name ?? null);
+  const [buyMeACoffeeUrl, setBuyMeACoffeeUrl] = useState<string | null>(() => initialPortfolioData.profile?.buyMeACoffeeUrl ?? null);
+  const [websiteUrl, setWebsiteUrl] = useState<string | null>(() => initialPortfolioData.profile?.websiteUrl ?? null);
 
   useEffect(() => {
     if (!slug) return;
@@ -35,8 +38,10 @@ export function ProjectPage() {
     void fetchPortfolio()
       .then((d) => {
         if (!cancelled) {
+          setProfile(d.profile ?? null);
           setSiteName(d.profile?.name ?? null);
           setBuyMeACoffeeUrl(d.profile?.buyMeACoffeeUrl ?? null);
+          setWebsiteUrl(d.profile?.websiteUrl ?? null);
           setAllProjects(d.projects ?? []);
         }
       })
@@ -81,7 +86,7 @@ export function ProjectPage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader name={siteName || "Pyae Phyo Maung"} />
+      <SiteHeader name={siteName} profile={profile} />
 
       <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <button
@@ -359,7 +364,7 @@ export function ProjectPage() {
         )}
       </main>
 
-      <SiteFooter name={siteName || "Pyae Phyo Maung"} />
+      <SiteFooter name={siteName} websiteUrl={websiteUrl} />
     </div>
   );
 }
