@@ -18,6 +18,22 @@ export type Stat = {
   sortOrder: number;
 };
 
+export type ProjectMetric = {
+  label: string;
+  value: string;
+  description: string;
+};
+
+export type CaseStudy = {
+  headline: string;
+  problem: string;
+  constraints: string;
+  decisions: string[];
+  outcome: string;
+  metrics: ProjectMetric[];
+  architectureHighlights?: string[];
+};
+
 export type Project = {
   id: string;
   title: string;
@@ -31,6 +47,9 @@ export type Project = {
   techStack: string[];
   featured: boolean;
   sortOrder: number;
+  badge?: string;
+  isOpenSource?: boolean;
+  caseStudy?: CaseStudy;
 };
 
 export type ExperienceRole = {

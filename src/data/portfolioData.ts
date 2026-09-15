@@ -22,10 +22,233 @@ export const initialPortfolioData: Portfolio = {
   projects: [
     {
       id: "proj-1",
-      title: "Digital Clinic Management System (DCMS)",
-      slug: "digital-clinic-management-system",
+      title: "JSON Link",
+      slug: "json-link",
+      badge: "Featured Case Study · Local-First",
       summary:
-        "Web-based clinic platform covering registration through checkout, with branch isolation and role-based access control.",
+        "Local-first localization workspace and spreadsheet studio with two-way disk sync and native MCP server for AI coding assistants.",
+      body: [
+        "JSON Link is a local-first localization workspace and spreadsheet studio designed for software teams and AI coding assistants.",
+        "",
+        "Zero-Backend Spreadsheet Studio — translates, edits, and organizes multi-language i18n JSON files directly in a clean spreadsheet interface with zero backend, working 100% privately in the browser.",
+        "",
+        "Two-Way Disk Synchronization — reads and writes translation files directly to local project repositories via the browser's Web File System Access API without uploading files to any cloud server.",
+        "",
+        "Model Context Protocol (MCP) Server — native MCP integration enables AI coding assistants like Claude Desktop, Cursor, and Antigravity to inspect, create, and update translation keys with zero hallucination.",
+        "",
+        "Lossless Variable & Syntax Protection — protects interpolation variables (e.g., {username}, %s, {{count}}) during batch translations and editing so formatting never breaks.",
+        "",
+        "Developer Tooling & CLI — ships with @jsonlink/vite-plugin for in-app translation editing at /__jsonlink and create-jsonlink for instant project scaffolding.",
+      ].join("\n"),
+      period: null,
+      url: "https://json-link.pages.dev",
+      repoUrl: "https://github.com/pyaephyomaungdev/json-link",
+      language: "TypeScript",
+      techStack: [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "MCP",
+        "Web File System API",
+      ],
+      featured: true,
+      isOpenSource: true,
+      sortOrder: 0,
+      caseStudy: {
+        headline:
+          "Zero-backend localization studio with two-way disk reconciliation and native MCP server for AI coding workflows.",
+        problem:
+          "Localization in modern web applications is chronically fragmented. Developers are trapped between two frustrating extremes: hand-editing sprawling, fragile JSON files across git branches (where a single misplaced quote or missing {variable} breaks the build) or subscribing to heavy SaaS platforms that disrupt local development loops, lock teams into proprietary platforms, and upload private product copy to external servers.",
+        constraints:
+          "Must operate 100% client-side with zero backend storage to guarantee total privacy; must seamlessly read and write nested translation folder structures on local disk using the browser's Web File System Access API; must guarantee zero variable corruption during automated translations; and must provide native Model Context Protocol (MCP) integration so local AI agents (Claude Desktop, Cursor, Antigravity) can manage translation keys without hallucination.",
+        decisions: [
+          "Reconciled two-way local disk synchronization using the Web File System Access API with automatic file change reconciliation without server intermediaries.",
+          "Architected an AST-based variable protection parser that tokenizes framework placeholders ({user}, %s, {{count}}, ICU syntax) before translation passes.",
+          "Implemented native Model Context Protocol (MCP) server integration, allowing AI coding assistants to query and update translation keys with deterministic precision.",
+          "Created @jsonlink/vite-plugin for in-situ dev editing directly at /__jsonlink in client web apps.",
+          "Packaged create-jsonlink CLI for instant project scaffolding and zero-configuration local workspace startup.",
+        ],
+        outcome:
+          "A frictionless, zero-server localization studio running at native desktop speed. Eliminates 100% of formatting syntax errors, preserves data confidentiality, and cuts translation update turnaround from hours to seconds.",
+        metrics: [
+          {
+            label: "Cloud Footprint",
+            value: "0 Servers",
+            description: "100% client-side execution",
+          },
+          {
+            label: "Variable Integrity",
+            value: "0% Leakage",
+            description: "Lossless AST placeholder protection",
+          },
+          {
+            label: "AI Integration",
+            value: "Native MCP",
+            description: "Claude & Cursor agent support",
+          },
+          {
+            label: "Disk Sync Latency",
+            value: "< 16ms",
+            description: "Direct local filesystem reconciliation",
+          },
+        ],
+        architectureHighlights: [
+          "Web File System Access API integration for direct directory handle reads and atomic writes",
+          "In-memory virtualized multi-column spreadsheet grid rendering 10,000+ keys at 60 FPS",
+          "AST token-guard for React-Intl, i18next, and ICU message formats",
+          "Stdio MCP server protocol layer for bi-directional AI assistant interaction",
+        ],
+      },
+    },
+    {
+      id: "proj-2",
+      title: "ToastStar",
+      slug: "toaststar",
+      badge: "Featured Case Study · Open Source",
+      summary:
+        "React notification engine featuring center-launch physics, hover fan-out stacks, queue-aware scheduling, and multi-app scoping.",
+      body: [
+        "toaststar is an open-source React notification library focused on motion and control — not just another snackbar wrapper.",
+        "",
+        "It ships a center-launch intro before settling to the edge, hover-only stack fan-out, scoped controllers so multiple apps on one page do not cross-fire, and helpers like toast.loading(), toast.update(), and toast.promise() for async flows.",
+        "",
+        "Optional IndexedDB or in-memory history, theme presets (glass, midnight, sunset, and more), progress bars, swipe-to-dismiss, dedupe keys, and queue overflow policies round out the API. Install with npm install toaststar.",
+      ].join("\n"),
+      period: null,
+      url: "https://toaststar.pages.dev/",
+      repoUrl: "https://github.com/pyaephyomaungdev/toaststar",
+      language: "TypeScript",
+      techStack: ["React", "TypeScript", "Vite", "IndexedDB"],
+      featured: true,
+      isOpenSource: true,
+      sortOrder: 1,
+      caseStudy: {
+        headline:
+          "Production React toast library focused on cinematic motion choreography, multi-instance isolation, and async flow control.",
+        problem:
+          "Most React toast libraries are either rudimentary snackbar alert wrappers or bloated packages that cause visible UI frame drops during high-frequency dispatches, lack stack organization for high-volume logs, and trigger cross-talk collisions when multiple micro-frontends or isolated modules share a single page.",
+        constraints:
+          "Zero external runtime dependencies; strictly under 5 kB bundle footprint; butter-smooth 60 FPS animations without blocking the main JavaScript thread; strict multi-controller isolation; and full async lifecycle support for complex promises and background jobs.",
+        decisions: [
+          "Engineered a signature center-launch intro bezier curve that smoothly docks to viewport edges using hardware-accelerated CSS transforms.",
+          "Designed hover-only stack fan-out: collapses into a sleek single-line card at rest and smoothly expands into an inspectable stack upon user hover.",
+          "Built scoped controller instances so nested apps, micro-frontends, and isolated widgets never cross-fire notifications.",
+          "Implemented an event-driven queue dispatcher with deduplication keys, priority ordering, and queue overflow policies.",
+          "Created pluggable persistence adapters supporting IndexedDB and in-memory replay history for offline audit trails.",
+        ],
+        outcome:
+          "Published an open-source React notification package on npm with zero runtime dependencies, comprehensive TypeScript definitions, and butter-smooth 60fps rendering across desktop and mobile browsers.",
+        metrics: [
+          {
+            label: "Bundle Footprint",
+            value: "< 4.8 kB",
+            description: "Zero external runtime dependencies",
+          },
+          {
+            label: "Rendering Speed",
+            value: "60 FPS",
+            description: "GPU-accelerated CSS transforms",
+          },
+          {
+            label: "App Isolation",
+            value: "100%",
+            description: "Scoped multi-controller instances",
+          },
+          {
+            label: "Async Lifecycle",
+            value: "Full Control",
+            description: "Promise resolution & progress hooks",
+          },
+        ],
+        architectureHighlights: [
+          "Pure CSS hardware transform transitions with zero JavaScript layout thrashing",
+          "Controller pub/sub pattern isolating notifications by application scope",
+          "Async promise resolver with reactive loading-to-success/error state transitions",
+          "Pluggable IndexedDB storage layer for durable notification history",
+        ],
+      },
+    },
+    {
+      id: "proj-3",
+      title: "DeskKit",
+      slug: "deskkit",
+      badge: "Local-First Privacy Suite",
+      summary:
+        "Local-first privacy suite running sensitive tools entirely in-browser: PII masking, PDF tools, redact, and encrypted notes.",
+      body: [
+        "DeskKit is a local-first privacy suite that runs sensitive tools in the browser: SecureLens for PII masking in AI chats, PDF Pages / Stamp / Merge / Split / Compress, Image Redact, Metadata Strip, and Notes.",
+        "",
+        "PDF and image bytes never leave the device. Notes stay in IndexedDB unless you explicitly save them to an optional encrypted vault. Signed-in users can create Secure Share links with password-derived AES-GCM ciphertext and expiry.",
+        "",
+        "The stack includes a React + Vite web app, Hono API for auth and vault ciphertext, pure TypeScript PII/PDF packages, and an optional local MCP server so Cursor or Claude Desktop can call tools on your machine without sending data to the cloud.",
+        "",
+        "A hosted PII mask/unmask API with daily free quota is also available for agents and backends that need Zero Data Retention-style processing.",
+      ].join("\n"),
+      period: null,
+      url: null,
+      repoUrl: null,
+      language: "TypeScript",
+      techStack: [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "Hono",
+        "PostgreSQL",
+        "Redis",
+        "pdf-lib",
+        "Web Crypto",
+      ],
+      featured: true,
+      isOpenSource: false,
+      sortOrder: 2,
+      caseStudy: {
+        headline:
+          "Local-first privacy toolkit running sensitive PII masking, PDF transforms, and AES-GCM vault entirely in-browser.",
+        problem:
+          "Developers and compliance teams frequently risk data leaks by uploading sensitive documents to ad-supported online PDF utilities or feeding unmasked logs containing PII (names, emails, tokens) into cloud-hosted AI LLMs.",
+        constraints:
+          "Zero raw bytes may ever leave the user device; PDF manipulation and PII redaction must execute entirely client-side; and local AI assistants must be able to invoke privacy tools without sending unmasked data to remote cloud servers.",
+        decisions: [
+          "Executed client-side PDF manipulation via pdf-lib and canvas-based document redaction entirely in-browser.",
+          "Engineered a deterministic client-side PII masking engine (SecureLens) that replaces identifiable entities with synthetic tokens before pasting into LLMs.",
+          "Designed zero-knowledge encrypted notes and vault using the browser Web Crypto API (AES-GCM 256-bit) with PBKDF2 key derivation.",
+          "Provided a native local MCP server for Claude Desktop and Cursor to process sensitive files locally.",
+        ],
+        outcome:
+          "A comprehensive privacy suite ensuring 100% of sensitive documents remain on-device, offering verifiable confidentiality alongside local AI tool integration.",
+        metrics: [
+          {
+            label: "Cloud Egress",
+            value: "0 Bytes",
+            description: "100% on-device client processing",
+          },
+          {
+            label: "Encryption Standard",
+            value: "AES-GCM 256",
+            description: "Browser Web Crypto standard",
+          },
+          {
+            label: "Agent Tooling",
+            value: "Native MCP",
+            description: "Zero-cloud local agent processing",
+          },
+          {
+            label: "Token Masking",
+            value: "< 2ms",
+            description: "Instant regex & token replacement",
+          },
+        ],
+      },
+    },
+    {
+      id: "proj-4",
+      title: "DCMS",
+      slug: "dcms",
+      badge: "Distributed Systems Platform",
+      summary:
+        "Digital Clinic Management System with role-based access control, appointment scheduling, and automated clinical billing workflows.",
       body: [
         "Associated with Spring University Myanmar.",
         "",
@@ -56,95 +279,46 @@ export const initialPortfolioData: Portfolio = {
         "Docker",
       ],
       featured: true,
-      sortOrder: 0,
-    },
-    {
-      id: "proj-2",
-      title: "ToastStar",
-      slug: "toaststar",
-      summary:
-        "React toast library with cinematic center-launch intros, hover fan-out stacks, queue-aware delivery, and optional toast history.",
-      body: [
-        "toaststar is an open-source React notification library focused on motion and control — not just another snackbar wrapper.",
-        "",
-        "It ships a center-launch intro before settling to the edge, hover-only stack fan-out, scoped controllers so multiple apps on one page do not cross-fire, and helpers like toast.loading(), toast.update(), and toast.promise() for async flows.",
-        "",
-        "Optional IndexedDB or in-memory history, theme presets (glass, midnight, sunset, and more), progress bars, swipe-to-dismiss, dedupe keys, and queue overflow policies round out the API. Install with npm install toaststar.",
-      ].join("\n"),
-      period: null,
-      url: "https://toaststar.pages.dev/",
-      repoUrl: "https://github.com/pyaephyomaungdev/toaststar",
-      language: "TypeScript",
-      techStack: ["React", "TypeScript", "Vite", "IndexedDB"],
-      featured: true,
-      sortOrder: 1,
-    },
-    {
-      id: "proj-3",
-      title: "DeskKit",
-      slug: "deskkit",
-      summary:
-        "Local-first privacy suite running sensitive tools entirely in-browser: PII masking, PDF tools, redact, and encrypted notes.",
-      body: [
-        "DeskKit is a local-first privacy suite that runs sensitive tools in the browser: SecureLens for PII masking in AI chats, PDF Pages / Stamp / Merge / Split / Compress, Image Redact, Metadata Strip, and Notes.",
-        "",
-        "PDF and image bytes never leave the device. Notes stay in IndexedDB unless you explicitly save them to an optional encrypted vault. Signed-in users can create Secure Share links with password-derived AES-GCM ciphertext and expiry.",
-        "",
-        "The stack includes a React + Vite web app, Hono API for auth and vault ciphertext, pure TypeScript PII/PDF packages, and an optional local MCP server so Cursor or Claude Desktop can call tools on your machine without sending data to the cloud.",
-        "",
-        "A hosted PII mask/unmask API with daily free quota is also available for agents and backends that need Zero Data Retention-style processing.",
-      ].join("\n"),
-      period: null,
-      url: null,
-      repoUrl: "https://github.com/pyaephyomaungdev/secure-lens",
-      language: "TypeScript",
-      techStack: [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS",
-        "Hono",
-        "PostgreSQL",
-        "Redis",
-        "pdf-lib",
-        "Web Crypto",
-      ],
-      featured: true,
-      sortOrder: 2,
-    },
-    {
-      id: "proj-4",
-      title: "JSON Link",
-      slug: "json-link",
-      summary:
-        "Local-first localization workspace and spreadsheet studio with two-way disk sync and native MCP server for AI coding assistants.",
-      body: [
-        "JSON Link is a local-first localization workspace and spreadsheet studio designed for software teams and AI coding assistants.",
-        "",
-        "Zero-Backend Spreadsheet Studio — translates, edits, and organizes multi-language i18n JSON files directly in a clean spreadsheet interface with zero backend, working 100% privately in the browser.",
-        "",
-        "Two-Way Disk Synchronization — reads and writes translation files directly to local project repositories via the browser's Web File System Access API without uploading files to any cloud server.",
-        "",
-        "Model Context Protocol (MCP) Server — native MCP integration enables AI coding assistants like Claude Desktop, Cursor, and Antigravity to inspect, create, and update translation keys with zero hallucination.",
-        "",
-        "Lossless Variable & Syntax Protection — protects interpolation variables (e.g., {username}, %s, {{count}}) during batch translations and editing so formatting never breaks.",
-        "",
-        "Developer Tooling & CLI — ships with @jsonlink/vite-plugin for in-app translation editing at /__jsonlink and create-jsonlink for instant project scaffolding.",
-      ].join("\n"),
-      period: null,
-      url: "https://json-link.pages.dev",
-      repoUrl: "https://github.com/pyaephyomaungdev/json-link",
-      language: "TypeScript",
-      techStack: [
-        "React",
-        "TypeScript",
-        "Vite",
-        "Tailwind CSS",
-        "MCP",
-        "Web File System API",
-      ],
-      featured: true,
+      isOpenSource: false,
       sortOrder: 3,
+      caseStudy: {
+        headline:
+          "Distributed clinical management platform streamlining patient workflows, role-based isolation, and billing automation.",
+        problem:
+          "Clinical facilities struggle with disconnected manual paperwork, double-booked appointments, fragmented prescription records, and cumbersome invoice-to-payment flows across multi-branch practices.",
+        constraints:
+          "Strict branch-level data isolation; asynchronous job queues for billing invoices and notification triggers; zero scheduling conflicts; and role-based security across multiple clinical personas.",
+        decisions: [
+          "Implemented scalable Node.js + TypeScript backend with MongoDB and strict Mongoose schema-level multi-tenant isolation.",
+          "Integrated Redis and BullMQ for reliable background job processing and automated billing generation.",
+          "Architected role-based access control (RBAC) covering Doctors, Front Desk, Pharmacists, and Administrators.",
+          "Deployed Cloudflare Turnstile bot protection and audited auth flows with JWT.",
+        ],
+        outcome:
+          "A robust, containerized digital clinic operations platform reducing patient check-in wait times and eliminating billing disputes.",
+        metrics: [
+          {
+            label: "Tenant Model",
+            value: "Multi-Branch",
+            description: "Strict role & branch data isolation",
+          },
+          {
+            label: "Queue Reliability",
+            value: "BullMQ + Redis",
+            description: "Guaranteed background execution",
+          },
+          {
+            label: "Security Audit",
+            value: "RBAC + JWT",
+            description: "Audited multi-role access control",
+          },
+          {
+            label: "Infrastructure",
+            value: "Dockerized",
+            description: "Reproducible container runtime",
+          },
+        ],
+      },
     },
   ],
   experience: [

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ContributionHeatmap } from "../components/ContributionHeatmap";
 import { ExperienceSection } from "../components/ExperienceSection";
+import { GitHubStarBadge } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { initialPortfolioData } from "../data/portfolioData";
 import { fetchPortfolio, type Portfolio } from "../lib/api";
@@ -136,14 +137,17 @@ export function HomePage() {
                     ) : null}
                   </div>
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
-                    {proj.language ? (
-                      <p className="text-xs text-muted">
-                        <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />
-                        {proj.language}
-                      </p>
-                    ) : (
-                      <span />
-                    )}
+                    <div className="flex items-center gap-2.5">
+                      {proj.language ? (
+                        <p className="text-xs text-muted">
+                          <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />
+                          {proj.language}
+                        </p>
+                      ) : null}
+                      {proj.isOpenSource && proj.repoUrl ? (
+                        <GitHubStarBadge repoUrl={proj.repoUrl} />
+                      ) : null}
+                    </div>
                     <div>
                       {proj.url ? (
                         <span className="text-xs font-medium text-ink">Live ↗</span>

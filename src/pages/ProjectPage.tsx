@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { GitHubStarButton } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { fetchPortfolio, fetchProject, type Project } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
@@ -8,6 +9,7 @@ export function ProjectPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [siteName, setSiteName] = useState<string | null>("Pyae Phyo Maung");
 
@@ -27,7 +29,10 @@ export function ProjectPage() {
 
     void fetchPortfolio()
       .then((d) => {
-        if (!cancelled) setSiteName(d.profile?.name ?? null);
+        if (!cancelled) {
+          setSiteName(d.profile?.name ?? null);
+          setAllProjects(d.projects ?? []);
+        }
       })
       .catch(() => undefined);
 
@@ -36,10 +41,18 @@ export function ProjectPage() {
     };
   }, [slug]);
 
+  const currentIndex = allProjects.findIndex((p) => p.slug === slug);
+  const nextProject =
+    currentIndex >= 0 && allProjects.length > 1
+      ? allProjects[(currentIndex + 1) % allProjects.length]
+      : null;
+
   const paragraphs = (project?.body || project?.summary || "")
     .split(/\n\n+/)
     .map((p) => p.trim())
     .filter(Boolean);
+
+  const cs = project?.caseStudy;
 
   return (
     <div className="min-h-screen">
@@ -54,7 +67,7 @@ export function ProjectPage() {
             queueMicrotask(() => scrollToId("projects"));
           }}
         >
-          ← Projects
+          ← Back to Selected Work
         </button>
 
         {error ? (
@@ -76,16 +89,30 @@ export function ProjectPage() {
           </div>
         ) : (
           <article className="mt-8">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-              Project
-            </p>
-            <h1 className="mt-2 font-display text-4xl tracking-tight sm:text-5xl">
+            {/* Header / Meta */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-soft px-3 py-1 text-xs font-medium text-ink">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                {project.badge ?? "Case Study"}
+              </span>
+              {project.period ? (
+                <span className="text-xs text-muted">{project.period}</span>
+              ) : null}
+            </div>
+
+            <h1 className="mt-3 font-display text-4xl tracking-tight sm:text-5xl">
               {project.title}
             </h1>
-            {project.period ? (
-              <p className="mt-2 text-sm text-muted">{project.period}</p>
+
+            {cs?.headline ? (
+              <p className="mt-3 text-lg font-medium text-ink leading-snug">
+                {cs.headline}
+              </p>
+            ) : project.summary ? (
+              <p className="mt-2 text-base text-muted">{project.summary}</p>
             ) : null}
 
+            {/* CTAs */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {project.url ? (
                 <a
@@ -99,15 +126,20 @@ export function ProjectPage() {
                 </a>
               ) : null}
               {project.repoUrl ? (
-                <a
-                  href={project.repoUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
-                >
-                  <span>Source code</span>
-                  <span aria-hidden>↗</span>
-                </a>
+                <>
+                  <a
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
+                  >
+                    <span>Source code</span>
+                    <span aria-hidden>↗</span>
+                  </a>
+                  {project.isOpenSource ? (
+                    <GitHubStarButton repoUrl={project.repoUrl} />
+                  ) : null}
+                </>
               ) : null}
               {!project.url && !project.repoUrl ? (
                 <span className="inline-flex items-center rounded-md border border-rule bg-soft px-3 py-1.5 text-xs font-medium text-muted">
@@ -116,9 +148,118 @@ export function ProjectPage() {
               ) : null}
             </div>
 
-            {project.techStack?.length ? (
+            {/* Metrics & Proof Callout Strip */}
+            {cs?.metrics?.length ? (
               <section className="mt-10">
-                <h2 className="text-sm font-semibold tracking-tight">Tech stack</h2>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Key Metrics & Engineering Proof
+                </p>
+                <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {cs.metrics.map((m) => (
+                    <div
+                      key={m.label}
+                      className="rounded-xl border border-rule bg-white p-3.5"
+                    >
+                      <p className="font-display text-2xl tracking-tight text-ink">
+                        {m.value}
+                      </p>
+                      <p className="text-xs font-semibold text-ink">{m.label}</p>
+                      <p className="mt-0.5 text-xs text-muted leading-tight">
+                        {m.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {/* Case Study Core Narrative Sections */}
+            {cs ? (
+              <div className="mt-12 space-y-8 border-t border-rule pt-8">
+                {/* 1. Problem */}
+                <section>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    Problem & Context
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl tracking-tight text-ink">
+                    The Problem & Status Quo
+                  </h2>
+                  <p className="mt-3 text-base text-muted leading-relaxed">
+                    {cs.problem}
+                  </p>
+                </section>
+
+                {/* 2. Technical Constraints */}
+                <section className="border-t border-rule pt-8">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    Engineering Challenges
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl tracking-tight text-ink">
+                    Technical Constraints
+                  </h2>
+                  <p className="mt-3 text-base text-muted leading-relaxed">
+                    {cs.constraints}
+                  </p>
+                </section>
+
+                {/* 3. Core Decisions & Architecture */}
+                <section className="border-t border-rule pt-8">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    System Architecture
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl tracking-tight text-ink">
+                    Core Decisions & Implementation
+                  </h2>
+                  <ul className="mt-4 space-y-2.5">
+                    {cs.decisions.map((d, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-base text-ink">
+                        <span className="mt-1.5 text-xs text-ink">◆</span>
+                        <span className="leading-relaxed">{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {cs.architectureHighlights?.length ? (
+                    <div className="mt-6 rounded-xl border border-rule bg-soft/50 p-4">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                        Architecture Highlights
+                      </p>
+                      <ul className="mt-2.5 space-y-1.5">
+                        {cs.architectureHighlights.map((h, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 text-xs text-ink"
+                          >
+                            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </section>
+
+                {/* 4. Verifiable Outcome */}
+                <section className="border-t border-rule pt-8">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    Results & Proof
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl tracking-tight text-ink">
+                    Outcome & Measurable Impact
+                  </h2>
+                  <div className="mt-3 rounded-xl border border-rule bg-white p-5">
+                    <p className="text-base font-medium text-ink leading-relaxed">
+                      {cs.outcome}
+                    </p>
+                  </div>
+                </section>
+              </div>
+            ) : null}
+
+            {/* Tech Stack */}
+            {project.techStack?.length ? (
+              <section className="mt-12">
+                <h2 className="text-sm font-semibold tracking-tight">Tech Stack</h2>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {project.techStack.map((t) => (
                     <li
@@ -130,20 +271,48 @@ export function ProjectPage() {
                   ))}
                 </ul>
               </section>
-            ) : project.language ? (
-              <p className="mt-8 text-sm text-muted">
-                <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-ink" />
-                {project.language}
-              </p>
             ) : null}
 
-            <section className="mt-10 space-y-4 text-base leading-relaxed text-ink">
-              {paragraphs.map((para, i) => (
-                <p key={i} className="whitespace-pre-line text-muted first:text-ink">
-                  {para}
+            {/* Additional Detailed Narrative / Breakdown */}
+            {paragraphs.length && !cs ? (
+              <section className="mt-10 space-y-4 text-base leading-relaxed text-ink">
+                {paragraphs.map((para, i) => (
+                  <p key={i} className="whitespace-pre-line text-muted first:text-ink">
+                    {para}
+                  </p>
+                ))}
+              </section>
+            ) : null}
+
+            {/* Next Case Study Navigation */}
+            {nextProject ? (
+              <div className="mt-16 border-t border-rule pt-8">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Next Case Study
                 </p>
-              ))}
-            </section>
+                <Link
+                  to={`/projects/${nextProject.slug}`}
+                  className="group mt-2 block rounded-xl border border-rule bg-white p-5 transition hover:border-ink/40"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs text-muted">
+                        {nextProject.badge ?? "Case Study"}
+                      </span>
+                      <h3 className="font-display text-2xl tracking-tight text-ink group-hover:underline">
+                        {nextProject.title}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted">
+                        {nextProject.caseStudy?.headline ?? nextProject.summary}
+                      </p>
+                    </div>
+                    <span className="text-xl text-muted group-hover:text-ink">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            ) : null}
           </article>
         )}
       </main>
