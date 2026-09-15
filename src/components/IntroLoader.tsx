@@ -84,8 +84,8 @@ export function IntroLoader() {
       role="status"
       aria-label="Loading portfolio"
       className={`fixed inset-0 z-50 flex flex-col justify-between bg-paper p-6 transition-all duration-800 ease-in-out sm:p-10 ${isCurtainUp
-          ? "pointer-events-none -translate-y-full opacity-90"
-          : "translate-y-0 opacity-100"
+        ? "pointer-events-none -translate-y-full opacity-90"
+        : "translate-y-0 opacity-100"
         }`}
       style={{
         transitionTimingFunction: "cubic-bezier(0.85, 0, 0.15, 1)",
@@ -129,7 +129,7 @@ export function IntroLoader() {
       <div className="relative z-10 flex flex-col items-center justify-center text-center">
         {/* Eyebrow badge */}
         <div
-          className={`mb-4 inline-flex items-center gap-2 rounded-full border border-rule bg-white px-3 py-1 transition-all duration-700 ${textVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+          className={`mb-4 inline-flex items-center gap-2 rounded-md border border-rule bg-white px-3 py-1 transition-all duration-700 ${textVisible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
             }`}
         >
           <span className="text-xs font-semibold uppercase tracking-widest text-muted">
