@@ -6,25 +6,21 @@ const NAV = [
   {
     id: "projects",
     label: "Projects",
-    num: "01",
     sub: "Selected work & case studies",
   },
   {
     id: "experience",
     label: "Experience",
-    num: "02",
     sub: "Career roles & timeline",
   },
   {
     id: "education",
     label: "Education",
-    num: "03",
     sub: "Degrees & certifications",
   },
   {
     id: "contact",
     label: "Contact",
-    num: "04",
     sub: "Let's build together",
   },
 ] as const;
@@ -130,7 +126,7 @@ export function SiteHeader({ name }: { name?: string | null }) {
             <button
               key={item.id}
               type="button"
-              className={`group flex items-center justify-between py-5 text-left transition-all duration-500 cursor-pointer ${open ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
+              className={`group flex items-start justify-between py-5 text-left transition-all duration-500 cursor-pointer ${open ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
                 }`}
               style={{
                 transitionDelay: `${open ? 100 + idx * 70 : 0}ms`,
@@ -138,9 +134,6 @@ export function SiteHeader({ name }: { name?: string | null }) {
               onClick={() => goSection(item.id)}
             >
               <div>
-                <span className="mb-1 block font-mono text-xs text-muted">
-                  {item.num}
-                </span>
                 <span className="font-display text-3xl tracking-tight text-ink transition-colors group-hover:text-accent">
                   {item.label}
                 </span>
