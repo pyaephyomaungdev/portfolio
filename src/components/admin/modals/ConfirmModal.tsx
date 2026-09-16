@@ -18,7 +18,7 @@ export function ConfirmModal({
   onConfirm,
   title,
   message,
-  eyebrow = "// CONFIRMATION REQUIRED",
+  eyebrow = "",
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
   variant = "destructive",
@@ -41,11 +41,10 @@ export function ConfirmModal({
         <div className="flex items-center justify-between border-b border-rule bg-white px-5 py-4">
           <div className="flex items-center gap-2.5">
             <div
-              className={`flex h-8 w-8 items-center justify-center rounded-lg border ${
-                variant === "destructive"
+              className={`flex h-8 w-8 items-center justify-center rounded-lg border ${variant === "destructive"
                   ? "border-destructive/20 bg-destructive-soft text-destructive"
                   : "border-accent/20 bg-accent-soft text-accent"
-              }`}
+                }`}
             >
               {variant === "destructive" ? (
                 <Trash2 className="h-4 w-4" />
@@ -92,11 +91,10 @@ export function ConfirmModal({
               onConfirm();
               onClose();
             }}
-            className={`rounded-lg px-4 py-2 text-xs font-mono font-medium transition cursor-pointer shadow-xs ${
-              variant === "destructive"
+            className={`rounded-lg px-4 py-2 text-xs font-mono font-medium transition cursor-pointer shadow-xs ${variant === "destructive"
                 ? "bg-destructive text-pure-white hover:bg-destructive/90"
                 : "bg-ink text-paper hover:bg-ink/90"
-            }`}
+              }`}
           >
             {confirmLabel}
           </button>

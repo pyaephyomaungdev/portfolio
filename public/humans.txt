@@ -1,0 +1,15 @@
+/* TEAM */
+Developer & Architect: Pyae Phyo Maung
+Role: Lead Systems Architect & Full-Stack Engineer
+Site: https://pyaephyomaung.dev
+GitHub: https://github.com/pyaephyomaungdev
+Location: Thailand / Remote
+
+/* SITE */
+Standards: HTML5, CSS3, ES2022, TypeScript
+Components: React 19, Tailwind CSS v4, Lucide Icons, Vite
+Hosting: Cloudflare Pages
+Edge Function: Telegram Webhook Relay
+Typography: Berkeley Mono, Instrumental Serif, Inter
+Color Space: OKLCH Design Tokens
+Doctype: HTML5

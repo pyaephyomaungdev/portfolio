@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchPortfolio, savePortfolioJson, uploadAvatarImage } from "../lib/api";
-import type { 
-  Portfolio, 
-  Project, 
-  ExperienceCompany, 
-  ExperienceRole, 
-  Education, 
-  Honor, 
-  License, 
-  Stat 
+import type {
+  Portfolio,
+  Project,
+  ExperienceCompany,
+  ExperienceRole,
+  Education,
+  Honor,
+  License,
+  Stat
 } from "../types/portfolio";
 
 // Layout & Navigation Components
@@ -18,6 +18,7 @@ import { AdminSidebar, type AdminTab } from "../components/admin/AdminSidebar";
 import { AdminFooter } from "../components/admin/AdminFooter";
 
 // Section Components (Dumb / Presentational)
+import { OverviewSection } from "../components/admin/sections/OverviewSection";
 import { ProfileSection } from "../components/admin/sections/ProfileSection";
 import { StatsSection } from "../components/admin/sections/StatsSection";
 import { ProjectsSection } from "../components/admin/sections/ProjectsSection";
@@ -38,17 +39,18 @@ import { AddProjectModal } from "../components/admin/modals/AddProjectModal";
 import { AddStatModal } from "../components/admin/modals/AddStatModal";
 import { ConfirmModal } from "../components/admin/modals/ConfirmModal";
 
-type ActiveModal = 
-  | "add-company" 
-  | "add-role" 
-  | "add-education" 
-  | "add-honor" 
-  | "add-license" 
-  | "add-project" 
-  | "add-stat" 
+type ActiveModal =
+  | "add-company"
+  | "add-role"
+  | "add-education"
+  | "add-honor"
+  | "add-license"
+  | "add-project"
+  | "add-stat"
   | null;
 
 const VALID_TABS: AdminTab[] = [
+  "overview",
   "profile",
   "stats",
   "projects",
@@ -66,11 +68,11 @@ export function AdminPage() {
 
   const activeTab: AdminTab = tab && VALID_TABS.includes(tab as AdminTab)
     ? (tab as AdminTab)
-    : "profile";
+    : "overview";
 
   useEffect(() => {
     if (tab && !VALID_TABS.includes(tab as AdminTab)) {
-      navigate("/admin/profile", { replace: true });
+      navigate("/admin/overview", { replace: true });
     }
   }, [tab, navigate]);
 
@@ -86,6 +88,10 @@ export function AdminPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
+  // Draft cache & Revert confirmation
+  const [draftDetected, setDraftDetected] = useState<Portfolio | null>(null);
+  const [revertModalOpen, setRevertModalOpen] = useState(false);
+
   // Modal Dialog states
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
   const [targetCompanyForRole, setTargetCompanyForRole] = useState<{ id: string; name: string } | null>(null);
@@ -99,7 +105,7 @@ export function AdminPage() {
     isOpen: false,
     title: "",
     message: "",
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
 
   function requestDelete(title: string, onConfirm: () => void) {
@@ -122,12 +128,38 @@ export function AdminPage() {
       setSavedSnapshot(JSON.stringify(p));
       setJsonText(JSON.stringify(p, null, 2));
       setJsonError(null);
+
+      // Check localStorage for unsaved drafts
+      try {
+        const savedDraft = localStorage.getItem("ppm_admin_draft");
+        if (savedDraft) {
+          const parsedDraft = JSON.parse(savedDraft);
+          if (JSON.stringify(parsedDraft) !== JSON.stringify(p)) {
+            setDraftDetected(parsedDraft);
+          } else {
+            localStorage.removeItem("ppm_admin_draft");
+          }
+        }
+      } catch {
+        // Ignore localStorage error
+      }
     } catch {
       setStatusMessage({ type: "error", text: "Failed to load initial data" });
     }
   }
 
   const isDirty = data !== null && savedSnapshot !== "" && JSON.stringify(data) !== savedSnapshot;
+
+  // Auto-cache dirty state in localStorage
+  useEffect(() => {
+    if (isDirty && data) {
+      try {
+        localStorage.setItem("ppm_admin_draft", JSON.stringify(data));
+      } catch {
+        // Ignore storage quota
+      }
+    }
+  }, [isDirty, data]);
 
   // Protect against accidental tab closure / reload when isDirty is true
   useEffect(() => {
@@ -138,6 +170,14 @@ export function AdminPage() {
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [isDirty]);
+
+  function handleRequestRevert() {
+    if (isDirty) {
+      setRevertModalOpen(true);
+    } else {
+      void loadData();
+    }
+  }
 
   function handleExitSite() {
     if (isDirty) {
@@ -232,6 +272,12 @@ export function AdminPage() {
     try {
       await savePortfolioJson(data);
       setSavedSnapshot(JSON.stringify(data));
+      try {
+        localStorage.removeItem("ppm_admin_draft");
+      } catch {
+        // Ignore
+      }
+      setDraftDetected(null);
       setStatusMessage({ type: "success", text: "Saved successfully to src/data/portfolio.json!" });
       setTimeout(() => setStatusMessage(null), 3500);
     } catch (err: unknown) {
@@ -381,6 +427,7 @@ export function AdminPage() {
       <AdminHeader
         statusMessage={statusMessage}
         onRevert={loadData}
+        onRequestRevert={handleRequestRevert}
         onSave={handleSave}
         onExport={handleExportJson}
         onImport={handleImportJson}
@@ -390,8 +437,48 @@ export function AdminPage() {
         isDirty={isDirty}
       />
 
+      {/* Draft Recovery Notification Banner */}
+      {draftDetected && (
+        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 pt-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-accent/30 bg-accent-soft text-accent text-xs font-mono shadow-xs">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+              <span>Unsaved local draft from a previous session detected.</span>
+            </div>
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  syncJson(draftDetected);
+                  setDraftDetected(null);
+                  setStatusMessage({ type: "success", text: "Restored unsaved draft!" });
+                  setTimeout(() => setStatusMessage(null), 3000);
+                }}
+                className="px-2.5 py-1 rounded bg-accent text-white font-medium hover:opacity-90 transition cursor-pointer"
+              >
+                Restore Draft
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem("ppm_admin_draft");
+                  } catch {
+                    // Ignore
+                  }
+                  setDraftDetected(null);
+                }}
+                className="px-2.5 py-1 rounded bg-white/60 text-ink hover:bg-white border border-accent/20 transition cursor-pointer"
+              >
+                Discard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 2. Workspace Body: Sidebar + Main Section Container */}
-      <div className="flex-1 flex items-start max-w-7xl w-full mx-auto p-4 sm:p-6 gap-6">
+      <div className="flex-1 flex flex-col md:flex-row items-start max-w-7xl w-full mx-auto p-4 sm:p-6 gap-6">
         <AdminSidebar
           activeTab={activeTab}
           onSelectTab={handleSelectTab}
@@ -405,7 +492,33 @@ export function AdminPage() {
           }}
         />
 
-        <main className="flex-1 min-w-0 bg-white rounded-xl border border-rule p-6 shadow-xs">
+        <main className="flex-1 min-w-0 w-full bg-paper rounded-xl border border-rule p-5 sm:p-6 shadow-xs">
+          {activeTab === "overview" && (
+            <OverviewSection
+              portfolio={data}
+              onUpdateAvailability={(patch) => {
+                const currentAvail = profile.availability || {
+                  enabled: true,
+                  status: "Available for Work",
+                  scope: "Full-Time & Remote",
+                  timezone: "Asia/Bangkok",
+                  timezoneLabel: "BKK (UTC+7)",
+                  sla: "<24h SLA",
+                };
+                syncJson({
+                  ...data,
+                  profile: {
+                    ...profile,
+                    availability: { ...currentAvail, ...patch },
+                  },
+                });
+                setStatusMessage({ type: "success", text: "Availability status updated!" });
+                setTimeout(() => setStatusMessage(null), 3000);
+              }}
+              onNavigateTab={handleSelectTab}
+            />
+          )}
+
           {activeTab === "profile" && (
             <ProfileSection
               profile={profile}
@@ -563,12 +676,34 @@ export function AdminPage() {
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal((prev) => ({ ...prev, isOpen: false }))}
         onConfirm={deleteModal.onConfirm}
-        eyebrow="// CONFIRM DELETION"
         title={deleteModal.title}
         message={deleteModal.message}
         confirmLabel="Delete Item"
         cancelLabel="Cancel"
         variant="destructive"
+      />
+
+      <ConfirmModal
+        isOpen={revertModalOpen}
+        onClose={() => setRevertModalOpen(false)}
+        onConfirm={() => {
+          setRevertModalOpen(false);
+          try {
+            localStorage.removeItem("ppm_admin_draft");
+          } catch {
+            // Ignore
+          }
+          setDraftDetected(null);
+          void loadData();
+          setStatusMessage({ type: "success", text: "Reloaded fresh state from disk." });
+          setTimeout(() => setStatusMessage(null), 3000);
+        }}
+        eyebrow="// DISCARD MODIFICATIONS"
+        title="Revert to Disk State?"
+        message="Are you sure you want to discard all unsaved edits and reload the saved state from src/data/portfolio.json?"
+        confirmLabel="Discard & Revert"
+        cancelLabel="Keep Editing"
+        variant="warning"
       />
     </div>
   );

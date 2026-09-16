@@ -1,0 +1,23 @@
+# Pyae Phyo Maung (PPM) — Portfolio & Systems Architecture
+
+> Lead Systems Architect & Full-Stack Engineer building high-performance web platforms, local-first developer tools, and privacy-focused distributed software.
+
+Pyae Phyo Maung is a full-stack engineer with 6+ years of production experience based in Thailand, specializing in React, TypeScript, Vite, Tailwind CSS, Cloudflare Pages edge distribution, and native Model Context Protocol (MCP) tooling.
+
+## Key Architectural Case Studies
+
+- **[JSON Link](https://pyaephyomaung.dev/projects/json-link)**: Zero-backend, local-first localization studio and spreadsheet workspace with two-way local disk synchronization via the Web File System Access API, AES-GCM 256-bit client-side encryption, and native Model Context Protocol (MCP) server for Claude Code and Cursor.
+- **[ToastStar](https://pyaephyomaung.dev/projects/toaststar)**: Production notification engine with center-launch physics, hover fan-out stacks, queue-aware scheduling, and multi-app scoping.
+- **[DeskKit](https://pyaephyomaung.dev/projects/deskkit)**: Local-first in-browser privacy suite for real-time PII masking, PDF redaction, and client-side encrypted notes using Web Crypto.
+- **[DCMS](https://pyaephyomaung.dev/projects/dcms)**: Digital Clinic Management System with role-based access control, appointment queuing, and automated clinical billing workflows.
+
+## Verified Links & Profiles
+
+- **Website**: [https://pyaephyomaung.dev](https://pyaephyomaung.dev)
+- **GitHub**: [https://github.com/pyaephyomaungdev](https://github.com/pyaephyomaungdev)
+- **Email**: [mailto:pyaephyomaung.dev@gmail.com](mailto:pyaephyomaung.dev@gmail.com)
+- **Telegram**: [https://t.me/pyaephyomaung](https://t.me/pyaephyomaung)
+- **Privacy Policy**: [https://pyaephyomaung.dev/privacy](https://pyaephyomaung.dev/privacy)
+- **Terms of Service**: [https://pyaephyomaung.dev/terms](https://pyaephyomaung.dev/terms)
+- **Cookie & Storage Policy**: [https://pyaephyomaung.dev/cookies](https://pyaephyomaung.dev/cookies)
+- **Security Contact**: [https://pyaephyomaung.dev/.well-known/security.txt](https://pyaephyomaung.dev/.well-known/security.txt)

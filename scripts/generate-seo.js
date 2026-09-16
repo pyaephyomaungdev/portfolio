@@ -48,6 +48,13 @@ export function generateSeo() {
     }
   }
 
+  // Legal & compliance routes
+  for (const legalRoute of ["privacy", "terms", "cookies"]) {
+    sitemapUrls.push(
+      `  <url>\n    <loc>${siteUrl}/${legalRoute}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.5</priority>\n  </url>`
+    );
+  }
+
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls.join(
     "\n"
   )}\n</urlset>\n`;

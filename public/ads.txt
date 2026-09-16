@@ -1,0 +1,4 @@
+# ads.txt - https://iabtechlab.com/ads-txt/
+# This domain represents an engineering portfolio and systems architecture laboratory.
+# It does not host programmatic advertising or authorize any third-party ad sellers.
+# Contact: contact@pyaephyomaung.dev

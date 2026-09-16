@@ -274,6 +274,20 @@ export function SiteFooter({ name }: SiteFooterProps) {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 font-mono text-xs">
         <span>© {new Date().getFullYear()} {displayName}</span>
         <span className="hidden sm:inline text-muted/40">•</span>
+        <div className="inline-flex items-center gap-2">
+          <Link to="/privacy" className="hover:text-ink transition underline underline-offset-4">
+            Privacy
+          </Link>
+          <span className="text-muted/40">•</span>
+          <Link to="/terms" className="hover:text-ink transition underline underline-offset-4">
+            Terms
+          </Link>
+          <span className="text-muted/40">•</span>
+          <Link to="/cookies" className="hover:text-ink transition underline underline-offset-4">
+            Cookies
+          </Link>
+        </div>
+        <span className="hidden sm:inline text-muted/40">•</span>
         <span className="inline-flex items-center gap-1.5">
           Developed with <Heart className="h-3.5 w-3.5 fill-accent text-accent inline" aria-label="love" /> by{" "}
           <a

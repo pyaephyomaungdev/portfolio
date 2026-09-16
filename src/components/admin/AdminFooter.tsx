@@ -2,7 +2,7 @@ import { Heart } from "lucide-react";
 
 export function AdminFooter() {
   return (
-    <footer className="sticky bottom-0 z-40 border-t border-rule bg-white/95 backdrop-blur-md py-3 px-6 text-center text-xs font-mono text-muted flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+    <footer className="mt-auto border-t border-rule bg-paper py-3.5 px-6 text-center text-xs font-mono text-muted flex flex-col sm:flex-row items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         <span className="h-2 w-2 rounded-full bg-accent" />
         <span>Portfolio Admin // Local Data Mode</span>
