@@ -8,17 +8,18 @@ This document outlines the official design tokens, typography, layout rules, and
 
 The color system is built on a **Swiss / Architectural Editorial** visual aesthetic: warm tactile paper, deep ink contrast, subtle boundary rules, and an international electric orange accent.
 
-| Token | CSS Variable | Tailwind Utility | Hex / Value | Usage |
-|---|---|---|---|---|
-| **Paper (Base)** | `--paper` | `bg-paper` | `#fbfbfa` | Primary canvas & background. Soft warm off-white. |
-| **Ink (Text)** | `--ink` | `text-ink`, `bg-ink` | `#1a1a1a` | Primary text, titles, high-contrast badges & primary CTA buttons. |
-| **Muted** | `--muted` | `text-muted` | `#6b6b6b` | Secondary descriptions, timestamps, subtitles, and subtle glyphs. |
-| **Rule (Borders)** | `--rule` | `border-rule` | `#e8e8e6` | Architectural gridlines, structural dividers, card borders. |
-| **Soft (Surface)** | `--soft` | `bg-soft` | `#f4f4f2` | Subtle container backgrounds, code blocks, chip badges. |
-| **White** | `--white` | `bg-white` | `#ffffff` | Elevated cards, interactive inputs, floating headers. |
-| **Accent (Signal)**| `--accent`| `text-accent`, `bg-accent`| `#f54e00` | Signal orange for live badges, status indicators, and active highlights. |
-| **Accent Soft** | `--accent-soft` | `bg-accent-soft` | `#ffe8de` | Tinted background for active states and alert highlights. |
-| **Destructive** | `--color-destructive` | `text-destructive` | `#b91c1c` | Deletions, warnings, and error statuses. |
+| Token | CSS Variable | Tailwind Utility | Light Hex | Dark Hex | Usage |
+|---|---|---|---|---|---|
+| **Paper (Base)** | `--paper` | `bg-paper` | `#fbfbfa` | `#0c0d0e` | Primary canvas & background. Soft warm off-white in light, matte obsidian in dark. |
+| **Ink (Text)** | `--ink` | `text-ink`, `bg-ink` | `#1a1a1a` | `#f4f4f2` | Primary text, titles, high-contrast badges & primary CTA buttons. |
+| **Muted** | `--muted` | `text-muted` | `#6b6b6b` | `#8e8f96` | Secondary descriptions, timestamps, subtitles, and subtle glyphs. |
+| **Rule (Borders)** | `--rule` | `border-rule` | `#e8e8e6` | `#23252a` | Architectural gridlines, structural dividers, card borders. |
+| **Soft (Surface)** | `--soft` | `bg-soft` | `#f4f4f2` | `#15161a` | Subtle container backgrounds, code blocks, chip badges. |
+| **White (Elevated)** | `--white` | `bg-white` | `#ffffff` | `#1a1b20` | Elevated cards, interactive inputs, floating headers. |
+| **Pure White** | `--pure-white` | `text-pure-white` | `#ffffff` | `#ffffff` | Absolute high-contrast pure white text for colored/destructive buttons. |
+| **Accent (Signal)**| `--accent`| `text-accent`, `bg-accent`| `#f54e00` | `#ff5c1a` | Signal orange for live badges, status indicators, and active highlights. |
+| **Accent Soft** | `--accent-soft` | `bg-accent-soft` | `#ffe8de` | `#2e160a` | Tinted background for active states and alert highlights. |
+| **Destructive** | `--color-destructive` | `text-destructive` | `#b91c1c` | `#ef4444` | Deletions, warnings, and error statuses. |
 
 ---
 

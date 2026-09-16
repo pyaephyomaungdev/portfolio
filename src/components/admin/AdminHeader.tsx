@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
 import { 
   Save, 
   RotateCcw, 
@@ -9,6 +8,7 @@ import {
   Download, 
   Upload 
 } from "lucide-react";
+import { ThemeToggle } from "../ThemeToggle";
 
 interface AdminHeaderProps {
   statusMessage: { type: "success" | "error"; text: string } | null;
@@ -16,6 +16,7 @@ interface AdminHeaderProps {
   onSave: () => void;
   onExport: () => void;
   onImport: (file: File) => void;
+  onExit?: () => void;
   isSaving: boolean;
   hasErrors: boolean;
   isDirty?: boolean;
@@ -27,6 +28,7 @@ export function AdminHeader({
   onSave,
   onExport,
   onImport,
+  onExit,
   isSaving,
   hasErrors,
   isDirty = false,
@@ -110,15 +112,17 @@ export function AdminHeader({
           <span className="hidden sm:inline">Revert</span>
         </button>
 
-        <Link
-          to="/"
-          target="_blank"
-          title="Open live site preview in new tab"
+        <button
+          type="button"
+          onClick={onExit}
+          title="Return to public portfolio site"
           className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-2.5 py-1.5 text-xs font-mono text-muted hover:text-ink hover:border-ink/40 transition-colors shadow-2xs cursor-pointer"
         >
           <Eye className="h-3.5 w-3.5" />
-          <span>Preview</span>
-        </Link>
+          <span>Exit to Site</span>
+        </button>
+
+        <ThemeToggle className="px-2.5 py-1.5" />
 
         {isDirty && !statusMessage && (
           <span className="inline-flex items-center gap-1.5 rounded-md bg-accent-soft px-2 py-0.5 text-xs font-mono text-accent border border-accent/20">

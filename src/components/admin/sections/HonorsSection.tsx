@@ -6,11 +6,26 @@ interface HonorsSectionProps {
   honors: Honor[];
   onChange: (honors: Honor[]) => void;
   onOpenAddModal: () => void;
+  onRequestDelete?: (title: string, onConfirm: () => void) => void;
 }
 
-export function HonorsSection({ honors, onChange, onOpenAddModal }: HonorsSectionProps) {
+export function HonorsSection({
+  honors,
+  onChange,
+  onOpenAddModal,
+  onRequestDelete,
+}: HonorsSectionProps) {
   function moveHonor(index: number, direction: "up" | "down") {
     onChange(reorderArray(honors, index, direction));
+  }
+
+  function handleDeleteHonor(idx: number, title: string) {
+    const doDelete = () => onChange(honors.filter((_, i) => i !== idx));
+    if (onRequestDelete) {
+      onRequestDelete(title || "Honor entry", doDelete);
+    } else {
+      doDelete();
+    }
   }
 
   return (
@@ -32,36 +47,41 @@ export function HonorsSection({ honors, onChange, onOpenAddModal }: HonorsSectio
         </button>
       </div>
 
-      <div className="space-y-3">
-        {honors.map((h, idx) => (
-          <div key={h.id} className="p-4 rounded-xl border border-rule bg-paper space-y-2">
-            <div className="flex justify-between items-center gap-3">
-              <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                <ReorderButtons
-                  canMoveUp={idx > 0}
-                  canMoveDown={idx < honors.length - 1}
-                  onMoveUp={() => moveHonor(idx, "up")}
-                  onMoveDown={() => moveHonor(idx, "down")}
-                />
-                <input
-                  type="text"
-                  value={h.title}
-                  onChange={(e) => {
-                    const updated = [...honors];
-                    updated[idx] = { ...h, title: e.target.value };
-                    onChange(updated);
-                  }}
-                  className="font-semibold text-base text-ink bg-transparent border-b border-transparent focus:border-ink outline-none flex-1 min-w-0"
-                />
+      {honors.length === 0 ? (
+        <div className="text-center py-12 border border-dashed border-rule rounded-xl text-muted text-xs font-mono">
+          No honors or awards configured yet. Click "Add Honor" above to create one.
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {honors.map((h, idx) => (
+            <div key={h.id} className="p-4 rounded-xl border border-rule bg-paper space-y-2">
+              <div className="flex justify-between items-center gap-3">
+                <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                  <ReorderButtons
+                    canMoveUp={idx > 0}
+                    canMoveDown={idx < honors.length - 1}
+                    onMoveUp={() => moveHonor(idx, "up")}
+                    onMoveDown={() => moveHonor(idx, "down")}
+                  />
+                  <input
+                    type="text"
+                    value={h.title}
+                    onChange={(e) => {
+                      const updated = [...honors];
+                      updated[idx] = { ...h, title: e.target.value };
+                      onChange(updated);
+                    }}
+                    className="font-semibold text-base text-ink bg-transparent border-b border-transparent focus:border-ink outline-none flex-1 min-w-0"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteHonor(idx, h.title)}
+                  className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer shrink-0"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => onChange(honors.filter((_, i) => i !== idx))}
-                className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer shrink-0"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <div>
                 <span className="text-xs font-mono text-muted uppercase">Issuer</span>
@@ -107,7 +127,8 @@ export function HonorsSection({ honors, onChange, onOpenAddModal }: HonorsSectio
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

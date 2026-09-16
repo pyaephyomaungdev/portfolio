@@ -6,11 +6,26 @@ interface EducationSectionProps {
   education: Education[];
   onChange: (education: Education[]) => void;
   onOpenAddModal: () => void;
+  onRequestDelete?: (title: string, onConfirm: () => void) => void;
 }
 
-export function EducationSection({ education, onChange, onOpenAddModal }: EducationSectionProps) {
+export function EducationSection({
+  education,
+  onChange,
+  onOpenAddModal,
+  onRequestDelete,
+}: EducationSectionProps) {
   function moveEducation(index: number, direction: "up" | "down") {
     onChange(reorderArray(education, index, direction));
+  }
+
+  function handleDeleteEducation(idx: number, school: string) {
+    const doDelete = () => onChange(education.filter((_, i) => i !== idx));
+    if (onRequestDelete) {
+      onRequestDelete(school || "Education entry", doDelete);
+    } else {
+      doDelete();
+    }
   }
 
   return (
@@ -32,36 +47,41 @@ export function EducationSection({ education, onChange, onOpenAddModal }: Educat
         </button>
       </div>
 
-      <div className="space-y-3">
-        {education.map((edu, idx) => (
-          <div key={edu.id} className="p-4 rounded-xl border border-rule bg-paper space-y-2">
-            <div className="flex justify-between items-center gap-3">
-              <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                <ReorderButtons
-                  canMoveUp={idx > 0}
-                  canMoveDown={idx < education.length - 1}
-                  onMoveUp={() => moveEducation(idx, "up")}
-                  onMoveDown={() => moveEducation(idx, "down")}
-                />
-                <input
-                  type="text"
-                  value={edu.school}
-                  onChange={(e) => {
-                    const updated = [...education];
-                    updated[idx] = { ...edu, school: e.target.value };
-                    onChange(updated);
-                  }}
-                  className="font-semibold text-base text-ink bg-transparent border-b border-transparent focus:border-ink outline-none flex-1 min-w-0"
-                />
+      {education.length === 0 ? (
+        <div className="text-center py-12 border border-dashed border-rule rounded-xl text-muted text-xs font-mono">
+          No education entries configured yet. Click "Add Education" above to create one.
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {education.map((edu, idx) => (
+            <div key={edu.id} className="p-4 rounded-xl border border-rule bg-paper space-y-2">
+              <div className="flex justify-between items-center gap-3">
+                <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                  <ReorderButtons
+                    canMoveUp={idx > 0}
+                    canMoveDown={idx < education.length - 1}
+                    onMoveUp={() => moveEducation(idx, "up")}
+                    onMoveDown={() => moveEducation(idx, "down")}
+                  />
+                  <input
+                    type="text"
+                    value={edu.school}
+                    onChange={(e) => {
+                      const updated = [...education];
+                      updated[idx] = { ...edu, school: e.target.value };
+                      onChange(updated);
+                    }}
+                    className="font-semibold text-base text-ink bg-transparent border-b border-transparent focus:border-ink outline-none flex-1 min-w-0"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteEducation(idx, edu.school)}
+                  className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer shrink-0"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => onChange(education.filter((_, i) => i !== idx))}
-                className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer shrink-0"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <div>
                 <span className="text-xs font-mono text-muted uppercase">Degree</span>
@@ -152,7 +172,8 @@ export function EducationSection({ education, onChange, onOpenAddModal }: Educat
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

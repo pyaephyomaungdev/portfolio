@@ -7,6 +7,7 @@ interface ExperienceSectionProps {
   onChange: (companies: ExperienceCompany[]) => void;
   onOpenAddCompanyModal: () => void;
   onOpenAddRoleModal: (companyId: string, companyName: string) => void;
+  onRequestDelete?: (title: string, onConfirm: () => void) => void;
 }
 
 export function ExperienceSection({
@@ -14,7 +15,36 @@ export function ExperienceSection({
   onChange,
   onOpenAddCompanyModal,
   onOpenAddRoleModal,
+  onRequestDelete,
 }: ExperienceSectionProps) {
+  function handleUpdateRole(companyIdx: number, roleIdx: number, updatedRole: ExperienceRole) {
+    const updated = [...companies];
+    updated[companyIdx].roles[roleIdx] = updatedRole;
+    onChange(updated);
+  }
+
+  function handleDeleteRole(companyIdx: number, roleIdx: number, roleTitle: string) {
+    const doDelete = () => {
+      const updated = [...companies];
+      updated[companyIdx].roles = updated[companyIdx].roles.filter((_, i) => i !== roleIdx);
+      onChange(updated);
+    };
+    if (onRequestDelete) {
+      onRequestDelete(roleTitle || "Role", doDelete);
+    } else {
+      doDelete();
+    }
+  }
+
+  function handleDeleteCompany(companyIdx: number, companyName: string) {
+    const doDelete = () => onChange(companies.filter((_, i) => i !== companyIdx));
+    if (onRequestDelete) {
+      onRequestDelete(companyName || "Company", doDelete);
+    } else {
+      doDelete();
+    }
+  }
+
   function moveCompany(index: number, direction: "up" | "down") {
     onChange(reorderArray(companies, index, direction));
   }
@@ -25,25 +55,6 @@ export function ExperienceSection({
       ...updated[companyIdx],
       roles: reorderArray(updated[companyIdx].roles, roleIdx, direction),
     };
-    onChange(updated);
-  }
-
-  function handleUpdateRole(
-    companyIdx: number,
-    roleIdx: number,
-    updatedRole: ExperienceRole
-  ) {
-    const updated = [...companies];
-    const roles = [...updated[companyIdx].roles];
-    roles[roleIdx] = updatedRole;
-    updated[companyIdx] = { ...updated[companyIdx], roles };
-    onChange(updated);
-  }
-
-  function handleDeleteRole(companyIdx: number, roleIdx: number) {
-    const updated = [...companies];
-    const roles = updated[companyIdx].roles.filter((_, i) => i !== roleIdx);
-    updated[companyIdx] = { ...updated[companyIdx], roles };
     onChange(updated);
   }
 
@@ -64,61 +75,66 @@ export function ExperienceSection({
         </button>
       </div>
 
-      <div className="space-y-4">
-        {companies.map((comp, cIdx) => (
-          <div key={comp.id} className="p-4 rounded-xl border border-rule bg-paper space-y-3">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex flex-1 items-center gap-2.5 flex-wrap sm:flex-nowrap">
-                <ReorderButtons
-                  canMoveUp={cIdx > 0}
-                  canMoveDown={cIdx < companies.length - 1}
-                  onMoveUp={() => moveCompany(cIdx, "up")}
-                  onMoveDown={() => moveCompany(cIdx, "down")}
-                />
-                <input
-                  type="text"
-                  value={comp.name}
-                  onChange={(e) => {
-                    const updated = [...companies];
-                    updated[cIdx] = { ...comp, name: e.target.value };
-                    onChange(updated);
-                  }}
-                  className="font-display text-lg font-bold text-ink bg-transparent border-b border-transparent focus:border-ink outline-none"
-                />
-                <input
-                  type="text"
-                  value={comp.location || ""}
-                  placeholder="Location"
-                  onChange={(e) => {
-                    const updated = [...companies];
-                    updated[cIdx] = { ...comp, location: e.target.value || null };
-                    onChange(updated);
-                  }}
-                  className="text-xs font-mono text-muted bg-white border border-rule rounded px-2 py-0.5 outline-none focus:border-ink"
-                />
-              </div>
+      {companies.length === 0 ? (
+        <div className="text-center py-12 border border-dashed border-rule rounded-xl text-muted text-xs font-mono">
+          No work experience configured yet. Click "Add Company" above to create one.
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {companies.map((comp, cIdx) => (
+            <div key={comp.id} className="p-4 rounded-xl border border-rule bg-paper space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-1 items-center gap-2.5 flex-wrap sm:flex-nowrap">
+                  <ReorderButtons
+                    canMoveUp={cIdx > 0}
+                    canMoveDown={cIdx < companies.length - 1}
+                    onMoveUp={() => moveCompany(cIdx, "up")}
+                    onMoveDown={() => moveCompany(cIdx, "down")}
+                  />
+                  <input
+                    type="text"
+                    value={comp.name}
+                    onChange={(e) => {
+                      const updated = [...companies];
+                      updated[cIdx] = { ...comp, name: e.target.value };
+                      onChange(updated);
+                    }}
+                    className="font-display text-lg font-bold text-ink bg-transparent border-b border-transparent focus:border-ink outline-none"
+                  />
+                  <input
+                    type="text"
+                    value={comp.location || ""}
+                    placeholder="Location"
+                    onChange={(e) => {
+                      const updated = [...companies];
+                      updated[cIdx] = { ...comp, location: e.target.value || null };
+                      onChange(updated);
+                    }}
+                    className="text-xs font-mono text-muted bg-white border border-rule rounded px-2 py-0.5 outline-none focus:border-ink"
+                  />
+                </div>
 
-              {/* Action Buttons: Add Role & Delete Company */}
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => onOpenAddRoleModal(comp.id, comp.name)}
-                  className="inline-flex items-center gap-1 rounded-md border border-rule bg-white px-2.5 py-1 text-xs font-mono font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs"
-                  title="Add another role to this company"
-                >
-                  <Plus className="h-3 w-3" />
-                  <span>Add Role</span>
-                </button>
-                <button
-                  type="button"
-                  title="Delete company"
-                  onClick={() => onChange(companies.filter((_, i) => i !== cIdx))}
-                  className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {/* Action Buttons: Add Role & Delete Company */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => onOpenAddRoleModal(comp.id, comp.name)}
+                    className="inline-flex items-center gap-1 rounded-md border border-rule bg-white px-2.5 py-1 text-xs font-mono font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+                    title="Add another role to this company"
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span>Add Role</span>
+                  </button>
+                  <button
+                    type="button"
+                    title="Delete company"
+                    onClick={() => handleDeleteCompany(cIdx, comp.name)}
+                    className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
-            </div>
 
             {/* Roles inside Company */}
             <div className="space-y-3">
@@ -178,7 +194,7 @@ export function ExperienceSection({
                       <button
                         type="button"
                         title="Remove role"
-                        onClick={() => handleDeleteRole(cIdx, rIdx)}
+                        onClick={() => handleDeleteRole(cIdx, rIdx, role.title)}
                         className="p-1 text-muted hover:text-destructive cursor-pointer transition"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -208,7 +224,8 @@ export function ExperienceSection({
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

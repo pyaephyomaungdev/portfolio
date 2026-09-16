@@ -2,8 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { fetchContributions, type ContributionDay, type ContributionYear } from "../lib/api";
 
-/** Ink scale — empty gray → near-black */
-const LEVEL = ["#ececea", "#c4c4c0", "#8a8a86", "#3d3d3a", "#111110"] as const;
+/** Ink scale dynamic CSS variables — adapts seamlessly to light and dark theme */
+const LEVEL_VARS = [
+  "var(--heatmap-0)",
+  "var(--heatmap-1)",
+  "var(--heatmap-2)",
+  "var(--heatmap-3)",
+  "var(--heatmap-4)",
+] as const;
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MIN_CELL = 11;
@@ -240,7 +246,7 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
                             } ${needsScroll ? "" : "aspect-square w-full min-w-0"}`}
                             style={{
                               ...(needsScroll ? { width: cell, height: cell } : null),
-                              backgroundColor: LEVEL[level],
+                              backgroundColor: LEVEL_VARS[level],
                               animationDelay: `${delay}ms`,
                             }}
                           />
@@ -272,7 +278,7 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
           </span>
           <div className="flex items-center gap-1">
             <span>Less</span>
-            {LEVEL.map((c, i) => (
+            {LEVEL_VARS.map((c, i) => (
               <span
                 key={i}
                 className="inline-block h-2.5 w-2.5 rounded-xs sm:h-3 sm:w-3 sm:rounded-xs"

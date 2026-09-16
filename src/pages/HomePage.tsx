@@ -6,6 +6,7 @@ import { GitHubStarBadge } from "../components/GitHubStarButton";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { TechIcon } from "../components/TechIcon";
 import { ExpandableText } from "../components/ExpandableText";
+import { BackToTopButton } from "../components/BackToTopButton";
 import { initialPortfolioData } from "../data/portfolioData";
 import { ArrowDown, ArrowRight, Check, ExternalLink } from "lucide-react";
 import { fetchPortfolio, type Portfolio } from "../lib/api";
@@ -42,7 +43,7 @@ export function HomePage() {
     <div className="min-h-screen">
       <SiteHeader name={p?.name} profile={p} />
 
-      <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
+      <main id="main-content" className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <section className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
           {p?.avatarUrl ? (
             <div className="relative shrink-0">
@@ -124,7 +125,7 @@ export function HomePage() {
             {data.stats.map((s) => (
               <div key={s.id}>
                 <p className="text-xs font-medium text-muted">{s.label}</p>
-                <p className="mt-1 text-2xl font-semibold tracking-tight">{s.value}</p>
+                <p className="mt-1 font-mono text-2xl font-semibold tracking-tight text-ink">{s.value}</p>
               </div>
             ))}
           </section>
@@ -397,6 +398,7 @@ export function HomePage() {
       </main>
 
       <SiteFooter name={p?.name} websiteUrl={p?.websiteUrl} />
+      <BackToTopButton />
     </div>
   );
 }

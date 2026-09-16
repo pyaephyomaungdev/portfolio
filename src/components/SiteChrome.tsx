@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowRight, ExternalLink, Heart } from "lucide-react";
 import { scrollToId } from "../lib/scrollToId";
 import { initialPortfolioData } from "../data/portfolioData";
+import { ThemeToggle } from "./ThemeToggle";
 import type { Profile } from "../types/portfolio";
 
 const NAV = [
@@ -72,6 +73,12 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-60 focus:rounded-md focus:border focus:border-rule focus:bg-ink focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-medium focus:text-paper focus:shadow-lg focus:outline-none"
+      >
+        Skip to content
+      </a>
       <header
         className={`sticky top-0 z-50 border-b border-rule backdrop-blur-md transition-colors ${
           open ? "bg-paper" : "bg-paper/90"
@@ -86,7 +93,7 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
             {displayName}
           </Link>
 
-          <nav className="hidden gap-5 text-sm text-muted sm:flex">
+          <nav className="hidden items-center gap-5 text-sm text-muted sm:flex">
             {NAV.map((item) => (
               <button
                 key={item.id}
@@ -97,32 +104,40 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
                 {item.label}
               </button>
             ))}
+            <div className="h-4 w-px bg-rule" aria-hidden="true" />
+            <ThemeToggle />
           </nav>
 
-          <button
-            type="button"
-            className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink sm:hidden cursor-pointer"
-            aria-expanded={open}
-            aria-controls={menuId}
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span className="sr-only">{open ? "Close" : "Menu"}</span>
-            <span className="relative block h-3.5 w-5" aria-hidden>
-              <span
-                className={`absolute left-0 top-0 block h-0.5 w-full rounded-full bg-current transition-all duration-300 ${open ? "translate-y-1.5 rotate-45" : ""
+          <div className="flex items-center gap-2 sm:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink cursor-pointer"
+              aria-expanded={open}
+              aria-controls={menuId}
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span className="sr-only">{open ? "Close" : "Menu"}</span>
+              <span className="relative block h-3.5 w-5" aria-hidden>
+                <span
+                  className={`absolute left-0 top-0 block h-0.5 w-full rounded-full bg-current transition-all duration-300 ${
+                    open ? "translate-y-1.5 rotate-45" : ""
                   }`}
-              />
-              <span
-                className={`absolute left-0 top-1.5 block h-0.5 w-full rounded-full bg-current transition-all duration-200 ${open ? "opacity-0" : ""
+                />
+                <span
+                  className={`absolute left-0 top-1.5 block h-0.5 w-full rounded-full bg-current transition-all duration-200 ${
+                    open ? "opacity-0" : ""
                   }`}
-              />
-              <span
-                className={`absolute left-0 top-3 block h-0.5 w-full rounded-full bg-current transition-all duration-300 ${open ? "-translate-y-1.5 -rotate-45" : ""
+                />
+                <span
+                  className={`absolute left-0 top-3 block h-0.5 w-full rounded-full bg-current transition-all duration-300 ${
+                    open ? "-translate-y-1.5 -rotate-45" : ""
                   }`}
-              />
-            </span>
-          </button>
+                />
+              </span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -165,6 +180,12 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
           className={`border-t border-rule pt-6 transition-all duration-500 delay-300 ${open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
             }`}
         >
+          {/* Theme switch row */}
+          <div className="flex items-center justify-between pb-4 border-b border-rule">
+            <span className="font-mono text-xs uppercase tracking-wider text-muted">Theme</span>
+            <ThemeToggle showLabel />
+          </div>
+
           {/* Direct contact and quick links */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             {p?.emailPublic ? (

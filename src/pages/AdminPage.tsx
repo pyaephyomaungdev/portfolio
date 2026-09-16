@@ -35,6 +35,7 @@ import { AddHonorModal } from "../components/admin/modals/AddHonorModal";
 import { AddLicenseModal } from "../components/admin/modals/AddLicenseModal";
 import { AddProjectModal } from "../components/admin/modals/AddProjectModal";
 import { AddStatModal } from "../components/admin/modals/AddStatModal";
+import { ConfirmModal } from "../components/admin/modals/ConfirmModal";
 
 type ActiveModal = 
   | "add-company" 
@@ -86,6 +87,27 @@ export function AdminPage() {
   // Modal Dialog states
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
   const [targetCompanyForRole, setTargetCompanyForRole] = useState<{ id: string; name: string } | null>(null);
+  const [unsavedExitModalOpen, setUnsavedExitModalOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
+
+  function requestDelete(title: string, onConfirm: () => void) {
+    setDeleteModal({
+      isOpen: true,
+      title: `Delete "${title}"?`,
+      message: `Are you sure you want to delete "${title}"? This item will be removed from your portfolio configuration.`,
+      onConfirm,
+    });
+  }
 
   useEffect(() => {
     void loadData();
@@ -104,6 +126,24 @@ export function AdminPage() {
   }
 
   const isDirty = data !== null && savedSnapshot !== "" && JSON.stringify(data) !== savedSnapshot;
+
+  // Protect against accidental tab closure / reload when isDirty is true
+  useEffect(() => {
+    if (!isDirty) return;
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
+
+  function handleExitSite() {
+    if (isDirty) {
+      setUnsavedExitModalOpen(true);
+    } else {
+      navigate("/");
+    }
+  }
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -342,6 +382,7 @@ export function AdminPage() {
         onSave={handleSave}
         onExport={handleExportJson}
         onImport={handleImportJson}
+        onExit={handleExitSite}
         isSaving={isSaving}
         hasErrors={Boolean(jsonError)}
         isDirty={isDirty}
@@ -377,6 +418,7 @@ export function AdminPage() {
               stats={data.stats || []}
               onChange={(stats) => syncJson({ ...data, stats })}
               onOpenAddModal={() => setActiveModal("add-stat")}
+              onRequestDelete={requestDelete}
             />
           )}
 
@@ -385,6 +427,7 @@ export function AdminPage() {
               projects={data.projects || []}
               onChange={(projects) => syncJson({ ...data, projects })}
               onOpenAddModal={() => setActiveModal("add-project")}
+              onRequestDelete={requestDelete}
             />
           )}
 
@@ -397,6 +440,7 @@ export function AdminPage() {
                 setTargetCompanyForRole({ id: companyId, name: companyName });
                 setActiveModal("add-role");
               }}
+              onRequestDelete={requestDelete}
             />
           )}
 
@@ -405,6 +449,7 @@ export function AdminPage() {
               education={data.education || []}
               onChange={(education) => syncJson({ ...data, education })}
               onOpenAddModal={() => setActiveModal("add-education")}
+              onRequestDelete={requestDelete}
             />
           )}
 
@@ -413,6 +458,7 @@ export function AdminPage() {
               honors={data.honors || []}
               onChange={(honors) => syncJson({ ...data, honors })}
               onOpenAddModal={() => setActiveModal("add-honor")}
+              onRequestDelete={requestDelete}
             />
           )}
 
@@ -421,6 +467,7 @@ export function AdminPage() {
               licenses={data.licenses || []}
               onChange={(licenses) => syncJson({ ...data, licenses })}
               onOpenAddModal={() => setActiveModal("add-license")}
+              onRequestDelete={requestDelete}
             />
           )}
 
@@ -488,6 +535,34 @@ export function AdminPage() {
         onClose={() => setActiveModal(null)}
         onAdd={handleAddStat}
         currentCount={data.stats?.length || 0}
+      />
+
+      {/* 5. Confirmation Modals */}
+      <ConfirmModal
+        isOpen={unsavedExitModalOpen}
+        onClose={() => setUnsavedExitModalOpen(false)}
+        onConfirm={() => {
+          setUnsavedExitModalOpen(false);
+          navigate("/");
+        }}
+        eyebrow="// UNSAVED CHANGES"
+        title="Discard Unsaved Changes?"
+        message="You have unsaved modifications in your portfolio editor. If you exit now, your changes will not be saved to disk."
+        confirmLabel="Discard & Exit"
+        cancelLabel="Stay & Edit"
+        variant="warning"
+      />
+
+      <ConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={deleteModal.onConfirm}
+        eyebrow="// CONFIRM DELETION"
+        title={deleteModal.title}
+        message={deleteModal.message}
+        confirmLabel="Delete Item"
+        cancelLabel="Cancel"
+        variant="destructive"
       />
     </div>
   );

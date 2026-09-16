@@ -72,6 +72,10 @@ export function ProjectPage() {
   }, [project, siteName]);
 
   const currentIndex = allProjects.findIndex((p) => p.slug === slug);
+  const prevProject =
+    currentIndex >= 0 && allProjects.length > 1
+      ? allProjects[(currentIndex - 1 + allProjects.length) % allProjects.length]
+      : null;
   const nextProject =
     currentIndex >= 0 && allProjects.length > 1
       ? allProjects[(currentIndex + 1) % allProjects.length]
@@ -88,7 +92,7 @@ export function ProjectPage() {
     <div className="min-h-screen">
       <SiteHeader name={siteName} profile={profile} />
 
-      <main className="mx-auto max-w-3xl px-5 pb-24 pt-10">
+      <main id="main-content" className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <button
           type="button"
           className="inline-flex items-center gap-1.5 text-sm text-muted underline-offset-2 hover:text-ink hover:underline cursor-pointer"
@@ -102,7 +106,26 @@ export function ProjectPage() {
         </button>
 
         {error ? (
-          <p className="mt-8 text-sm text-destructive">{error}</p>
+          <div className="mt-12 rounded-2xl border border-rule bg-white p-8 sm:p-12 text-center">
+            <span className="font-mono text-xs uppercase tracking-widest text-accent block">
+              // NOT FOUND
+            </span>
+            <h2 className="mt-2 font-display text-3xl text-ink font-normal">
+              Project Not Found
+            </h2>
+            <p className="mt-3 text-sm text-muted max-w-md mx-auto">
+              We could not find a case study with slug <code className="font-mono bg-soft px-1.5 py-0.5 rounded text-ink">{slug}</code>.
+            </p>
+            <div className="mt-6 flex justify-center gap-3">
+              <Link
+                to="/#projects"
+                className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer"
+              >
+                <span>View All Projects</span>
+                <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
         ) : !project ? (
           <div className="mt-8 animate-pulse space-y-4">
             <div className="h-4 w-16 rounded bg-soft" />
@@ -333,31 +356,59 @@ export function ProjectPage() {
               <BuyMeACoffeeCard className="mt-14" url={buyMeACoffeeUrl || undefined} />
             ) : null}
 
-            {/* Next Case Study Navigation */}
-            {nextProject ? (
+            {/* Two-Way Case Study Navigation */}
+            {allProjects.length > 1 && (prevProject || nextProject) ? (
               <div className="mt-16 border-t border-rule pt-8">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                  Next Case Study
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-3">
+                  More Case Studies
                 </p>
-                <Link
-                  to={`/projects/${nextProject.slug}`}
-                  className="group mt-2 block rounded-xl border border-rule bg-white p-5 transition hover:border-ink/40"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs text-muted">
-                        {nextProject.badge ?? "Case Study"}
-                      </span>
-                      <h3 className="font-display text-2xl tracking-tight text-ink group-hover:underline">
-                        {nextProject.title}
-                      </h3>
-                      <p className="mt-1 text-sm text-muted">
-                        {nextProject.caseStudy?.headline ?? nextProject.summary}
-                      </p>
-                    </div>
-                    <ArrowRight className="h-5 w-5 shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true" />
-                  </div>
-                </Link>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {prevProject ? (
+                    <Link
+                      to={`/projects/${prevProject.slug}`}
+                      className="group flex flex-col justify-between rounded-xl border border-rule bg-white p-5 transition hover:border-ink/40"
+                    >
+                      <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
+                        <ArrowLeft className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:-translate-x-1 group-hover:text-ink" aria-hidden="true" />
+                        <span>Previous Case Study</span>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted block mb-1">
+                          {prevProject.badge ?? "Case Study"}
+                        </span>
+                        <h3 className="font-display text-xl tracking-tight text-ink group-hover:underline">
+                          {prevProject.title}
+                        </h3>
+                        <p className="mt-1 line-clamp-2 text-xs text-muted">
+                          {prevProject.caseStudy?.headline ?? prevProject.summary}
+                        </p>
+                      </div>
+                    </Link>
+                  ) : <div />}
+
+                  {nextProject ? (
+                    <Link
+                      to={`/projects/${nextProject.slug}`}
+                      className="group flex flex-col justify-between rounded-xl border border-rule bg-white p-5 transition hover:border-ink/40 sm:text-right"
+                    >
+                      <div className="flex items-center gap-1.5 text-xs text-muted mb-2 sm:justify-end">
+                        <span>Next Case Study</span>
+                        <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted block mb-1">
+                          {nextProject.badge ?? "Case Study"}
+                        </span>
+                        <h3 className="font-display text-xl tracking-tight text-ink group-hover:underline">
+                          {nextProject.title}
+                        </h3>
+                        <p className="mt-1 line-clamp-2 text-xs text-muted">
+                          {nextProject.caseStudy?.headline ?? nextProject.summary}
+                        </p>
+                      </div>
+                    </Link>
+                  ) : null}
+                </div>
               </div>
             ) : null}
           </article>

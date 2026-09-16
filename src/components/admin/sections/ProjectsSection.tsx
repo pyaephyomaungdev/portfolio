@@ -10,14 +10,29 @@ interface ProjectsSectionProps {
   projects: Project[];
   onChange: (projects: Project[]) => void;
   onOpenAddModal: () => void;
+  onRequestDelete?: (title: string, onConfirm: () => void) => void;
 }
 
-export function ProjectsSection({ projects, onChange, onOpenAddModal }: ProjectsSectionProps) {
+export function ProjectsSection({
+  projects,
+  onChange,
+  onOpenAddModal,
+  onRequestDelete,
+}: ProjectsSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedDetailId, setExpandedDetailId] = useState<string | null>(null);
 
   function moveProject(index: number, direction: "up" | "down") {
     onChange(reorderArray(projects, index, direction));
+  }
+
+  function handleDeleteProject(proj: Project) {
+    const doDelete = () => onChange(projects.filter((p) => p.id !== proj.id));
+    if (onRequestDelete) {
+      onRequestDelete(proj.title || "Project", doDelete);
+    } else {
+      doDelete();
+    }
   }
 
   const filteredProjects = projects.filter((proj) => {
@@ -133,7 +148,7 @@ export function ProjectsSection({ projects, onChange, onOpenAddModal }: Projects
                     />
                     <button
                       type="button"
-                      onClick={() => onChange(projects.filter((p) => p.id !== proj.id))}
+                      onClick={() => handleDeleteProject(proj)}
                       title="Delete Project"
                       className="p-1 text-muted hover:text-destructive cursor-pointer transition"
                     >

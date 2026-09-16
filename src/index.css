@@ -6,14 +6,44 @@
   --muted: #6b6b6b;
   --rule: #e8e8e6;
   --soft: #f4f4f2;
+  --white: #ffffff;
+  --pure-white: #ffffff;
   --accent: #f54e00;
   --accent-soft: #ffe8de;
   --success: #15803d;
   --success-soft: #f0fdf4;
   --destructive: #b91c1c;
   --destructive-soft: #fef2f2;
+  --heatmap-0: #ececea;
+  --heatmap-1: #c4c4c0;
+  --heatmap-2: #8a8a86;
+  --heatmap-3: #3d3d3a;
+  --heatmap-4: #111110;
   --font: "DM Sans", system-ui, sans-serif;
   --display: "Instrument Serif", Georgia, serif;
+}
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0c0d0e;
+  --ink: #f4f4f2;
+  --muted: #8e8f96;
+  --rule: #23252a;
+  --soft: #15161a;
+  --white: #1a1b20;
+  --pure-white: #ffffff;
+  --accent: #ff5c1a;
+  --accent-soft: #2e160a;
+  --success: #22c55e;
+  --success-soft: #082814;
+  --destructive: #ef4444;
+  --destructive-soft: #380d0d;
+  --heatmap-0: #1a1b20;
+  --heatmap-1: #343740;
+  --heatmap-2: #5b6070;
+  --heatmap-3: #949baa;
+  --heatmap-4: #f4f4f2;
 }
 
 @theme {
@@ -22,6 +52,8 @@
   --color-muted: var(--muted);
   --color-rule: var(--rule);
   --color-soft: var(--soft);
+  --color-white: var(--white);
+  --color-pure-white: var(--pure-white);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
   --color-success: var(--success);
@@ -37,9 +69,34 @@
 }
 
 html {
-  color-scheme: light;
+  color-scheme: light dark;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--ink) 22%, transparent) transparent;
+}
+
+/* Circular View Transition Wave */
+::view-transition-group(root) {
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  will-change: clip-path;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
 }
 
 body {
@@ -150,5 +207,48 @@ body {
   .heatmap-cell:hover,
   .heatmap-cell:focus-visible {
     transform: none;
+  }
+}
+
+@media print {
+  /* Hide interactive, floating, and web-only UI elements */
+  .z-loader,
+  header,
+  nav,
+  button,
+  .btn-primary,
+  [aria-label="Back to top"],
+  a[href="#main-content"],
+  aside {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 10.5pt !important;
+    line-height: 1.4 !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Prevent awkward mid-card page splits */
+  article,
+  section,
+  .rounded-xl,
+  .rounded-2xl {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    border-color: #e5e7eb !important;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
   }
 }

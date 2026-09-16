@@ -16,6 +16,23 @@
     <meta name="theme-color" content="#fbfbfa" />
     <link rel="canonical" href="https://pyaephyomaung.dev" />
 
+    <!-- Dark / Light Theme Pre-Hydration Init (Zero-FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem("ppm_theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var isDark = saved === "dark" || ((!saved || saved === "system") && prefersDark);
+          if (isDark) {
+            document.documentElement.classList.add("dark");
+            document.documentElement.setAttribute("data-theme", "dark");
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute("content", "#0c0d0e");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <!-- Favicon & Apple Touch Icons (Generated from User Avatar) -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
