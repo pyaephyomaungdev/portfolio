@@ -233,6 +233,13 @@ export function HomePage() {
                     <p className="mt-0.5 text-sm text-muted">
                       {[e.degree, e.field].filter(Boolean).join(" · ")}
                     </p>
+                    {e.description ? (
+                      <ExpandableText
+                        text={e.description}
+                        className="mt-2 text-sm text-muted leading-relaxed"
+                        threshold={140}
+                      />
+                    ) : null}
                   </div>
                   <p className="font-mono text-xs text-muted shrink-0">
                     {[e.startDate, e.endDate].filter(Boolean).join(" – ")}

@@ -12,6 +12,7 @@ export function AddCompanyModal({ isOpen, onClose, onAdd }: AddCompanyModalProps
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [initialRoleTitle, setInitialRoleTitle] = useState("");
+  const [initialRoleDescription, setInitialRoleDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [skills, setSkills] = useState("");
@@ -35,6 +36,7 @@ export function AddCompanyModal({ isOpen, onClose, onAdd }: AddCompanyModalProps
               startDate: startDate.trim() || "Present",
               endDate: endDate.trim() || null,
               location: location.trim() || null,
+              description: initialRoleDescription.trim() || null,
               skills: skills.split(",").map((s) => s.trim()).filter(Boolean),
               sortOrder: 0,
             },
@@ -46,6 +48,7 @@ export function AddCompanyModal({ isOpen, onClose, onAdd }: AddCompanyModalProps
     setName("");
     setLocation("");
     setInitialRoleTitle("");
+    setInitialRoleDescription("");
     setStartDate("");
     setEndDate("");
     setSkills("");
@@ -120,6 +123,18 @@ export function AddCompanyModal({ isOpen, onClose, onAdd }: AddCompanyModalProps
                   className="w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink outline-none focus:border-ink transition font-mono"
                 />
               </div>
+            </div>
+            <div>
+              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                Description / Responsibilities (Optional)
+              </label>
+              <textarea
+                rows={3}
+                placeholder="Describe key responsibilities or achievements..."
+                value={initialRoleDescription}
+                onChange={(e) => setInitialRoleDescription(e.target.value)}
+                className="w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink outline-none focus:border-ink transition resize-y font-sans leading-relaxed"
+              />
             </div>
             <div>
               <label className="block text-xs font-mono uppercase text-muted mb-1">Skills (comma separated)</label>

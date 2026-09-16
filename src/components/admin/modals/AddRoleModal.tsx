@@ -21,6 +21,7 @@ export function AddRoleModal({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
   const [skills, setSkills] = useState("");
 
   function handleSubmit() {
@@ -33,6 +34,7 @@ export function AddRoleModal({
       startDate: startDate.trim() || "Present",
       endDate: endDate.trim() || null,
       location: location.trim() || null,
+      description: description.trim() || null,
       skills: skills.split(",").map((s) => s.trim()).filter(Boolean),
       sortOrder: 0,
     };
@@ -42,6 +44,7 @@ export function AddRoleModal({
     setStartDate("");
     setEndDate("");
     setLocation("");
+    setDescription("");
     setSkills("");
     onClose();
   }
@@ -97,6 +100,18 @@ export function AddRoleModal({
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink outline-none focus:border-ink transition"
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-mono uppercase text-muted mb-1">
+            Description / Responsibilities (Optional)
+          </label>
+          <textarea
+            rows={3}
+            placeholder="Key achievements, projects delivered, leadership responsibilities..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink outline-none focus:border-ink transition resize-y font-sans leading-relaxed"
           />
         </div>
         <div>

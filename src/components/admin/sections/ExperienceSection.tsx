@@ -121,67 +121,87 @@ export function ExperienceSection({
             </div>
 
             {/* Roles inside Company */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               {comp.roles.map((role, rIdx) => (
-                <div key={role.id} className="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs border-t border-rule/60 pt-2.5 items-center">
-                  <div className="sm:col-span-4">
-                    <span className="text-xs font-mono text-muted uppercase block mb-1">Role Title</span>
-                    <input
-                      type="text"
-                      value={role.title}
-                      onChange={(e) => handleUpdateRole(cIdx, rIdx, { ...role, title: e.target.value })}
-                      className="w-full rounded border border-rule bg-white px-2.5 py-1 font-medium text-ink outline-none focus:border-ink"
-                    />
-                  </div>
-                  <div className="sm:col-span-3">
-                    <span className="text-xs font-mono text-muted uppercase block mb-1">Timeline (Start – End)</span>
-                    <div className="flex gap-1">
+                <div key={role.id} className="border-t border-rule/60 pt-2.5 text-xs space-y-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+                    <div className="sm:col-span-4">
+                      <span className="text-xs font-mono text-muted uppercase block mb-1">Role Title</span>
                       <input
                         type="text"
-                        value={role.startDate}
-                        placeholder="Start"
-                        onChange={(e) => handleUpdateRole(cIdx, rIdx, { ...role, startDate: e.target.value })}
-                        className="w-1/2 rounded border border-rule bg-white px-2 py-1 font-mono text-muted outline-none focus:border-ink"
-                      />
-                      <input
-                        type="text"
-                        value={role.endDate || ""}
-                        placeholder="Present"
-                        onChange={(e) => handleUpdateRole(cIdx, rIdx, { ...role, endDate: e.target.value || null })}
-                        className="w-1/2 rounded border border-rule bg-white px-2 py-1 font-mono text-muted outline-none focus:border-ink"
+                        value={role.title}
+                        onChange={(e) => handleUpdateRole(cIdx, rIdx, { ...role, title: e.target.value })}
+                        className="w-full rounded border border-rule bg-white px-2.5 py-1 font-medium text-ink outline-none focus:border-ink"
                       />
                     </div>
+                    <div className="sm:col-span-3">
+                      <span className="text-xs font-mono text-muted uppercase block mb-1">Timeline (Start – End)</span>
+                      <div className="flex gap-1">
+                        <input
+                          type="text"
+                          value={role.startDate}
+                          placeholder="Start"
+                          onChange={(e) => handleUpdateRole(cIdx, rIdx, { ...role, startDate: e.target.value })}
+                          className="w-1/2 rounded border border-rule bg-white px-2 py-1 font-mono text-muted outline-none focus:border-ink"
+                        />
+                        <input
+                          type="text"
+                          value={role.endDate || ""}
+                          placeholder="Present"
+                          onChange={(e) => handleUpdateRole(cIdx, rIdx, { ...role, endDate: e.target.value || null })}
+                          className="w-1/2 rounded border border-rule bg-white px-2 py-1 font-mono text-muted outline-none focus:border-ink"
+                        />
+                      </div>
+                    </div>
+                    <div className="sm:col-span-3">
+                      <span className="text-xs font-mono text-muted uppercase block mb-1">Skills (comma separated)</span>
+                      <input
+                        type="text"
+                        value={role.skills.join(", ")}
+                        onChange={(e) =>
+                          handleUpdateRole(cIdx, rIdx, {
+                            ...role,
+                            skills: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                          })
+                        }
+                        className="w-full rounded border border-rule bg-white px-2.5 py-1 font-mono text-muted outline-none focus:border-ink"
+                      />
+                    </div>
+                    <div className="sm:col-span-2 flex items-center justify-end gap-1.5 pt-3 sm:pt-0">
+                      <ReorderButtons
+                        size="sm"
+                        canMoveUp={rIdx > 0}
+                        canMoveDown={rIdx < comp.roles.length - 1}
+                        onMoveUp={() => moveRole(cIdx, rIdx, "up")}
+                        onMoveDown={() => moveRole(cIdx, rIdx, "down")}
+                      />
+                      <button
+                        type="button"
+                        title="Remove role"
+                        onClick={() => handleDeleteRole(cIdx, rIdx)}
+                        className="p-1 text-muted hover:text-destructive cursor-pointer transition"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="sm:col-span-3">
-                    <span className="text-xs font-mono text-muted uppercase block mb-1">Skills (comma separated)</span>
-                    <input
-                      type="text"
-                      value={role.skills.join(", ")}
+
+                  <div>
+                    <span className="text-xs font-mono text-muted uppercase block mb-1">
+                      Description / Responsibilities (supports ExpandableText)
+                    </span>
+                    <textarea
+                      rows={2}
+                      value={role.description || ""}
+                      placeholder="Key achievements, projects delivered, leadership responsibilities..."
                       onChange={(e) =>
                         handleUpdateRole(cIdx, rIdx, {
                           ...role,
-                          skills: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                          description: e.target.value || null,
                         })
                       }
-                      className="w-full rounded border border-rule bg-white px-2.5 py-1 font-mono text-muted outline-none focus:border-ink"
+                      className="w-full rounded border border-rule bg-white px-2.5 py-1.5 text-xs text-ink outline-none focus:border-ink resize-y font-sans leading-relaxed"
                     />
-                  </div>
-                  <div className="sm:col-span-2 flex items-center justify-end gap-1.5 pt-3 sm:pt-0">
-                    <ReorderButtons
-                      size="sm"
-                      canMoveUp={rIdx > 0}
-                      canMoveDown={rIdx < comp.roles.length - 1}
-                      onMoveUp={() => moveRole(cIdx, rIdx, "up")}
-                      onMoveDown={() => moveRole(cIdx, rIdx, "down")}
-                    />
-                    <button
-                      type="button"
-                      title="Remove role"
-                      onClick={() => handleDeleteRole(cIdx, rIdx)}
-                      className="p-1 text-muted hover:text-destructive cursor-pointer transition"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
                   </div>
                 </div>
               ))}

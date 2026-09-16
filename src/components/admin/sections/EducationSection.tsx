@@ -133,6 +133,23 @@ export function EducationSection({ education, onChange, onOpenAddModal }: Educat
                 />
               </div>
             </div>
+
+            <div className="text-xs pt-1">
+              <span className="text-xs font-mono text-muted uppercase block mb-1">
+                Description / Notes (supports ExpandableText)
+              </span>
+              <textarea
+                rows={2}
+                placeholder="Activities, societies, honors, thesis, or coursework..."
+                value={edu.description || ""}
+                onChange={(e) => {
+                  const updated = [...education];
+                  updated[idx] = { ...edu, description: e.target.value || null };
+                  onChange(updated);
+                }}
+                className="w-full rounded border border-rule bg-white px-2.5 py-1.5 text-xs text-ink outline-none focus:border-ink resize-y font-sans leading-relaxed"
+              />
+            </div>
           </div>
         ))}
       </div>

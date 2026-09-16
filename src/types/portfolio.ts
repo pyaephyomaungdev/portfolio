@@ -62,6 +62,7 @@ export type ExperienceRole = {
   startDate: string;
   endDate: string | null;
   location: string | null;
+  description?: string | null;
   skills: string[];
   sortOrder: number;
 };
@@ -82,6 +83,7 @@ export type Education = {
   field: string | null;
   startDate: string | null;
   endDate: string | null;
+  description?: string | null;
   url: string | null;
 };
 

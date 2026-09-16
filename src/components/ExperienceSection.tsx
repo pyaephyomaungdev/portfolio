@@ -1,3 +1,4 @@
+import { ExpandableText } from "./ExpandableText";
 import type { ExperienceCompany } from "../lib/api";
 
 function rolePeriod(start: string, end: string | null) {
@@ -34,6 +35,13 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
                       ? ` · ${role.location || co.location}`
                       : ""}
                   </p>
+                  {role.description ? (
+                    <ExpandableText
+                      text={role.description}
+                      className="mt-2 text-sm text-muted leading-relaxed"
+                      threshold={140}
+                    />
+                  ) : null}
                   {role.skills?.length ? (
                     <p className="mt-2 text-sm text-muted">
                       <span className="mr-1 text-ink">◆</span>
@@ -68,6 +76,13 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
                       {rolePeriod(role.startDate, role.endDate)}
                       {role.location ? ` · ${role.location}` : ""}
                     </p>
+                    {role.description ? (
+                      <ExpandableText
+                        text={role.description}
+                        className="mt-2 text-sm text-muted leading-relaxed"
+                        threshold={140}
+                      />
+                    ) : null}
                     {role.skills?.length ? (
                       <p className="mt-1.5 text-sm text-muted">
                         <span className="mr-1 text-ink">◆</span>

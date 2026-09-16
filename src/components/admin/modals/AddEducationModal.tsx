@@ -14,6 +14,7 @@ export function AddEducationModal({ isOpen, onClose, onAdd }: AddEducationModalP
   const [field, setField] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [description, setDescription] = useState("");
   const [url, setUrl] = useState("");
 
   function handleSubmit() {
@@ -25,6 +26,7 @@ export function AddEducationModal({ isOpen, onClose, onAdd }: AddEducationModalP
       field: field.trim() || null,
       startDate: startDate.trim() || null,
       endDate: endDate.trim() || null,
+      description: description.trim() || null,
       url: url.trim() || null,
     };
     onAdd(newEdu);
@@ -33,6 +35,7 @@ export function AddEducationModal({ isOpen, onClose, onAdd }: AddEducationModalP
     setField("");
     setStartDate("");
     setEndDate("");
+    setDescription("");
     setUrl("");
     onClose();
   }
@@ -111,6 +114,18 @@ export function AddEducationModal({ isOpen, onClose, onAdd }: AddEducationModalP
               className="w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink outline-none focus:border-ink transition font-mono"
             />
           </div>
+        </div>
+        <div>
+          <label className="block text-xs font-mono uppercase text-muted mb-1">
+            Description / Notes (Optional)
+          </label>
+          <textarea
+            rows={3}
+            placeholder="Activities, societies, honors, thesis, or coursework..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full rounded-lg border border-rule bg-white px-3 py-2 text-sm text-ink outline-none focus:border-ink transition resize-y font-sans leading-relaxed"
+          />
         </div>
         <div>
           <label className="block text-xs font-mono uppercase text-muted mb-1">
