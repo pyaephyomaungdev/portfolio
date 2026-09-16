@@ -89,9 +89,6 @@ export function ContactForm({ profile, className = "" }: ContactFormProps) {
     <div className={`relative rounded-xl border border-rule bg-white p-6 sm:p-7 shadow-xs ${className}`}>
       <div className="flex items-center justify-between border-b border-rule pb-3.5 mb-5">
         <div>
-          <span className="font-mono text-xs uppercase tracking-widest text-muted block">
-            // DROP A QUICK NOTE
-          </span>
           <h3 className="font-display text-xl font-semibold text-ink mt-0.5">
             Direct Message Dispatch
           </h3>
@@ -228,9 +225,6 @@ export function ContactForm({ profile, className = "" }: ContactFormProps) {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-            <span className="font-mono text-xs text-muted">
-              ⚡ Direct Telegram Bot Notification enabled
-            </span>
 
             <button
               type="submit"
