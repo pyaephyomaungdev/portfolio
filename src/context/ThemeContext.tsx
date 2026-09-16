@@ -3,6 +3,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
   type MouseEvent as ReactMouseEvent,
@@ -92,8 +93,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const isTransitioningRef = useRef(false);
+
   const toggleTheme = useCallback(
     (event?: ToggleThemeEvent) => {
+      if (isTransitioningRef.current) return;
+
       const next: Theme = resolvedTheme === "dark" ? "light" : "dark";
       const isNextDark = next === "dark";
 
@@ -109,37 +114,72 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Pin the ripple center to the exact center of the clicked button
-      let x = window.innerWidth / 2;
-      let y = window.innerHeight / 2;
+      // Determine center point of the clicked button
+      let x: number | null = null;
+      let y: number | null = null;
 
       if (event) {
         const rawTarget =
           ("currentTarget" in event && event.currentTarget) ||
           ("target" in event && event.target) ||
           null;
-        const button =
-          rawTarget instanceof HTMLElement
-            ? rawTarget.closest("button") || rawTarget
-            : null;
+        const elem = rawTarget instanceof Element ? rawTarget : null;
+        const btn = elem?.closest("button") || (elem?.tagName === "BUTTON" ? (elem as HTMLElement) : null);
 
-        if (button && typeof button.getBoundingClientRect === "function") {
-          const rect = button.getBoundingClientRect();
-          x = rect.left + rect.width / 2;
-          y = rect.top + rect.height / 2;
-        } else if ("clientX" in event && typeof event.clientX === "number" && event.clientX > 0) {
+        if (btn && typeof btn.getBoundingClientRect === "function") {
+          const rect = btn.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            x = rect.left + rect.width / 2;
+            y = rect.top + rect.height / 2;
+          }
+        }
+
+        if ((x === null || y === null) && "clientX" in event && typeof event.clientX === "number" && event.clientX > 0) {
           x = event.clientX;
-          y = event.clientY;
+          y = typeof event.clientY === "number" && event.clientY > 0 ? event.clientY : 28;
         }
       }
+
+      // Priority 2: Query the DOM for visible theme button
+      if (x === null || y === null || x <= 0) {
+        if (typeof document !== "undefined") {
+          const visibleBtn = Array.from(
+            document.querySelectorAll<HTMLElement>('button[aria-label*="Switch to"], button[aria-label*="theme"]')
+          ).find((b) => b.offsetWidth > 0 && b.offsetHeight > 0);
+
+          if (visibleBtn) {
+            const rect = visibleBtn.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+              x = rect.left + rect.width / 2;
+              y = rect.top + rect.height / 2;
+            }
+          }
+        }
+      }
+
+      // Priority 3: Absolute fallback — always top-right header coordinates
+      const finalX =
+        x !== null && x > 0
+          ? x
+          : typeof window !== "undefined"
+            ? window.innerWidth - 44
+            : 320;
+      const finalY = y !== null && y > 0 ? y : 28;
 
       // Generous buffer to ensure the circle smoothly exits all 4 screen corners
       const endRadius = Math.ceil(
         Math.hypot(
-          Math.max(x, window.innerWidth - x),
-          Math.max(y, window.innerHeight - y),
-        ) + 80,
+          Math.max(finalX, window.innerWidth - finalX),
+          Math.max(finalY, window.innerHeight - finalY),
+        ) + 60,
       );
+
+      // Set CSS variables synchronously before starting the view transition
+      document.documentElement.style.setProperty("--vt-x", `${finalX}px`);
+      document.documentElement.style.setProperty("--vt-y", `${finalY}px`);
+      document.documentElement.style.setProperty("--vt-radius", `${endRadius}px`);
+
+      isTransitioningRef.current = true;
 
       // Apply root DOM theme synchronously within transition callback
       const transition = document.startViewTransition(() => {
@@ -149,22 +189,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         });
       });
 
-      transition.ready.then(() => {
-        const clipPath = [
-          `circle(0px at ${x}px ${y}px)`,
-          `circle(${endRadius}px at ${x}px ${y}px)`,
-        ];
-        document.documentElement.animate(
-          {
-            clipPath,
-          },
-          {
-            duration: 500,
-            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-            pseudoElement: "::view-transition-new(root)",
-          },
-        );
-      });
+      transition.finished
+        .catch(() => {})
+        .finally(() => {
+          isTransitioningRef.current = false;
+        });
     },
     [resolvedTheme, setTheme],
   );
