@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ContributionHeatmap } from "../components/ContributionHeatmap";
 import { ExperienceSection } from "../components/ExperienceSection";
@@ -7,15 +7,43 @@ import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { TechIcon } from "../components/TechIcon";
 import { ExpandableText } from "../components/ExpandableText";
 import { BackToTopButton } from "../components/BackToTopButton";
+import { AvailabilityBadge } from "../components/AvailabilityBadge";
+import { ContactModal } from "../components/ContactModal";
+import { ContactForm } from "../components/ContactForm";
+import { ProjectCategoryFilter } from "../components/ProjectCategoryFilter";
 import { initialPortfolioData } from "../data/portfolioData";
-import { ArrowDown, ArrowRight, Check, ExternalLink } from "lucide-react";
+import { ArrowRight, Check, ExternalLink, Printer } from "lucide-react";
 import { fetchPortfolio, type Portfolio } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
 
 export function HomePage() {
   const [data, setData] = useState<Portfolio>(initialPortfolioData);
   const [copied, setCopied] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const location = useLocation();
+
+  const categories = useMemo(() => {
+    if (!data.projects?.length) return [];
+    const counts = new Map<string, number>();
+    for (const proj of data.projects) {
+      if (proj.categories?.length) {
+        for (const cat of proj.categories) {
+          counts.set(cat, (counts.get(cat) || 0) + 1);
+        }
+      }
+    }
+    return [
+      { name: "All", count: data.projects.length },
+      ...Array.from(counts.entries()).map(([name, count]) => ({ name, count })),
+    ];
+  }, [data.projects]);
+
+  const filteredProjects = useMemo(() => {
+    if (!data.projects?.length) return [];
+    if (selectedCategory === "All") return data.projects;
+    return data.projects.filter((p) => p.categories?.includes(selectedCategory));
+  }, [data.projects, selectedCategory]);
 
   useEffect(() => {
     void fetchPortfolio().then(setData);
@@ -41,7 +69,7 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
-      <SiteHeader name={p?.name} profile={p} />
+      <SiteHeader name={p?.name} profile={p} onOpenContact={() => setContactModalOpen(true)} />
 
       <main id="main-content" className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <section className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
@@ -56,10 +84,14 @@ export function HomePage() {
                 decoding="async"
                 className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
               />
+              <AvailabilityBadge config={p?.availability} onOpenContact={() => setContactModalOpen(true)} variant="corner" />
             </div>
           ) : (
-            <div className="flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl border border-rule bg-soft text-3xl font-semibold text-muted">
-              {(p?.name || "P").slice(0, 1)}
+            <div className="relative shrink-0">
+              <div className="flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-2xl border border-rule bg-soft text-3xl font-semibold text-muted">
+                {(p?.name || "P").slice(0, 1)}
+              </div>
+              <AvailabilityBadge config={p?.availability} onOpenContact={() => setContactModalOpen(true)} variant="corner" />
             </div>
           )}
           <div className="min-w-0 flex-1">
@@ -100,14 +132,23 @@ export function HomePage() {
               />
             ) : null}
 
-            <div className="mt-5 flex flex-wrap items-center gap-3">
+
+            {/* Print-Only Recruiter Contact Bar */}
+            <div className="hidden print:flex print:flex-wrap print:items-center print:gap-4 print:mt-4 print:pt-3 print:border-t print:border-rule print:text-xs print:font-mono print:text-ink">
+              {p?.emailPublic && <span>Email: {p.emailPublic}</span>}
+              {p?.githubUrl && <span>GitHub: {p.githubUrl.replace(/^https?:\/\//, "")}</span>}
+              {p?.websiteUrl && <span>Portfolio: {p.websiteUrl.replace(/^https?:\/\//, "")}</span>}
+              {p?.location && <span>Location: {p.location}</span>}
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3 print:hidden">
               <button
                 type="button"
-                onClick={() => scrollToId("contact")}
+                onClick={() => setContactModalOpen(true)}
                 className="btn-primary inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer"
               >
                 <span>Get in touch</span>
-                <ArrowDown className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               </button>
               <button
                 type="button"
@@ -115,6 +156,15 @@ export function HomePage() {
                 className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
               >
                 <span>View work</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                title="Print or Save as PDF Resume (A4 CV)"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-ink cursor-pointer group"
+              >
+                <Printer className="h-3.5 w-3.5 shrink-0 text-muted group-hover:text-ink transition-colors" aria-hidden="true" />
+                <span>Print / Save CV</span>
               </button>
             </div>
           </div>
@@ -132,7 +182,9 @@ export function HomePage() {
         ) : null}
 
         {p?.githubUrl?.trim() ? (
-          <ContributionHeatmap githubUrl={p.githubUrl} />
+          <div data-no-print className="print:hidden">
+            <ContributionHeatmap githubUrl={p.githubUrl} />
+          </div>
         ) : null}
 
         {data.projects?.length ? (
@@ -140,66 +192,108 @@ export function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Projects
             </p>
-            <h2 className="mt-1 font-display text-3xl tracking-tight">
-              Selected work
-            </h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {data.projects.map((proj, i) => (
-                <Link
-                  key={proj.id}
-                  to={`/projects/${proj.slug}`}
-                  className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition hover:border-ink/30"
-                >
-                  <div>
-                    <span className="absolute right-3 top-3 text-xs text-muted">{i + 1}</span>
-                    <h3 className="pr-6 font-semibold tracking-tight group-hover:underline">
-                      {proj.title}
-                    </h3>
-                    {proj.period ? (
-                      <p className="mt-1 text-xs text-muted">{proj.period}</p>
-                    ) : null}
-                    {proj.summary ? (
-                      <ExpandableText
-                        text={proj.summary}
-                        className="mt-2 text-sm text-muted leading-relaxed"
-                        threshold={110}
-                      />
-                    ) : null}
-                  </div>
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
-                    <div className="flex items-center gap-2.5">
-                      {proj.language ? (
-                        <p className="inline-flex items-center gap-1.5 text-xs text-muted">
-                          <TechIcon name={proj.language} className="h-3 w-3 shrink-0 text-muted" />
-                          <span>{proj.language}</span>
-                        </p>
-                      ) : null}
-                      {proj.isOpenSource && proj.repoUrl ? (
-                        <GitHubStarBadge repoUrl={proj.repoUrl} />
-                      ) : null}
-                    </div>
-                    <div>
-                      {proj.url ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-ink">
-                          <span>Live</span>
-                          <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
-                        </span>
-                      ) : proj.repoUrl ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-medium text-muted group-hover:text-ink">
-                          <span>Source</span>
-                          <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-xs text-muted">
-                          <span>Overview</span>
-                          <ArrowRight className="h-3 w-3 shrink-0" aria-hidden="true" />
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              ))}
+            <div className="mt-1 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+              <h2 className="font-display text-3xl tracking-tight">
+                Selected work
+              </h2>
+              {selectedCategory !== "All" && (
+                <span className="font-mono text-xs text-muted">
+                  Showing {filteredProjects.length} of {data.projects.length} projects
+                </span>
+              )}
             </div>
+
+            {/* Horizontally Scrollable Filter Chips with Gradient Blur Navigation */}
+            <ProjectCategoryFilter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+
+            {filteredProjects.length === 0 ? (
+              <div className="mt-6 rounded-xl border border-dashed border-rule p-8 text-center">
+                <p className="text-sm text-muted">
+                  No projects found matching category &ldquo;{selectedCategory}&rdquo;.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory("All")}
+                  className="mt-3 text-xs font-medium text-accent underline-offset-2 hover:underline cursor-pointer"
+                >
+                  Reset filter to All
+                </button>
+              </div>
+            ) : (
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {filteredProjects.map((proj, i) => (
+                  <Link
+                    key={proj.id}
+                    to={`/projects/${proj.slug}`}
+                    className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition hover:border-ink/30"
+                  >
+                    <div>
+                      <span className="absolute right-3 top-3 text-xs text-muted">{i + 1}</span>
+                      <h3 className="pr-6 font-semibold tracking-tight group-hover:underline">
+                        {proj.title}
+                      </h3>
+                      {proj.period ? (
+                        <p className="mt-1 text-xs text-muted">{proj.period}</p>
+                      ) : null}
+                      {proj.summary ? (
+                        <ExpandableText
+                          text={proj.summary}
+                          className="mt-2 text-sm text-muted leading-relaxed"
+                          threshold={110}
+                        />
+                      ) : null}
+                      {proj.categories?.length ? (
+                        <div className="mt-2.5 flex flex-wrap gap-1">
+                          {proj.categories.map((cat) => (
+                            <span
+                              key={cat}
+                              className="inline-block rounded border border-rule/70 bg-soft/60 px-1.5 py-0.5 font-mono text-xs text-muted"
+                            >
+                              {cat}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
+                      <div className="flex items-center gap-2.5">
+                        {proj.language ? (
+                          <p className="inline-flex items-center gap-1.5 text-xs text-muted">
+                            <TechIcon name={proj.language} className="h-3 w-3 shrink-0 text-muted" />
+                            <span>{proj.language}</span>
+                          </p>
+                        ) : null}
+                        {proj.isOpenSource && proj.repoUrl ? (
+                          <GitHubStarBadge repoUrl={proj.repoUrl} />
+                        ) : null}
+                      </div>
+                      <div>
+                        {proj.url ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-ink">
+                            <span>Live</span>
+                            <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                          </span>
+                        ) : proj.repoUrl ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-muted group-hover:text-ink">
+                            <span>Source</span>
+                            <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-xs text-muted">
+                            <span>Overview</span>
+                            <ArrowRight className="h-3 w-3 shrink-0" aria-hidden="true" />
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </section>
         ) : null}
 
@@ -350,37 +444,50 @@ export function HomePage() {
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setContactModalOpen(true)}
+                className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition cursor-pointer"
+              >
+                <span>Direct Channels Hub</span>
+                <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+              </button>
+
               {p?.emailPublic ? (
-                <>
-                  <a
-                    href={`mailto:${p.emailPublic}`}
-                    className="btn-primary inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition cursor-pointer"
-                  >
-                    <span>Send email</span>
-                    <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (p?.emailPublic) {
-                        navigator.clipboard.writeText(p.emailPublic);
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 2000);
-                      }
-                    }}
-                    className="inline-flex items-center gap-2 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                        <span>Copied to clipboard!</span>
-                      </>
-                    ) : (
-                      <span>Copy email address</span>
-                    )}
-                  </button>
-                </>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (p?.emailPublic) {
+                      void navigator.clipboard.writeText(p.emailPublic);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }
+                  }}
+                  className="inline-flex items-center gap-2 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-ink transition hover:border-ink cursor-pointer"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                      <span>Copied to clipboard!</span>
+                    </>
+                  ) : (
+                    <span>Copy email address</span>
+                  )}
+                </button>
               ) : null}
+
+              {p?.telegramUrl ? (
+                <a
+                  href={p.telegramUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-4 py-2.5 text-sm font-medium text-muted transition hover:border-ink hover:text-ink"
+                >
+                  <span>Telegram</span>
+                  <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                </a>
+              ) : null}
+
               {p?.githubUrl ? (
                 <a
                   href={p.githubUrl}
@@ -394,11 +501,21 @@ export function HomePage() {
               ) : null}
             </div>
           </div>
+
+          {/* Direct Note Form - Only rendered when Telegram dispatch is configured */}
+          {p?.telegramConfigured ? <ContactForm profile={p} className="mt-6" /> : null}
         </section>
       </main>
 
       <SiteFooter name={p?.name} websiteUrl={p?.websiteUrl} />
       <BackToTopButton />
+
+      {/* Direct Contact Modal */}
+      <ContactModal
+        isOpen={contactModalOpen}
+        onClose={() => setContactModalOpen(false)}
+        profile={p}
+      />
     </div>
   );
 }

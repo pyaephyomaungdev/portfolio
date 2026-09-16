@@ -5,6 +5,7 @@ import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { TechIcon } from "../components/TechIcon";
 import { ExpandableText } from "../components/ExpandableText";
 import { BuyMeACoffeeButton, BuyMeACoffeeCard } from "../components/BuyMeACoffeeButton";
+import { ArchitectureBlueprint } from "../components/ArchitectureBlueprint";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { fetchPortfolio, fetchProject, type Project, type Profile } from "../lib/api";
 import { initialPortfolioData } from "../data/portfolioData";
@@ -298,6 +299,12 @@ export function ProjectPage() {
                           </li>
                         ))}
                       </ul>
+                    </div>
+                  ) : null}
+
+                  {cs.blueprint ? (
+                    <div className="mt-8">
+                      <ArchitectureBlueprint blueprint={cs.blueprint} />
                     </div>
                   ) : null}
                 </section>

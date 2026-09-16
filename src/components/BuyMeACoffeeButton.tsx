@@ -104,8 +104,8 @@ export function BuyMeACoffeeButton({
       target="_blank"
       rel="noreferrer"
       aria-label="Buy me a coffee on BuyMeACoffee.com"
-      className={`group inline-flex items-center gap-2 rounded-xl bg-ink text-paper font-medium shadow-xs hover:opacity-90 active:opacity-80 transition cursor-pointer ${
-        isSm ? "px-3 py-1.5 text-xs" : "px-4 py-2.5 text-sm"
+      className={`group inline-flex items-center gap-2 rounded-lg bg-ink text-paper font-medium shadow-xs hover:opacity-90 active:opacity-80 transition cursor-pointer ${
+        isSm ? "px-4 py-2 text-sm" : "px-4 py-2.5 text-sm"
       } ${className}`}
     >
       <BuyMeACoffeeIcon className={isSm ? "h-3.5 w-3.5 shrink-0" : "h-4 w-4 shrink-0"} />
@@ -123,7 +123,8 @@ export function BuyMeACoffeeCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-rule bg-white p-6 sm:p-8 text-center shadow-xs flex flex-col items-center justify-center gap-3 ${className}`}
+      data-no-print
+      className={`rounded-2xl border border-rule bg-white p-6 sm:p-8 text-center shadow-xs flex flex-col items-center justify-center gap-3 no-print ${className}`}
     >
       <span className="text-xs font-mono uppercase tracking-widest text-muted">
         Support The Creator

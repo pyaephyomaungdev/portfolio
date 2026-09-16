@@ -1,3 +1,12 @@
+export type AvailabilityConfig = {
+  enabled?: boolean;
+  status?: string;
+  scope?: string;
+  timezone?: string;
+  timezoneLabel?: string;
+  sla?: string;
+};
+
 export type Profile = {
   name: string;
   handle: string;
@@ -8,8 +17,14 @@ export type Profile = {
   githubUrl: string | null;
   websiteUrl: string | null;
   buyMeACoffeeUrl?: string | null;
+  telegramUrl?: string | null;
+  linkedinUrl?: string | null;
   joinedLabel: string | null;
   bio: string | null;
+  availability?: AvailabilityConfig;
+  contactModalTitle?: string | null;
+  contactModalSubtitle?: string | null;
+  telegramConfigured?: boolean;
 };
 
 export type Stat = {
@@ -25,6 +40,29 @@ export type ProjectMetric = {
   description: string;
 };
 
+export type BlueprintNode = {
+  id: string;
+  label: string;
+  role: string;
+  badge: "CLIENT" | "ENGINE" | "STORAGE" | "AGENT" | "NETWORK";
+  details?: string;
+};
+
+export type BlueprintConnection = {
+  from: string;
+  to: string;
+  label?: string;
+  bidirectional?: boolean;
+};
+
+export type SystemBlueprint = {
+  protocol: string;
+  headline: string;
+  description: string;
+  nodes: BlueprintNode[];
+  connections: BlueprintConnection[];
+};
+
 export type CaseStudy = {
   headline: string;
   problem: string;
@@ -33,6 +71,7 @@ export type CaseStudy = {
   outcome: string;
   metrics: ProjectMetric[];
   architectureHighlights?: string[];
+  blueprint?: SystemBlueprint;
 };
 
 export type Project = {
@@ -46,6 +85,7 @@ export type Project = {
   repoUrl: string | null;
   language: string | null;
   techStack: string[];
+  categories?: string[];
   featured: boolean;
   sortOrder: number;
   badge?: string;

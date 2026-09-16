@@ -165,9 +165,8 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
               key={y}
               type="button"
               onClick={() => setYear(y)}
-              className={`flex min-h-11 min-w-12 items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors sm:min-h-0 sm:min-w-0 sm:px-2.5 sm:py-1 cursor-pointer ${
-                y === year ? "btn-primary" : "text-muted hover:text-ink"
-              }`}
+              className={`flex min-h-8 sm:min-w-12 items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors sm:min-h-0 sm:min-w-0 sm:px-2.5 sm:py-1 cursor-pointer ${y === year ? "btn-primary" : "text-muted hover:text-ink"
+                }`}
             >
               {y}
             </button>
@@ -241,9 +240,8 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
                             onMouseLeave={() => setTip(null)}
                             onFocus={(e) => showTip(e.currentTarget, `${d.count} on ${d.date}`)}
                             onBlur={() => setTip(null)}
-                            className={`rounded-xs border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-1 sm:rounded-xs cursor-pointer ${
-                              animateCells ? "heatmap-cell" : "opacity-0"
-                            } ${needsScroll ? "" : "aspect-square w-full min-w-0"}`}
+                            className={`rounded-xs border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-1 sm:rounded-xs cursor-pointer ${animateCells ? "heatmap-cell" : "opacity-0"
+                              } ${needsScroll ? "" : "aspect-square w-full min-w-0"}`}
                             style={{
                               ...(needsScroll ? { width: cell, height: cell } : null),
                               backgroundColor: LEVEL_VARS[level],
@@ -292,19 +290,19 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
 
       {tip
         ? createPortal(
-            <div
-              className="pointer-events-none fixed z-50 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-xs font-medium shadow-md"
-              style={{
-                left: tip.x,
-                top: tip.y,
-                color: "var(--paper)",
-                transform: tip.place === "above" ? "translate(-50%, -100%)" : "translate(-50%, 0)",
-              }}
-            >
-              {tip.text}
-            </div>,
-            document.body,
-          )
+          <div
+            className="pointer-events-none fixed z-50 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-xs font-medium shadow-md"
+            style={{
+              left: tip.x,
+              top: tip.y,
+              color: "var(--paper)",
+              transform: tip.place === "above" ? "translate(-50%, -100%)" : "translate(-50%, 0)",
+            }}
+          >
+            {tip.text}
+          </div>,
+          document.body,
+        )
         : null}
     </section>
   );

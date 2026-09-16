@@ -210,24 +210,106 @@ body {
   }
 }
 
+@keyframes popover-spring-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(-6px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.015) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Utility to completely hide scrollbars while preserving native smooth scrolling */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.animate-popover-bloom {
+  animation: popover-spring-in 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: 96px -6px;
+}
+
+.popover-container {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: -84px;
+  width: calc(100vw - 2.5rem);
+  max-width: 320px;
+}
+
+.popover-notch {
+  position: absolute;
+  top: -6px;
+  left: 96px;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+@media (min-width: 640px) {
+  .animate-popover-bloom {
+    transform-origin: 14px -6px;
+  }
+
+  .popover-container {
+    left: 0;
+    width: 20rem;
+    max-width: 20rem;
+  }
+
+  .popover-notch {
+    left: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-popover-bloom {
+    animation: none;
+  }
+}
+
+@page {
+  margin: 1.5cm;
+  size: A4 portrait;
+}
+
 @media print {
-  /* Hide interactive, floating, and web-only UI elements */
+  /* Hide interactive, floating, web-only UI elements, and donation cards */
+  .no-print,
+  [data-no-print],
   .z-loader,
   header,
   nav,
   button,
   .btn-primary,
   [aria-label="Back to top"],
+  [aria-label="Theme"],
   a[href="#main-content"],
-  aside {
+  aside,
+  .heatmap-scroll,
+  .heatmap-cell {
     display: none !important;
   }
 
+  html,
   body {
     background: #ffffff !important;
     color: #111827 !important;
-    font-size: 10.5pt !important;
-    line-height: 1.4 !important;
+    font-size: 10pt !important;
+    line-height: 1.45 !important;
   }
 
   main {
@@ -236,7 +318,7 @@ body {
     margin: 0 !important;
   }
 
-  /* Prevent awkward mid-card page splits */
+  /* Clean, crisp monochrome borders and prevent awkward mid-card page splits */
   article,
   section,
   .rounded-xl,
@@ -244,7 +326,8 @@ body {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    border-color: #e5e7eb !important;
+    border-color: #d1d5db !important;
+    background: #ffffff !important;
   }
 
   a {

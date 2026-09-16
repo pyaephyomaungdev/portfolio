@@ -2,13 +2,14 @@
   <img src="public/avatar.jpg" width="96" height="96" alt="Pyae Phyo Maung Avatar" style="border-radius: 50%; border: 2px solid #e8e8e6; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
   <h1>Pyae Phyo Maung — Architectural Portfolio System</h1>
   <p><strong>The Swiss-Crafted, Zero-Backend Personal Portfolio & Local Visual CMS for Engineers</strong></p>
-  <p>Engineered with React 19, Vite 8, TypeScript 5.8, Tailwind CSS v4, View Transitions API, dynamic GitHub commit matrix, and an executive resume print engine.</p>
+  <p>Engineered with React 19, Vite 8, TypeScript 5.8 Strict, Tailwind CSS v4, View Transitions API, Cloudflare Pages Functions edge dispatch, dynamic GitHub commit matrix, and an executive resume print engine.</p>
 
   <p>
     <a href="https://pyaephyomaung.dev"><img src="https://img.shields.io/badge/Live_Site-pyaephyomaung.dev-blue?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Live Site" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
     <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.1-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" /></a>
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
+    <a href="https://developers.cloudflare.com/pages"><img src="https://img.shields.io/badge/Edge-Cloudflare_Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare Edge" /></a>
     <a href="https://github.com/oxc-project/oxc"><img src="https://img.shields.io/badge/Oxlint-0_Warnings-emerald?style=for-the-badge&logo=oxc&logoColor=white" alt="Oxlint Clean" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License MIT" /></a>
   </p>
@@ -37,8 +38,8 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 
 | Provider | Instant Launch | Deployment Target | Cost |
 | :--- | :--- | :--- | :--- |
+| **Cloudflare Pages** | [![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/pyaephyomaungdev/portfolio) | Cloudflare Edge (330+ Cities) + Serverless Functions | $0 / month |
 | **Vercel** | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpyaephyomaungdev%2Fportfolio) | Edge Network / Global CDN | $0 / month |
-| **Cloudflare Pages** | [![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/pyaephyomaungdev/portfolio) | Cloudflare Edge (300+ Cities) | $0 / month |
 | **Railway** | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/new?template=https://github.com/pyaephyomaungdev/portfolio) | Containerized Web Service | Free tier ready |
 | **Netlify** | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/pyaephyomaungdev/portfolio) | High-Performance Static CDN | $0 / month |
 
@@ -50,6 +51,10 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 | :--- | :--- | :--- | :--- |
 | **Data Privacy & Storage** | External backend / MongoDB | Proprietary vendor lock-in | **100% Client-Side JSON + Zero Backend** |
 | **Theme Switching UX** | Flash of unstyled white / snap | Abrupt CSS toggle | **Zero-FOUC + Circular View Transition Wave** |
+| **Live Availability & Timezone** | Static text lines | None | **Avatar Corner Radar Badge with Live Clock & Swiss Popover** |
+| **Direct Contact Notifications** | Generic mailto links only | Formspree / Typeform ($29/mo) | **Telegram Bot Zero-Leak Edge Dispatch (`functions/api/send-note.ts`)** |
+| **Category Tech Filtering** | Clunky wrapping lists | Multi-select dropdowns | **Zero-Scrollbar Momentum Chip Track with Gradient Blur Navigation** |
+| **Engineering Blueprints** | Uninteractive static screenshots | Heavy embed widgets | **Interactive Swiss Drafting System Architecture Blueprints** |
 | **CMS Experience** | Manual code edits only | Clunky block editor | **Built-in Local Visual CMS (`/admin`) with JSON Sync** |
 | **Contribution Matrix** | Static screenshots or heavy embeds | Third-party iframe widgets | **Live Dynamic SVG GitHub Heatmap (No API Key Required)** |
 | **Print / CV Capability** | Broken layouts with print headers | Watermarked PDF exports | **Resume-Ready `@media print` Clean Executive CV** |
@@ -62,30 +67,79 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 ## Feature Tour
 
 <details open>
-<summary><strong>1. Hardware-Accelerated View Transitions Light & Dark Mode</strong> (Click to collapse)</summary>
+<summary><strong>1. Live Availability & Timezone Radar Badge (Corner Anchor)</strong> (Click to collapse)</summary>
 
-* **Circular Ripple Wave Engine**: Toggling between Light and Dark mode triggers a smooth circular clip-path wave originating from the exact `(x, y)` coordinates of the cursor or touch tap using the modern `document.startViewTransition()` API.
-* **Synchronous DOM Snapshotting**: Injects `.dark` and `data-theme` state synchronously inside the transition callback, preventing DOM layout thrashing or mid-animation stutter.
-* **Extended Viewport Coverage**: Computes exact corner distances with a `+60px` boundary margin and `450ms` group duration to guarantee the wave cleanly covers all screen corners without cutting off.
-* **Zero-FOUC Architecture**: Includes a synchronous `<head>` script in `index.html` that evaluates `localStorage` and system `prefers-color-scheme` before the DOM renders, eliminating bright white flashes on reload.
-* **Sun ⇄ Moon Morphing Micro-Interaction**: Dual icons smoothly scale and rotate into view with a `duration-300` transition.
+* **Avatar Bottom-Right Anchor**: Completely eliminates lengthy horizontal hero text; anchors a sleek, space-efficient circular radar beacon at the bottom-right corner of the avatar (`AvailabilityBadge.tsx`).
+* **Real-Time Pulsing Beacon**: Live pulsing green indicator (`animate-ping bg-success`) with tactile ring boundary (`ring-2 ring-paper border-rule`).
+* **Tactile Spring Bloom Popover**: Clicking the beacon triggers an architectural popover card with a physical 45° pointer beak notch connecting directly to the beacon center.
+* **Live Asia/Bangkok Ticking Clock**: Computes exact local time via `Intl.DateTimeFormat` with IANA timezone support (`Asia/Bangkok`), response SLA tags (`<24h SLA`), and Swiss drafting crosshairs (`+`).
+* **Mobile Viewport Protection**: Smart boundary positioning prevents horizontal overflow on any mobile screen (iPhone SE, Pixel 7, modern Android).
 
 </details>
 
 <details open>
-<summary><strong>2. Local-First Visual Admin CMS (`/admin`)</strong> (Click to collapse)</summary>
+<summary><strong>2. Telegram Bot Instant Notification & Zero-Leak Edge Architecture</strong> (Click to collapse)</summary>
 
-* **No Backend Required**: Runs completely client-side in the browser, manipulating the structured portfolio data model in memory.
-* **Comprehensive Section Editing**: Visual CRUD interfaces for Profile, Featured Projects, Career Experience, Academic Background, Honors & Awards, Licenses & Certifications, and Key Statistics.
-* **Live In-Page Reordering**: One-click **Up (`↑`) / Down (`↓`)** reordering buttons across all arrays with intelligent edge-boundary disabling.
-* **Unsaved Changes Guard**: Custom Swiss-styled modal dialog (`ConfirmModal.tsx`) alerts the user when attempting to exit with unsaved modifications, alongside native `beforeunload` tab-close protection.
-* **Destructive Deletion Confirmation**: Prevents accidental deletion of case studies or timeline items with architectural confirmation modals.
+* **Zero-Leak Secret Isolation**: Telegram Bot Token and Chat ID are **never exposed in client-side bundles or public JSON**.
+* **Cloudflare Pages Edge Function** ([`functions/api/send-note.ts`](functions/api/send-note.ts)): Contact note submissions from the browser call `POST /api/send-note`. The Cloudflare Pages serverless function reads `context.env.TELEGRAM_BOT_TOKEN` & `context.env.TELEGRAM_CHAT_ID` and dispatches markdown notifications directly to Telegram server-to-server.
+* **Local Development Secrets Isolation**: When running locally (`npm run dev`), credentials entered in Admin are saved to gitignored `.env.local` via Vite dev connect middleware.
+* **Anti-Spam Honeypot**: Features an invisible off-screen honeypot trap (`hp_trap`) that silently neutralizes automated web scrapers.
+* **Conditional Homepage Form**: The "Direct Message Dispatch" form on the homepage is only rendered when Telegram notifications are configured and active; otherwise, displays verified direct channels (Email copy, Telegram direct link, GitHub).
+
+</details>
+
+<details open>
+<summary><strong>3. Horizontally Scrollable Tech Stack Filters with Gradient Blur Navigation</strong> (Click to collapse)</summary>
+
+* **Zero-Scrollbar Momentum Track**: Dynamically derives project category tags into a single clean horizontal track with native momentum scrolling and completely hidden scrollbars (`.no-scrollbar`).
+* **Real-Time Edge Blur Indicators**: Dynamically detects scroll boundaries; renders smooth transparent gradient overlays (`from-paper via-paper/90 to-transparent backdrop-blur-xs`) on the left and right edges when more content is available.
+* **One-Click Chevron Navigation**: Embedded circular navigation buttons (`ChevronLeft` / `ChevronRight`) allow seamless one-click scrolling without requiring touch swiping.
+* **Auto-Focus Active Pill**: Clicking any category chip smoothly scrolls the selected pill into view.
+
+</details>
+
+<details open>
+<summary><strong>4. Interactive System Architecture Blueprints for Case Studies</strong> (Click to collapse)</summary>
+
+* **Swiss Drafting Aesthetic**: Every featured engineering case study includes an architectural blueprint (`[BLUEPRINT // FIG 1.0]`) featuring boundary crosshairs (`+`), headline, narrative, and transport protocol badges.
+* **Taxonomic Node Isolation**: Interactive nodes categorized by system role (`CLIENT`, `ENGINE`, `STORAGE`, `AGENT`, `NETWORK`). Clicking any node isolates its inbound and outbound channels and dims unrelated components.
+* **Bidirectional Protocol Flow Rails**: Visual transmission data pipes displaying protocol directions (`Sync ⇄`, `Emit ──►`) and transport details (e.g., `Atomic Disk I/O`, `AES-GCM 256`, `Stdio JSON-RPC 2.0`, `BullMQ + Redis`).
+
+</details>
+
+<details>
+<summary><strong>5. Hardware-Accelerated View Transitions Light & Dark Mode</strong> (Click to expand)</summary>
+
+* **Circular Ripple Wave Engine**: Toggling between Light and Dark mode triggers a smooth circular clip-path wave originating from the exact `(x, y)` coordinates of the toggle button using the modern `document.startViewTransition()` API.
+* **Synchronous DOM Snapshotting**: Injects `.dark` and `data-theme` state synchronously inside the transition callback, preventing DOM layout thrashing.
+* **Zero-FOUC Architecture**: Synchronous inline `<head>` script evaluates `localStorage` and system `prefers-color-scheme` before DOM painting, eliminating bright white flashes on reload.
+* **Sun ⇄ Moon Morphing Micro-Interaction**: Dual icons smoothly scale and rotate into view with a `duration-500` transition.
+
+</details>
+
+<details>
+<summary><strong>6. Local-First Visual Admin CMS (`/admin`)</strong> (Click to expand)</summary>
+
+* **No Backend Required**: Runs client-side in the browser, manipulating structured portfolio data models in memory with instant disk persistence.
+* **1:1 Hero Avatar Simulation**: Profile Section includes an authentic interactive preview of the hero avatar and corner availability beacon with live popover testing.
+* **Comprehensive Section Editing**: Visual CRUD interfaces for Profile, Featured Projects, Career Experience, Academic Background, Honors & Awards, Licenses & Certifications, Key Statistics, and Cloudflare Deployment.
+* **Universal Up/Down Reordering**: One-click **Up (`↑`) / Down (`↓`)** reordering buttons across all arrays with intelligent edge-boundary disabling.
+* **Unsaved Changes Guard & Confirmation Modals**: Custom Swiss-styled modal dialogs (`ConfirmModal.tsx`) guard unsaved modifications and prevent accidental deletions.
 * **One-Click JSON Import / Export**: Export your complete portfolio configuration as a portable `.json` backup file, or import external datasets instantly.
 
 </details>
 
 <details>
-<summary><strong>3. Kinetic Typographic Intro Loader</strong> (Click to expand)</summary>
+<summary><strong>7. Cloudflare Pages Deployment & Edge Secret Hub (`/admin/deploy`)</strong> (Click to expand)</summary>
+
+* **Deploy Hub**: Dedicated admin section with 1-click Wrangler CLI commands (`npm run deploy`), build settings copies, and direct Cloudflare dashboard project creation shortcuts.
+* **SPA Routing Protection**: Includes `public/_redirects` (`/* /index.html 200`) automatically bundled into `dist/` on build to prevent 404s on deep links.
+* **Edge Environment Variables Helper**: Instant 1-click copy cards for configuring `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in Cloudflare Pages dashboard.
+
+</details>
+
+<details>
+<summary><strong>8. Kinetic Typographic Intro Loader</strong> (Click to expand)</summary>
 
 * **Precision Drafting Frame**: Opens with Swiss architectural corner crosshairs (`+`), system OK status badge, and real-time year coordinates (`PPM // 2026`).
 * **Staggered Letter Reveal**: Animates initials and full name using kinetic translateY easing.
@@ -95,7 +149,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>4. Dynamic GitHub Contribution Matrix</strong> (Click to expand)</summary>
+<summary><strong>9. Dynamic GitHub Contribution Matrix</strong> (Click to expand)</summary>
 
 * **Zero API Token Required**: Extracts public contribution data directly via username scraping with cached fallback.
 * **Adaptive Theme Palette**: Contribution squares dynamically shift between Light mode ink scale (`#ececea` → `#111110`) and Dark mode obsidian scale (`#1a1b20` → `#f4f4f2`) via CSS variables (`--heatmap-0` to `--heatmap-4`).
@@ -105,7 +159,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>5. Resume-Ready Print Engine (`@media print`)</strong> (Click to expand)</summary>
+<summary><strong>10. Resume-Ready Print Engine (`@media print`)</strong> (Click to expand)</summary>
 
 * **Executive CV Format**: Hitting `Cmd + P` or `Ctrl + P` in any browser automatically transforms the web portfolio into a clean, monochrome curriculum vitae.
 * **Web UI Elimination**: Strips out navigation bars, intro loader, floating buttons, back-to-top pill, and external links automatically.
@@ -114,7 +168,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>6. Two-Way Case Study Navigation & Dedicated 404</strong> (Click to expand)</summary>
+<summary><strong>11. Two-Way Case Study Navigation & Dedicated 404</strong> (Click to expand)</summary>
 
 * **Bilateral Navigation**: Project case study detail pages feature a responsive 2-column grid at the bottom linking to both `← Previous Case Study` and `Next Case Study →`.
 * **Architectural 404 Page**: Missing routes render an editorial `// 404 ERROR` canvas with drafting crosshairs and one-click navigation back to home or project archives.
@@ -155,6 +209,12 @@ npm run build
 ```
 Executes the automated SEO and sitemap generator (`scripts/generate-seo.js`), runs strict TypeScript checking (`tsc --noEmit`), and builds an optimized static bundle in `dist/` in under 300ms.
 
+### 5. Deploy to Cloudflare Pages
+```bash
+npm run deploy
+```
+Compiles production build and deploys to Cloudflare Pages edge network via Wrangler CLI.
+
 ---
 
 ## Visual Admin CMS (`/admin`)
@@ -163,20 +223,22 @@ The built-in CMS allows developers and non-developers to customize their entire 
 
 ```
 /admin
-├── /admin/profile        → Name, Title, Bio, Email, GitHub URL, Social Links
-├── /admin/projects       → Title, Slug, Description, Role, Tech Stack, Links, Reordering
+├── /admin/profile        → Identity, Avatar, Social Links, Availability Radar, Telegram Bot
+├── /admin/projects       → Title, Slug, Case Study, Blueprints, Buy Me A Coffee, Reordering
 ├── /admin/experience     → Companies, Work Timeline, Roles, Descriptions, Reordering
 ├── /admin/education      → Degrees, Universities, Period, Descriptions, Reordering
 ├── /admin/honors         → Competitions, Hackathons, Awards, Organizations, Reordering
 ├── /admin/licenses       → Certifications, Issuers, Credential IDs, Verification URLs
-└── /admin/stats          → Metric Badges, Numerical Values, Subtitles, Reordering
+├── /admin/stats          → Metric Badges, Numerical Values, Subtitles, Reordering
+├── /admin/deploy         → Cloudflare Pages Edge Deployment, Secrets & SPA Routing
+└── /admin/json           → Raw JSON Direct Import & Export Hub
 ```
 
 ### Workflow
 1. Navigate to `/admin`.
 2. Make edits to any section, reorder cards with **`↑`** and **`↓`** buttons.
-3. Click **Export JSON** to download your updated `portfolioData.json`.
-4. Replace `src/data/portfolioData.ts` with your exported configuration for a permanent static build, or deploy directly!
+3. Click **Save to Disk (`⌘S` / `Ctrl+S`)** to write changes directly to `src/data/portfolio.json`.
+4. Click **Export** to download portable JSON backups, or **Import** to restore datasets.
 
 ---
 
@@ -211,7 +273,11 @@ Built upon an architectural drafting philosophy combining high-contrast ink, war
 
 ```
 portfolio/
+├── functions/                  # Cloudflare Pages Serverless Edge Functions
+│   └── api/
+│       └── send-note.ts        # Server-side Telegram Bot dispatch & honeypot validation
 ├── public/                     # Static assets (Favicons, OpenGraph, Avatar)
+│   ├── _redirects              # Cloudflare Pages SPA rewrite rules (/* /index.html 200)
 │   ├── avatar.jpg              # Primary profile photo & favicon source
 │   ├── robots.txt              # Search engine crawling rules
 │   └── sitemap.xml             # Auto-generated XML sitemap
@@ -222,17 +288,24 @@ portfolio/
 │   ├── components/             # Reusable UI components
 │   │   ├── admin/              # Visual CMS editors, modals, reorder controls
 │   │   │   ├── modals/         # ConfirmModal, AddCompanyModal, AddLicenseModal
-│   │   │   └── sections/       # Section editors (Projects, Exp, Edu, Stats)
-│   │   ├── BackToTopButton.tsx # Smooth-scrolling floating action button
-│   │   ├── ContributionHeatmap.tsx # Live SVG GitHub matrix
-│   │   ├── ExpandableText.tsx  # Truncated description accordion
-│   │   ├── IntroLoader.tsx     # Kinetic typographic preloader
-│   │   ├── SiteChrome.tsx      # SiteHeader, SiteFooter, mobile navigation
-│   │   └── ThemeToggle.tsx     # Sun/Moon morphing button with View Transitions
+│   │   │   └── sections/       # Section editors (Profile, Projects, Exp, Deploy)
+│   │   ├── ArchitectureBlueprint.tsx # Interactive Swiss drafting case study blueprints
+│   │   ├── AvailabilityBadge.tsx     # Avatar corner radar beacon with popover notch
+│   │   ├── BackToTopButton.tsx       # Smooth-scrolling floating action button
+│   │   ├── BuyMeACoffeeButton.tsx    # Official brand BMC support button & card
+│   │   ├── ContactForm.tsx           # Honeypot-protected edge dispatch note form
+│   │   ├── ContactModal.tsx          # Direct engineering channels hub dialog
+│   │   ├── ContributionHeatmap.tsx   # Live SVG GitHub matrix
+│   │   ├── ExpandableText.tsx        # Truncated description accordion
+│   │   ├── IntroLoader.tsx           # Kinetic typographic preloader
+│   │   ├── ProjectCategoryFilter.tsx # Zero-scrollbar momentum chip track with gradient blur
+│   │   ├── SiteChrome.tsx            # SiteHeader, SiteFooter, mobile navigation
+│   │   └── ThemeToggle.tsx           # Sun/Moon morphing button with View Transitions
 │   ├── context/
 │   │   └── ThemeContext.tsx    # Zero-FOUC theme state with circular ripple engine
 │   ├── data/
-│   │   └── portfolioData.ts    # Single source of truth (Profile, Projects, Career)
+│   │   ├── portfolio.json      # Single source of truth (Profile, Projects, Career)
+│   │   └── portfolioData.ts    # Type-safe client fallback data
 │   ├── pages/
 │   │   ├── AdminPage.tsx       # Local CMS layout & tab controller
 │   │   ├── HomePage.tsx        # Editorial single-page portfolio layout
@@ -241,11 +314,12 @@ portfolio/
 │   ├── types/
 │   │   └── portfolio.ts        # TypeScript data model interfaces
 │   ├── App.tsx                 # Root router with ThemeProvider wrap
-│   ├── index.css               # Tailwind v4 @theme, tokens, View Transitions
+│   ├── index.css               # Tailwind v4 @theme, tokens, View Transitions, no-scrollbar
 │   └── main.tsx                # Client application entry point
 ├── DESIGN_TOKENS.md            # Official design tokens specification
 ├── index.html                  # HTML entry with Zero-FOUC script & JSON-LD
-└── package.json                # Project dependencies & scripts
+├── package.json                # Project dependencies & scripts
+└── vite.config.ts              # Vite config with admin server connect middleware
 ```
 
 ---

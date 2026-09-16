@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint",
+    "deploy": "npm run build && npx wrangler pages deploy dist",
     "generate:icons": "python3 scripts/generate-favicons.py",
     "generate:seo": "node scripts/generate-seo.js"
   },

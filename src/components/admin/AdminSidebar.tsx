@@ -7,7 +7,8 @@ import {
   GraduationCap, 
   Award, 
   BadgeCheck,
-  FileCode 
+  FileCode,
+  Cloud 
 } from "lucide-react";
 
 export type AdminTab = 
@@ -18,6 +19,7 @@ export type AdminTab =
   | "education" 
   | "honors" 
   | "licenses" 
+  | "deploy"
   | "json";
 
 interface AdminSidebarProps {
@@ -46,6 +48,7 @@ export function AdminSidebar({
     { id: "education" as const, label: "Education", icon: GraduationCap, count: counts.education },
     { id: "honors" as const, label: "Honors", icon: Award, count: counts.honors },
     { id: "licenses" as const, label: "Certifications", icon: BadgeCheck, count: counts.licenses },
+    { id: "deploy" as const, label: "Deploy & Hosting", icon: Cloud, count: null },
     { id: "json" as const, label: "Raw JSON", icon: FileCode, count: null },
   ];
 

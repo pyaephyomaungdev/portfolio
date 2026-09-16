@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowRight, ExternalLink, Heart } from "lucide-react";
+import { ArrowRight, ExternalLink, Heart, Printer } from "lucide-react";
 import { scrollToId } from "../lib/scrollToId";
 import { initialPortfolioData } from "../data/portfolioData";
 import { ThemeToggle } from "./ThemeToggle";
@@ -32,9 +32,10 @@ const NAV = [
 interface SiteHeaderProps {
   name?: string | null;
   profile?: Profile | null;
+  onOpenContact?: () => void;
 }
 
-export function SiteHeader({ name, profile }: SiteHeaderProps) {
+export function SiteHeader({ name, profile, onOpenContact }: SiteHeaderProps) {
   const p = profile ?? initialPortfolioData.profile;
   const displayName = name || p?.name || "Portfolio";
   const [open, setOpen] = useState(false);
@@ -59,6 +60,11 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
   }, [open]);
 
   function goSection(id: string) {
+    if (id === "contact" && onOpenContact) {
+      setOpen(false);
+      onOpenContact();
+      return;
+    }
     setOpen(false);
     const hash = `#${id}`;
     if (location.pathname === "/") {
@@ -104,6 +110,16 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
                 {item.label}
               </button>
             ))}
+            <div className="h-4 w-px bg-rule" aria-hidden="true" />
+            <button
+              type="button"
+              onClick={() => window.print()}
+              title="Print or Save Resume as PDF"
+              className="inline-flex items-center gap-1.5 hover:text-ink cursor-pointer transition-colors"
+            >
+              <Printer className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>Resume</span>
+            </button>
             <div className="h-4 w-px bg-rule" aria-hidden="true" />
             <ThemeToggle />
           </nav>
@@ -184,6 +200,22 @@ export function SiteHeader({ name, profile }: SiteHeaderProps) {
           <div className="flex items-center justify-between pb-4 border-b border-rule">
             <span className="font-mono text-xs uppercase tracking-wider text-muted">Theme</span>
             <ThemeToggle showLabel />
+          </div>
+
+          {/* Print / Save CV row for mobile */}
+          <div className="flex items-center justify-between py-3 border-b border-rule">
+            <span className="font-mono text-xs uppercase tracking-wider text-muted">Executive CV</span>
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setTimeout(() => window.print(), 350);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-3 py-1.5 text-xs font-mono text-ink shadow-2xs hover:border-ink/40 transition cursor-pointer"
+            >
+              <Printer className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>Print / Save PDF</span>
+            </button>
           </div>
 
           {/* Direct contact and quick links */}

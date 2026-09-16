@@ -25,6 +25,7 @@ import { ExperienceSection } from "../components/admin/sections/ExperienceSectio
 import { EducationSection } from "../components/admin/sections/EducationSection";
 import { HonorsSection } from "../components/admin/sections/HonorsSection";
 import { LicensesSection } from "../components/admin/sections/LicensesSection";
+import { DeploySection } from "../components/admin/sections/DeploySection";
 import { RawJsonSection } from "../components/admin/sections/RawJsonSection";
 
 // Modal Dialog Components
@@ -55,6 +56,7 @@ const VALID_TABS: AdminTab[] = [
   "education",
   "honors",
   "licenses",
+  "deploy",
   "json",
 ];
 
@@ -469,6 +471,10 @@ export function AdminPage() {
               onOpenAddModal={() => setActiveModal("add-license")}
               onRequestDelete={requestDelete}
             />
+          )}
+
+          {activeTab === "deploy" && (
+            <DeploySection profile={data.profile} />
           )}
 
           {activeTab === "json" && (

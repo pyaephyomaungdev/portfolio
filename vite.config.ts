@@ -97,6 +97,228 @@ function portfolioAdminPlugin(): Plugin {
           });
           return;
         }
+
+        res.statusCode = 405;
+        res.end("Method Not Allowed");
+      });
+
+      // Helper to read gitignored .env.local secrets
+      function getTelegramSecrets() {
+        let botToken = process.env.TELEGRAM_BOT_TOKEN || "";
+        let chatId = process.env.TELEGRAM_CHAT_ID || "";
+
+        const envLocalPath = path.resolve(process.cwd(), ".env.local");
+        if (fs.existsSync(envLocalPath)) {
+          const content = fs.readFileSync(envLocalPath, "utf8");
+          for (const line of content.split("\n")) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith("#")) continue;
+            const [key, ...valParts] = trimmed.split("=");
+            const val = valParts.join("=").trim().replace(/^["']|["']$/g, "");
+            if (key?.trim() === "TELEGRAM_BOT_TOKEN") botToken = val;
+            if (key?.trim() === "TELEGRAM_CHAT_ID") chatId = val;
+          }
+        }
+        return { botToken, chatId };
+      }
+
+      function saveTelegramSecrets(token: string, chat: string) {
+        const envLocalPath = path.resolve(process.cwd(), ".env.local");
+        let existing = "";
+        if (fs.existsSync(envLocalPath)) {
+          existing = fs.readFileSync(envLocalPath, "utf8");
+        }
+
+        const lines = existing.split("\n").filter((l) => {
+          const k = l.split("=")[0]?.trim();
+          return k !== "TELEGRAM_BOT_TOKEN" && k !== "TELEGRAM_CHAT_ID";
+        });
+
+        if (token) lines.push(`TELEGRAM_BOT_TOKEN=${token}`);
+        if (chat) lines.push(`TELEGRAM_CHAT_ID=${chat}`);
+
+        fs.writeFileSync(envLocalPath, lines.filter(Boolean).join("\n") + "\n", "utf8");
+      }
+
+      // Public endpoint for submitting contact notes securely
+      server.middlewares.use("/api/send-note", (req, res) => {
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", async () => {
+            try {
+              const { name, email, message, hp_trap } = JSON.parse(body || "{}");
+
+              // Honeypot spam trap
+              if (hp_trap && hp_trap.trim() !== "") {
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ success: true }));
+                return;
+              }
+
+              if (!message || !message.trim()) {
+                res.statusCode = 400;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ error: "Message is required" }));
+                return;
+              }
+
+              const { botToken, chatId } = getTelegramSecrets();
+              if (!botToken || !chatId) {
+                res.statusCode = 503;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ error: "Telegram Bot not configured in .env.local" }));
+                return;
+              }
+
+              const timestamp = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
+              const formattedText = `📬 *New Project Note from Portfolio*\n\n👤 *From:* ${name?.trim() || "Anonymous"}\n📧 *Email:* ${email?.trim() || "N/A"}\n\n💬 *Message:*\n${message.trim()}\n\n---\n⏰ _Time: ${timestamp} (UTC+7)_`;
+
+              const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  chat_id: chatId,
+                  text: formattedText,
+                  parse_mode: "Markdown",
+                }),
+              });
+
+              if (tgRes.ok) {
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ success: true }));
+              } else {
+                const tgErr = await tgRes.json().catch(() => ({}));
+                res.statusCode = 502;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ error: "Telegram API error", details: tgErr }));
+              }
+            } catch (err: unknown) {
+              res.statusCode = 500;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ error: err instanceof Error ? err.message : "Internal error" }));
+            }
+          });
+          return;
+        }
+        res.statusCode = 405;
+        res.end("Method Not Allowed");
+      });
+
+      // Admin endpoint to read / write Telegram secrets securely in .env.local
+      server.middlewares.use("/api/admin/telegram-config", (req, res) => {
+        if (req.method === "GET") {
+          const { botToken, chatId } = getTelegramSecrets();
+          res.setHeader("Content-Type", "application/json");
+          res.end(
+            JSON.stringify({
+              configured: Boolean(botToken && chatId),
+              hasToken: Boolean(botToken),
+              chatId: chatId || "",
+            })
+          );
+          return;
+        }
+
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", () => {
+            try {
+              const { botToken, chatId } = JSON.parse(body || "{}");
+              const current = getTelegramSecrets();
+              const finalToken = botToken !== undefined ? botToken.trim() : current.botToken;
+              const finalChat = chatId !== undefined ? chatId.trim() : current.chatId;
+
+              saveTelegramSecrets(finalToken, finalChat);
+
+              // Update telegramConfigured in portfolio.json
+              try {
+                const data = JSON.parse(fs.readFileSync(dataFilePath, "utf8"));
+                data.profile.telegramConfigured = Boolean(finalToken && finalChat);
+                fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2) + "\n", "utf8");
+              } catch (e) {
+                console.warn("[admin-api] Error updating telegramConfigured in portfolio.json:", e);
+              }
+
+              res.setHeader("Content-Type", "application/json");
+              res.end(
+                JSON.stringify({
+                  success: true,
+                  configured: Boolean(finalToken && finalChat),
+                  chatId: finalChat,
+                })
+              );
+            } catch {
+              res.statusCode = 400;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ error: "Invalid payload" }));
+            }
+          });
+          return;
+        }
+
+        res.statusCode = 405;
+        res.end("Method Not Allowed");
+      });
+
+      // Admin endpoint to send test ping securely from server
+      server.middlewares.use("/api/admin/telegram-test", (req, res) => {
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", async () => {
+            try {
+              const { botToken, chatId } = JSON.parse(body || "{}");
+              const current = getTelegramSecrets();
+              const useToken = botToken?.trim() || current.botToken;
+              const useChat = chatId?.trim() || current.chatId;
+
+              if (!useToken || !useChat) {
+                res.statusCode = 400;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ error: "Missing Bot Token or Chat ID" }));
+                return;
+              }
+
+              const tgRes = await fetch(`https://api.telegram.org/bot${useToken}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  chat_id: useChat,
+                  text: `🔔 *Test Ping from Portfolio Admin*\n\n✅ Telegram Bot is connected and ready to receive inquiries!\n\n_Sent at ${new Date().toLocaleTimeString()}._`,
+                  parse_mode: "Markdown",
+                }),
+              });
+
+              if (tgRes.ok) {
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ success: true }));
+              } else {
+                const tgErr = await tgRes.json().catch(() => ({})) as { description?: string };
+                res.statusCode = 502;
+                res.setHeader("Content-Type", "application/json");
+                let errMsg = tgErr.description || "Failed to send test ping";
+                if (errMsg.toLowerCase().includes("chat not found")) {
+                  errMsg = "Bad Request: chat not found — Telegram Bot ထဲသို့ဝင်၍ 'Start' (/start) အရင်နှိပ်ထားပေးပါ။";
+                }
+                res.end(JSON.stringify({ error: errMsg }));
+              }
+            } catch (err: unknown) {
+              res.statusCode = 500;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ error: err instanceof Error ? err.message : "Network error" }));
+            }
+          });
+          return;
+        }
+
         res.statusCode = 405;
         res.end("Method Not Allowed");
       });

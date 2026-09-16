@@ -9,6 +9,19 @@
     "githubUrl": "https://github.com/pyaephyomaungdev",
     "websiteUrl": "https://github.com/pyaephyomaungdev",
     "buyMeACoffeeUrl": "https://www.buymeacoffee.com/pyaephyomaa",
+    "telegramUrl": "https://t.me/pyaephyomaung",
+    "linkedinUrl": null,
+    "availability": {
+      "enabled": true,
+      "status": "Available for Work",
+      "scope": "Full-Time & Remote",
+      "timezone": "Asia/Bangkok",
+      "timezoneLabel": "BKK (UTC+7)",
+      "sla": "<24h SLA"
+    },
+    "contactModalTitle": "Let's build together",
+    "contactModalSubtitle": "Connect via verified direct engineering channels, copy email address, or drop a quick project note.",
+    "telegramConfigured": true,
     "joinedLabel": null,
     "bio": "Full-stack engineer building web platforms, clinic systems, and privacy-minded tools across Thailand and remote teams."
   },
@@ -101,8 +114,69 @@
           "In-memory virtualized multi-column spreadsheet grid rendering 10,000+ keys at 60 FPS",
           "AST token-guard for React-Intl, i18next, and ICU message formats",
           "Stdio MCP server protocol layer for bi-directional AI assistant interaction"
-        ]
-      }
+        ],
+        "blueprint": {
+          "protocol": "LOCAL-FIRST RECONCILIATION · STDIO JSON-RPC 2.0",
+          "headline": "Two-Way Disk Sync & Agent Protocol Architecture",
+          "description": "AST-guarded localization pipeline pairing client-side spreadsheet virtualization with direct local filesystem handles and stdio MCP AI agent access.",
+          "nodes": [
+            {
+              "id": "web-ui",
+              "label": "Web Studio UI",
+              "role": "Virtualized Canvas Grid",
+              "badge": "CLIENT",
+              "details": "Zero-backend React + Vite app rendering 10k+ rows at 60 FPS"
+            },
+            {
+              "id": "ast-engine",
+              "label": "AST Variable Guard",
+              "role": "Lossless Syntax Tokenizer",
+              "badge": "ENGINE",
+              "details": "Protects {var}, %s, ICU plural tokens from translation corruption"
+            },
+            {
+              "id": "file-system",
+              "label": "File System API",
+              "role": "Local Disk Directory Handle",
+              "badge": "STORAGE",
+              "details": "Direct read/write atomic sync to project repos with 0 cloud egress"
+            },
+            {
+              "id": "mcp-server",
+              "label": "MCP Server",
+              "role": "Stdio JSON-RPC Agent Bridge",
+              "badge": "AGENT",
+              "details": "Enables Claude Desktop, Cursor & Antigravity to edit keys directly"
+            }
+          ],
+          "connections": [
+            {
+              "from": "web-ui",
+              "to": "ast-engine",
+              "label": "Parse & Tokenize",
+              "bidirectional": true
+            },
+            {
+              "from": "ast-engine",
+              "to": "file-system",
+              "label": "Atomic Disk I/O",
+              "bidirectional": true
+            },
+            {
+              "from": "mcp-server",
+              "to": "file-system",
+              "label": "Key Mutation / Query",
+              "bidirectional": true
+            }
+          ]
+        }
+      },
+      "categories": [
+        "Local-First",
+        "Open Source",
+        "AI / Tooling",
+        "React / Vite"
+      ]
     },
     {
       "id": "proj-2",
@@ -163,9 +237,82 @@
           "Controller pub/sub pattern isolating notifications by application scope",
           "Async promise resolver with reactive loading-to-success/error state transitions",
           "Pluggable IndexedDB storage layer for durable notification history"
-        ]
+        ],
+        "blueprint": {
+          "protocol": "GPU-ACCELERATED EVENT DISPATCH · MULTI-CONTROLLER PUBSUB",
+          "headline": "Decoupled Notification Bus & Motion Orchestration",
+          "description": "Zero-dependency event bus with microtask queue scheduling, scoped controller isolation, and composite GPU hardware transform choreography.",
+          "nodes": [
+            {
+              "id": "app-client",
+              "label": "Host React App",
+              "role": "Caller / Hook Triggers",
+              "badge": "CLIENT",
+              "details": "Calls toast(), toast.promise(), toast.loading() with type safety"
+            },
+            {
+              "id": "scoped-bus",
+              "label": "Scoped Controller Bus",
+              "role": "Isolated Pub/Sub Dispatcher",
+              "badge": "ENGINE",
+              "details": "Prevents cross-talk across independent widgets or micro-frontends"
+            },
+            {
+              "id": "queue-engine",
+              "label": "Queue Scheduler",
+              "role": "Priority & Dedupe Policy",
+              "badge": "ENGINE",
+              "details": "Manages rate limits, stack overflow thresholds, and deduplication"
+            },
+            {
+              "id": "motion-renderer",
+              "label": "Hardware CSS Compositor",
+              "role": "60 FPS Bezier Transform",
+              "badge": "CLIENT",
+              "details": "Center-launch arc with hover fan-out running purely on GPU"
+            },
+            {
+              "id": "history-store",
+              "label": "IndexedDB History",
+              "role": "Durable Audit Trail",
+              "badge": "STORAGE",
+              "details": "Pluggable offline persistence adapter for replaying past alerts"
+            }
+          ],
+          "connections": [
+            {
+              "from": "app-client",
+              "to": "scoped-bus",
+              "label": "Dispatch Event",
+              "bidirectional": false
+            },
+            {
+              "from": "scoped-bus",
+              "to": "queue-engine",
+              "label": "Filter & Prioritize",
+              "bidirectional": true
+            },
+            {
+              "from": "queue-engine",
+              "to": "motion-renderer",
+              "label": "Paint & Transform",
+              "bidirectional": false
+            },
+            {
+              "from": "queue-engine",
+              "to": "history-store",
+              "label": "Persist Log",
+              "bidirectional": true
+            }
+          ]
+        }
       },
-      "buyMeACoffee": true
+      "buyMeACoffee": true,
+      "categories": [
+        "Open Source",
+        "React / Vite",
+        "UI / Motion"
+      ]
     },
     {
       "id": "proj-3",
@@ -224,8 +371,82 @@
             "value": "< 2ms",
             "description": "Instant regex & token replacement"
           }
-        ]
-      }
+        ],
+        "blueprint": {
+          "protocol": "ZERO CLOUD EGRESS · AES-GCM 256 WEB CRYPTO",
+          "headline": "Deterministic Client Sandbox & Local Agent Bus",
+          "description": "100% on-device document sanitization and redaction sandbox with PBKDF2 client-side encryption and offline MCP agent execution.",
+          "nodes": [
+            {
+              "id": "desktop-ui",
+              "label": "DeskKit UI",
+              "role": "Client Browser Workspace",
+              "badge": "CLIENT",
+              "details": "React + Vite privacy toolset with 0 external tracking or telemetry"
+            },
+            {
+              "id": "securelens",
+              "label": "SecureLens Engine",
+              "role": "Deterministic PII Masker",
+              "badge": "ENGINE",
+              "details": "Replaces names, emails, keys with synthetic tokens in < 2ms"
+            },
+            {
+              "id": "pdf-pipeline",
+              "label": "pdf-lib & Canvas",
+              "role": "In-Memory Byte Transformer",
+              "badge": "ENGINE",
+              "details": "Client-side PDF merge, split, stamp, redact without server egress"
+            },
+            {
+              "id": "vault-crypto",
+              "label": "Web Crypto Vault",
+              "role": "AES-GCM 256 / PBKDF2",
+              "badge": "STORAGE",
+              "details": "Encrypted notes and secure share blobs stored in IndexedDB"
+            },
+            {
+              "id": "local-mcp",
+              "label": "Local DeskKit MCP",
+              "role": "Zero-Cloud AI Tooling",
+              "badge": "AGENT",
+              "details": "Executes redaction and document transformations for AI assistants"
+            }
+          ],
+          "connections": [
+            {
+              "from": "desktop-ui",
+              "to": "securelens",
+              "label": "Tokenize PII",
+              "bidirectional": true
+            },
+            {
+              "from": "desktop-ui",
+              "to": "pdf-pipeline",
+              "label": "ArrayBuffer Stream",
+              "bidirectional": true
+            },
+            {
+              "from": "desktop-ui",
+              "to": "vault-crypto",
+              "label": "Encrypt / Decrypt",
+              "bidirectional": true
+            },
+            {
+              "from": "local-mcp",
+              "to": "securelens",
+              "label": "Tool Invocation",
+              "bidirectional": true
+            }
+          ]
+        }
+      },
+      "categories": [
+        "Local-First",
+        "Full-Stack",
+        "AI / Tooling",
+        "Privacy / Crypto"
+      ]
     },
     {
       "id": "proj-4",
@@ -285,8 +506,75 @@
             "value": "Dockerized",
             "description": "Reproducible container runtime"
           }
-        ]
-      }
+        ],
+        "blueprint": {
+          "protocol": "MULTI-TENANT RBAC · ASYNC REDIS BULLMQ SCHEDULER",
+          "headline": "Clinic Operations & Automated Billing Pipeline",
+          "description": "Distributed multi-role clinical engine coordinating real-time appointment booking, schema-isolated medical records, and asynchronous invoice automation.",
+          "nodes": [
+            {
+              "id": "react-client",
+              "label": "Clinical Portal",
+              "role": "Role-Adaptive UI",
+              "badge": "CLIENT",
+              "details": "Tailored workflows for Doctors, Pharmacists, and Front Desk"
+            },
+            {
+              "id": "gateway-auth",
+              "label": "API Gateway & RBAC",
+              "role": "Turnstile & JWT Guard",
+              "badge": "NETWORK",
+              "details": "Node.js + Express/Hono validating multi-tenant permissions"
+            },
+            {
+              "id": "db-cluster",
+              "label": "MongoDB Cluster",
+              "role": "Schema Tenant Partition",
+              "badge": "STORAGE",
+              "details": "Patient records, clinical encounters, and pharmacy inventory"
+            },
+            {
+              "id": "job-queue",
+              "label": "BullMQ + Redis",
+              "role": "Background Scheduler",
+              "badge": "ENGINE",
+              "details": "Automated billing invoicing, notification triggers, PDF generation"
+            }
+          ],
+          "connections": [
+            {
+              "from": "react-client",
+              "to": "gateway-auth",
+              "label": "TLS / JWT Auth",
+              "bidirectional": true
+            },
+            {
+              "from": "gateway-auth",
+              "to": "db-cluster",
+              "label": "Multi-Tenant Queries",
+              "bidirectional": true
+            },
+            {
+              "from": "gateway-auth",
+              "to": "job-queue",
+              "label": "Enqueue Jobs",
+              "bidirectional": false
+            },
+            {
+              "from": "job-queue",
+              "to": "db-cluster",
+              "label": "Reconcile Invoices",
+              "bidirectional": true
+            }
+          ]
+        }
+      },
+      "categories": [
+        "Full-Stack",
+        "Distributed Systems",
+        "HealthTech",
+        "Database / Queue"
+      ]
     }
   ],
   "experience": [
