@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import type { CustomSection } from "../types/portfolio";
 import { MarkdownRenderer } from "./MarkdownRenderer";
@@ -8,6 +8,7 @@ interface CustomSectionViewProps {
 }
 
 export function CustomSectionView({ section }: CustomSectionViewProps) {
+  const navigate = useNavigate();
   if (!section.visible) return null;
 
   const kicker =
@@ -55,7 +56,18 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
               return (
                 <div
                   key={item.id}
-                  className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs text-left"
+                  onClick={(e) => {
+                    const target = e.target as HTMLElement | null;
+                    if (target?.closest('a, button, input, [data-interactive="true"]')) {
+                      return;
+                    }
+                    const selection = window.getSelection();
+                    if (selection && selection.toString().trim().length > 0) {
+                      return;
+                    }
+                    navigate(detailUrl);
+                  }}
+                  className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs text-left cursor-pointer select-none sm:select-text"
                 >
                   <div>
                     {/* Border-Integrated Corner Date/Index Notch */}
@@ -67,7 +79,6 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
 
                     <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                       <Link to={detailUrl} className="focus:outline-none">
-                        <span className="absolute inset-0 z-0" aria-hidden="true" />
                         {item.title}
                       </Link>
                     </h3>
@@ -83,7 +94,7 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                     ) : null}
 
                     {item.tag ? (
-                      <div className="mt-2.5 flex flex-wrap gap-1 relative z-10">
+                      <div className="mt-2.5 flex flex-wrap gap-1">
                         <span className="inline-block rounded border border-rule/70 bg-soft/60 px-1.5 py-0.5 font-mono text-xs text-muted">
                           {item.tag}
                         </span>

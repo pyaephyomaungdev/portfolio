@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ContributionHeatmap } from "../components/ContributionHeatmap";
 import { ExperienceSection } from "../components/ExperienceSection";
 import { GitHubStarBadge } from "../components/GitHubStarButton";
@@ -26,6 +26,7 @@ export function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const categories = useMemo(() => {
     if (!data.projects?.length) return [];
@@ -264,7 +265,18 @@ export function HomePage() {
                 {filteredProjects.map((proj, i) => (
                   <div
                     key={proj.id}
-                    className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs"
+                    onClick={(e) => {
+                      const target = e.target as HTMLElement | null;
+                      if (target?.closest('a, button, input, [data-interactive="true"]')) {
+                        return;
+                      }
+                      const selection = window.getSelection();
+                      if (selection && selection.toString().trim().length > 0) {
+                        return;
+                      }
+                      navigate(`/projects/${proj.slug}`);
+                    }}
+                    className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs cursor-pointer select-none sm:select-text"
                   >
                     <div>
                       {/* Border-Integrated Corner Index Notch */}
@@ -276,7 +288,6 @@ export function HomePage() {
 
                       <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                         <Link to={`/projects/${proj.slug}`} className="focus:outline-none">
-                          <span className="absolute inset-0 z-0" aria-hidden="true" />
                           {proj.title}
                         </Link>
                       </h3>
@@ -284,16 +295,14 @@ export function HomePage() {
                         <p className="mt-1 text-xs text-muted">{proj.period}</p>
                       ) : null}
                       {proj.summary ? (
-                        <div className="relative z-10">
-                          <ExpandableText
-                            text={proj.summary}
-                            className="mt-2 text-sm text-muted leading-relaxed"
-                            threshold={110}
-                          />
-                        </div>
+                        <ExpandableText
+                          text={proj.summary}
+                          className="mt-2 text-sm text-muted leading-relaxed"
+                          threshold={110}
+                        />
                       ) : null}
                       {proj.categories?.length ? (
-                        <div className="mt-2.5 flex flex-wrap gap-1 relative z-10">
+                        <div className="mt-2.5 flex flex-wrap gap-1">
                           {proj.categories.map((cat) => (
                             <span
                               key={cat}

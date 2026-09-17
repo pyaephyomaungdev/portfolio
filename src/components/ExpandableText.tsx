@@ -42,15 +42,8 @@ export function ExpandableText({
     <div className="relative">
       {/* Content wrapper with fluid height transition */}
       <div
-        onClick={(e) => {
-          if (!isExpanded) {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsExpanded(true);
-          }
-        }}
         className={`relative overflow-hidden transition-all duration-500 ease-in-out ${
-          isExpanded ? "max-h-96 cursor-default" : "max-h-20 cursor-pointer"
+          isExpanded ? "max-h-96" : "max-h-20"
         }`}
         style={
           isExpanded

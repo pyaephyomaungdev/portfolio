@@ -111,14 +111,50 @@ export async function fetchCustomItem(
   return { section, item };
 }
 
+const CONTRIB_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
 export async function fetchContributions(year: number, customUsername?: string): Promise<ContributionYear> {
   const username = customUsername || GITHUB_USERNAME;
+  const cacheKey = `ppm_contrib_${username}_${year}`;
+
+  // Check localStorage cache first to avoid 2s+ network roundtrips on repeat loads/audits
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      const raw = localStorage.getItem(cacheKey);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (
+          cached &&
+          typeof cached.timestamp === "number" &&
+          Date.now() - cached.timestamp < CONTRIB_CACHE_TTL &&
+          cached.data
+        ) {
+          return cached.data as ContributionYear;
+        }
+      }
+    } catch {
+      // Ignore localStorage read errors
+    }
+  }
+
+  const saveCache = (data: ContributionYear) => {
+    if (typeof window !== "undefined" && window.localStorage && data.days?.length > 0) {
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data }));
+      } catch {
+        // Ignore localStorage quota errors
+      }
+    }
+  };
+
   // If a custom API_BASE is configured, try it first
   if (API_BASE) {
     try {
       const res = await fetch(`${API_BASE}/api/public/github/contributions?year=${year}&username=${encodeURIComponent(username)}`);
       if (res.ok) {
-        return (await res.json()) as ContributionYear;
+        const result = (await res.json()) as ContributionYear;
+        saveCache(result);
+        return result;
       }
     } catch {
       // Fall back to direct GitHub contribution endpoint
@@ -134,16 +170,33 @@ export async function fetchContributions(year: number, customUsername?: string):
       const json = await res.json();
       const total =
         (typeof json.total === "number" ? json.total : json.total?.[String(year)]) || 0;
-      return {
+      const result: ContributionYear = {
         year,
         total,
         days: Array.isArray(json.contributions) ? json.contributions : [],
         source: "github",
         username,
       };
+      saveCache(result);
+      return result;
     }
   } catch {
     // Network or API offline
+  }
+
+  // Fallback to expired cache if network is offline
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      const raw = localStorage.getItem(cacheKey);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (cached?.data) {
+          return cached.data as ContributionYear;
+        }
+      }
+    } catch {
+      // Ignore
+    }
   }
 
   return {

@@ -5,6 +5,7 @@ import { initialPortfolioData } from "../../data/portfolioData";
 describe("Client API routines", () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    localStorage.clear();
   });
 
   it("fetchPortfolio returns static dataset fallback", async () => {
@@ -36,5 +37,27 @@ describe("Client API routines", () => {
     expect(result.total).toBe(0);
     expect(result.days).toEqual([]);
     expect(result.source).toBe("empty");
+  });
+
+  it("fetchContributions uses cached data if available without calling fetch", async () => {
+    const cachedData = {
+      year: 2026,
+      total: 42,
+      days: [{ date: "2026-01-01", count: 5, level: 2 }],
+      source: "github",
+      username: "cacheduser",
+    };
+    localStorage.setItem(
+      "ppm_contrib_cacheduser_2026",
+      JSON.stringify({ timestamp: Date.now(), data: cachedData })
+    );
+
+    const fetchSpy = vi.fn();
+    globalThis.fetch = fetchSpy;
+
+    const result = await fetchContributions(2026, "cacheduser");
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(result.total).toBe(42);
+    expect(result.days).toEqual(cachedData.days);
   });
 });

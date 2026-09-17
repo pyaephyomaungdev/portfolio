@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { CustomSectionView } from "../CustomSectionView";
 import type { CustomSection } from "../../types/portfolio";
 
@@ -31,7 +32,11 @@ describe("CustomSectionView Public Component", () => {
       visible: true,
     };
 
-    render(<CustomSectionView section={section} />);
+    render(
+      <MemoryRouter>
+        <CustomSectionView section={section} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText("Featured Architecture Essays")).not.toBeNull();
     expect(screen.getByText("Long-form technical documentation")).not.toBeNull();
@@ -50,7 +55,12 @@ describe("CustomSectionView Public Component", () => {
       visible: false,
     };
 
-    const { container } = render(<CustomSectionView section={section} />);
+    const { container } = render(
+      <MemoryRouter>
+        <CustomSectionView section={section} />
+      </MemoryRouter>
+    );
     expect(container.firstChild).toBeNull();
   });
 });
+

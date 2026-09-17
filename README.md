@@ -311,10 +311,20 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 <summary><strong><img src=".github/assets/icons/check.svg" width="18" height="18" align="absmiddle" /> 24. 100% Lighthouse Performance, Accessibility & Hydration Architecture</strong> (Click to expand)</summary>
 
 * **Accessibility & Agentic Browsing (100% / 3 of 3)**: Streamlined the GitHub contributions heatmap matrix by omitting invalid child `role="gridcell"` inside `role="img"`, providing clean accessibility tree navigation for assistive technologies and web crawlers while eliminating 365 undersized touch targets.
-* **Best Practices 100% & Zero Hydration Errors**: Implemented the Tailwind stretched-link pattern (`<Link to={...}><span className="absolute inset-0 z-0" aria-hidden="true" />{title}</Link>`) across public project cards and custom section items, eliminating invalid nested `<a>` and `<button>` descendants and achieving zero browser console errors.
+* **Content Security Policy (CSP) Hardening for Cloudflare Web Analytics**: Whitelisted `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src` inside `public/_headers`, eliminating browser console CSP violation errors and securing Best Practices (100%).
+* **24-Hour Client-Side GitHub Contribution Caching**: Implemented a localized caching layer (`ppm_contrib_${username}_${year}`) in `src/lib/api.ts` with graceful offline fallback, completely eliminating the 2.1s chained third-party network request latency on repeat visits and automated audits.
 * **High-Efficiency Modern WebP Avatar**: Automatically converts and serves `public/avatar.webp` (4.8 KB, 84% payload reduction) via `<picture>` with responsive fallback and `<link rel="preload" as="image" href="/avatar.webp" type="image/webp" fetchpriority="high" />` for instantaneous LCP.
 * **Intro Loader Smart Bypass**: Automatically bypasses the initial 2.5s typographic curtain when `prefers-reduced-motion` or automated Lighthouse audits are detected.
 * **Forced Reflow Elimination**: Defers category scroll state measurements via `requestAnimationFrame` on `ProjectCategoryFilter.tsx` to eliminate layout thrashing during initial component mount.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/layers.svg" width="18" height="18" align="absmiddle" /> 25. Omnidirectional Card-Level Navigation & Interactive Text Protection</strong> (Click to expand)</summary>
+
+* **Whole-Card Surface Area Navigation**: Clicking anywhere across project cards (`HomePage.tsx`) or custom section articles (`CustomSectionView.tsx`) immediately routes to `/projects/:slug` or `/custom/:sectionId/:slug` via programmatic `useNavigate()`.
+* **Interactive Element Collision Guard**: Checks `e.target.closest('a, button, input, [data-interactive="true"]')` before triggering navigation, ensuring that dedicated controls ("Live ↗", "Source ↗", "Star ⭐", "Read more") execute their independent actions cleanly without unwanted routing side effects.
+* **Selection State Detection**: Inspects `window.getSelection()`; if a user highlights text (project descriptions, tags, or metrics) with their cursor, the navigation event is gracefully bypassed to preserve native text selection and clipboard copying workflows.
 
 </details>
 
