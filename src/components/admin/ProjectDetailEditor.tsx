@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Plus, Trash2, ExternalLink } from "lucide-react";
+import { Plus, ExternalLink } from "lucide-react";
 import { Checkbox } from "./Checkbox";
 import { ReorderButtons, reorderArray } from "./ReorderButtons";
+import { CustomSelect } from "./CustomSelect";
 import type { Project, CaseStudy, ProjectMetric, SystemBlueprint, BlueprintNode, BlueprintConnection } from "../../types/portfolio";
 
 
@@ -188,6 +189,12 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
     updateBlueprint({ nodes, connections });
   }
 
+  function handleMoveNode(index: number, direction: "up" | "down") {
+    if (!cs?.blueprint?.nodes) return;
+    const nodes = reorderArray(cs.blueprint.nodes, index, direction);
+    updateBlueprint({ nodes });
+  }
+
   function handleAddConnection() {
     const newConn: BlueprintConnection = {
       from: "",
@@ -216,8 +223,14 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
     updateBlueprint({ connections });
   }
 
+  function handleMoveConnection(index: number, direction: "up" | "down") {
+    if (!cs?.blueprint?.connections) return;
+    const connections = reorderArray(cs.blueprint.connections, index, direction);
+    updateBlueprint({ connections });
+  }
+
   return (
-    <div className="bg-white rounded-xl border border-rule p-4 sm:p-5 space-y-6">
+    <div className="bg-paper rounded-xl border border-rule p-4 sm:p-5 space-y-6 shadow-2xs">
       {/* Sub-panel Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-rule pb-3">
         <div>
@@ -368,8 +381,8 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
               />
             </div>
 
-            {/* Key Decisions (List with Up/Down reordering) */}
-            <div className="space-y-2 border-t border-rule/60 pt-4">
+            {/* Key Decisions (Cards with Border-Integrated Corner Notch) */}
+            <div className="space-y-3 border-t border-rule/60 pt-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono uppercase text-muted font-semibold">
                   Core Decisions & Implementation ({cs.decisions?.length || 0})
@@ -377,45 +390,50 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                 <button
                   type="button"
                   onClick={handleAddDecision}
-                  className="inline-flex items-center gap-1 rounded border border-rule bg-white px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1 rounded border border-rule bg-paper px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
                 >
                   <Plus className="h-3 w-3" />
                   <span>Add Decision</span>
                 </button>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 {(cs.decisions || []).map((decision, dIdx) => (
-                  <div key={dIdx} className="flex items-center gap-2">
+                  <div
+                    key={dIdx}
+                    className="group relative rounded-xl border border-rule bg-paper p-3.5 flex flex-col gap-2 hover:border-ink/30 transition shadow-2xs text-xs"
+                  >
                     <ReorderButtons
-                      size="sm"
+                      variant="corner"
+                      index={dIdx}
                       canMoveUp={dIdx > 0}
                       canMoveDown={dIdx < (cs.decisions?.length || 0) - 1}
                       onMoveUp={() => handleMoveDecision(dIdx, "up")}
                       onMoveDown={() => handleMoveDecision(dIdx, "down")}
+                      onDelete={() => handleDeleteDecision(dIdx)}
+                      deleteTitle="Delete decision"
                     />
+
+                    <div className="flex items-center gap-2 pr-32">
+                      <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider">
+                        Decision #{dIdx + 1}
+                      </span>
+                    </div>
+
                     <input
                       type="text"
                       value={decision}
                       placeholder="e.g. Architected an AST-based variable protection parser..."
                       onChange={(e) => handleUpdateDecision(dIdx, e.target.value)}
-                      className="flex-1 rounded border border-rule bg-paper px-2.5 py-1 text-xs outline-none focus:border-ink"
+                      className="w-full rounded-lg border border-rule bg-soft/40 px-3 py-1.5 text-xs text-ink outline-none focus:border-ink font-medium"
                     />
-                    <button
-                      type="button"
-                      title="Remove decision"
-                      onClick={() => handleDeleteDecision(dIdx)}
-                      className="p-1 text-muted hover:text-destructive cursor-pointer transition shrink-0"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Architecture Highlights (List with Up/Down reordering) */}
-            <div className="space-y-2 border-t border-rule/60 pt-4">
+            {/* Architecture Highlights (Cards with Border-Integrated Corner Notch) */}
+            <div className="space-y-3 border-t border-rule/60 pt-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono uppercase text-muted font-semibold">
                   Architecture Highlights ({cs.architectureHighlights?.length || 0})
@@ -423,87 +441,107 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                 <button
                   type="button"
                   onClick={handleAddHighlight}
-                  className="inline-flex items-center gap-1 rounded border border-rule bg-white px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1 rounded border border-rule bg-paper px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
                 >
                   <Plus className="h-3 w-3" />
                   <span>Add Highlight</span>
                 </button>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 {(cs.architectureHighlights || []).map((highlight, hIdx) => (
-                  <div key={hIdx} className="flex items-center gap-2">
+                  <div
+                    key={hIdx}
+                    className="group relative rounded-xl border border-rule bg-paper p-3.5 flex flex-col gap-2 hover:border-ink/30 transition shadow-2xs text-xs"
+                  >
                     <ReorderButtons
-                      size="sm"
+                      variant="corner"
+                      index={hIdx}
                       canMoveUp={hIdx > 0}
                       canMoveDown={hIdx < (cs.architectureHighlights?.length || 0) - 1}
                       onMoveUp={() => handleMoveHighlight(hIdx, "up")}
                       onMoveDown={() => handleMoveHighlight(hIdx, "down")}
+                      onDelete={() => handleDeleteHighlight(hIdx)}
+                      deleteTitle="Delete highlight"
                     />
+
+                    <div className="flex items-center gap-2 pr-32">
+                      <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider">
+                        Highlight #{hIdx + 1}
+                      </span>
+                    </div>
+
                     <input
                       type="text"
                       value={highlight}
-                      placeholder="e.g. Web File System Access API integration for atomic writes..."
+                      placeholder="e.g. Zero-network client-side execution via Web Crypto API..."
                       onChange={(e) => handleUpdateHighlight(hIdx, e.target.value)}
-                      className="flex-1 rounded border border-rule bg-paper px-2.5 py-1 text-xs outline-none focus:border-ink"
+                      className="w-full rounded-lg border border-rule bg-soft/40 px-3 py-1.5 text-xs text-ink outline-none focus:border-ink font-medium"
                     />
-                    <button
-                      type="button"
-                      title="Remove highlight"
-                      onClick={() => handleDeleteHighlight(hIdx)}
-                      className="p-1 text-muted hover:text-destructive cursor-pointer transition shrink-0"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Key Metrics Strip (List with Up/Down reordering) */}
-            <div className="space-y-2 border-t border-rule/60 pt-4">
+            {/* Key Metrics (Cards with Border-Integrated Corner Notch) */}
+            <div className="space-y-3 border-t border-rule/60 pt-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono uppercase text-muted font-semibold">
-                  Key Metrics & Engineering Proof ({cs.metrics?.length || 0})
+                  Measurable Impact & Metrics ({cs.metrics?.length || 0})
                 </span>
                 <button
                   type="button"
                   onClick={handleAddMetric}
-                  className="inline-flex items-center gap-1 rounded border border-rule bg-white px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1 rounded border border-rule bg-paper px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
                 >
                   <Plus className="h-3 w-3" />
                   <span>Add Metric</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {(cs.metrics || []).map((metric, mIdx) => (
                   <div
                     key={mIdx}
-                    className="p-3 rounded-lg border border-rule bg-paper flex items-start gap-2 text-xs"
+                    className="group relative rounded-xl border border-rule bg-paper p-4 flex flex-col gap-3 text-xs hover:border-ink/30 transition shadow-2xs"
                   >
                     <ReorderButtons
-                      size="sm"
+                      variant="corner"
+                      index={mIdx}
                       canMoveUp={mIdx > 0}
                       canMoveDown={mIdx < (cs.metrics?.length || 0) - 1}
                       onMoveUp={() => handleMoveMetric(mIdx, "up")}
                       onMoveDown={() => handleMoveMetric(mIdx, "down")}
+                      onDelete={() => handleDeleteMetric(mIdx)}
+                      deleteTitle="Delete metric"
                     />
-                    <div className="flex-1 space-y-1.5">
+
+                    <div className="flex items-center gap-2 pr-32">
+                      <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider">
+                        Metric #{mIdx + 1}
+                      </span>
+                      {metric.label || metric.value ? (
+                        <span className="font-medium text-xs text-ink truncate">
+                          — {metric.label || metric.value}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="space-y-2">
                       <div className="flex gap-2">
                         <input
                           type="text"
                           placeholder="Value (e.g. 0 Servers)"
                           value={metric.value}
                           onChange={(e) => handleUpdateMetric(mIdx, { value: e.target.value })}
-                          className="w-1/2 rounded border border-rule bg-white px-2 py-1 font-bold text-ink outline-none focus:border-ink"
+                          className="w-1/2 rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 font-bold text-ink outline-none focus:border-ink"
                         />
                         <input
                           type="text"
                           placeholder="Label (e.g. Cloud Footprint)"
                           value={metric.label}
                           onChange={(e) => handleUpdateMetric(mIdx, { label: e.target.value })}
-                          className="w-1/2 rounded border border-rule bg-white px-2 py-1 font-semibold text-ink outline-none focus:border-ink"
+                          className="w-1/2 rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 font-semibold text-ink outline-none focus:border-ink"
                         />
                       </div>
                       <input
@@ -511,17 +549,9 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                         placeholder="Description (e.g. 100% client-side execution)"
                         value={metric.description}
                         onChange={(e) => handleUpdateMetric(mIdx, { description: e.target.value })}
-                        className="w-full rounded border border-rule bg-white px-2 py-1 text-muted outline-none focus:border-ink"
+                        className="w-full rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 text-muted outline-none focus:border-ink"
                       />
                     </div>
-                    <button
-                      type="button"
-                      title="Remove metric"
-                      onClick={() => handleDeleteMetric(mIdx)}
-                      className="p-1 text-muted hover:text-destructive cursor-pointer transition shrink-0"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
                   </div>
                 ))}
               </div>
@@ -557,7 +587,7 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                       onChange={(e) =>
                         updateBlueprint({ headline: e.target.value })
                       }
-                      className="w-full rounded border border-rule bg-white px-2.5 py-1.5 text-xs font-semibold text-ink outline-none focus:border-ink"
+                      className="w-full rounded border border-rule bg-paper px-2.5 py-1.5 text-xs font-semibold text-ink outline-none focus:border-ink"
                     />
                     <textarea
                       rows={2}
@@ -566,12 +596,12 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                       onChange={(e) =>
                         updateBlueprint({ description: e.target.value })
                       }
-                      className="w-full rounded border border-rule bg-white px-2.5 py-1.5 text-xs outline-none focus:border-ink"
+                      className="w-full rounded border border-rule bg-paper px-2.5 py-1.5 text-xs outline-none focus:border-ink"
                     />
                   </div>
 
                   {/* Nodes */}
-                  <div className="space-y-2 border-t border-rule/60 pt-3">
+                  <div className="space-y-3 border-t border-rule/60 pt-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-mono uppercase text-muted font-semibold">
                         Nodes ({cs.blueprint.nodes.length})
@@ -579,98 +609,133 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                       <button
                         type="button"
                         onClick={handleAddNode}
-                        className="inline-flex items-center gap-1 rounded border border-rule bg-white px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+                        className="inline-flex items-center gap-1 rounded border border-rule bg-paper px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
                       >
                         <Plus className="h-3 w-3" />
                         <span>Add Node</span>
                       </button>
                     </div>
-                    <div className="space-y-2">
+
+                    <div className="space-y-3">
                       {cs.blueprint.nodes.map((node, nIdx) => (
                         <div
                           key={nIdx}
-                          className="rounded-lg border border-rule bg-white p-3 space-y-2"
+                          className="group relative rounded-xl border border-rule bg-paper p-4 flex flex-col gap-3 hover:border-ink/30 transition shadow-2xs text-xs"
                         >
-                          <div className="flex flex-wrap items-center gap-2">
-                            <input
-                              type="text"
-                              placeholder="id (e.g. web-ui)"
-                              value={node.id}
-                              onChange={(e) =>
-                                handleUpdateNode(nIdx, { id: e.target.value })
-                              }
-                              className="w-28 rounded border border-rule bg-paper px-2 py-1 font-mono text-xs text-muted outline-none focus:border-ink"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Label (e.g. Web Studio UI)"
-                              value={node.label}
-                              onChange={(e) =>
-                                handleUpdateNode(nIdx, {
-                                  label: e.target.value,
-                                })
-                              }
-                              className="min-w-0 flex-1 rounded border border-rule bg-paper px-2 py-1 text-xs font-semibold text-ink outline-none focus:border-ink"
-                            />
-                            <select
-                              value={node.badge}
-                              onChange={(e) =>
-                                handleUpdateNode(nIdx, {
-                                  badge: e.target.value as BlueprintNode["badge"],
-                                })
-                              }
-                              className="rounded border border-rule bg-paper px-2 py-1 font-mono text-xs text-ink outline-none focus:border-ink cursor-pointer"
-                            >
-                              {(
-                                [
-                                  "CLIENT",
-                                  "ENGINE",
-                                  "STORAGE",
-                                  "AGENT",
-                                  "NETWORK",
-                                ] as const
-                              ).map((b) => (
-                                <option key={b} value={b}>
-                                  {b}
-                                </option>
-                              ))}
-                            </select>
-                            <button
-                              type="button"
-                              title="Remove node"
-                              onClick={() => handleDeleteNode(nIdx)}
-                              className="p-1 text-muted hover:text-destructive cursor-pointer transition shrink-0"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
+                          <ReorderButtons
+                            variant="corner"
+                            index={nIdx}
+                            canMoveUp={nIdx > 0}
+                            canMoveDown={nIdx < cs.blueprint!.nodes.length - 1}
+                            onMoveUp={() => handleMoveNode(nIdx, "up")}
+                            onMoveDown={() => handleMoveNode(nIdx, "down")}
+                            onDelete={() => handleDeleteNode(nIdx)}
+                            deleteTitle="Delete node"
+                          />
+
+                          <div className="flex items-center gap-2 pr-32">
+                            <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider">
+                              Node #{nIdx + 1}
+                            </span>
+                            {node.label || node.id ? (
+                              <span className="font-medium text-xs text-ink truncate">
+                                — {node.label || node.id}
+                              </span>
+                            ) : null}
                           </div>
-                          <input
-                            type="text"
-                            placeholder="Role (e.g. Virtualized Canvas Grid)"
-                            value={node.role}
-                            onChange={(e) =>
-                              handleUpdateNode(nIdx, { role: e.target.value })
-                            }
-                            className="w-full rounded border border-rule bg-paper px-2 py-1 font-mono text-xs text-muted outline-none focus:border-ink"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Details (optional) — shown on inspect"
-                            value={node.details ?? ""}
-                            onChange={(e) =>
-                              handleUpdateNode(nIdx, {
-                                details: e.target.value || undefined,
-                              })
-                            }
-                            className="w-full rounded border border-rule bg-paper px-2 py-1 text-xs text-muted outline-none focus:border-ink"
-                          />
+
+                          <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                            <div className="sm:col-span-3">
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                Node ID *
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="id (e.g. web-ui)"
+                                value={node.id}
+                                onChange={(e) =>
+                                  handleUpdateNode(nIdx, { id: e.target.value })
+                                }
+                                className="w-full rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 font-mono text-xs text-ink outline-none focus:border-ink"
+                              />
+                            </div>
+                            <div className="sm:col-span-5">
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                Display Label *
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Label (e.g. Web Studio UI)"
+                                value={node.label}
+                                onChange={(e) =>
+                                  handleUpdateNode(nIdx, {
+                                    label: e.target.value,
+                                  })
+                                }
+                                className="w-full rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 text-xs font-semibold text-ink outline-none focus:border-ink"
+                              />
+                            </div>
+                            <div className="sm:col-span-4">
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                Architectural Layer
+                              </label>
+                              <CustomSelect
+                                value={node.badge}
+                                onChange={(val) =>
+                                  handleUpdateNode(nIdx, {
+                                    badge: val as BlueprintNode["badge"],
+                                  })
+                                }
+                                options={[
+                                  { value: "CLIENT", label: "CLIENT" },
+                                  { value: "ENGINE", label: "ENGINE" },
+                                  { value: "STORAGE", label: "STORAGE" },
+                                  { value: "AGENT", label: "AGENT" },
+                                  { value: "NETWORK", label: "NETWORK" },
+                                ]}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                Component Role
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Role (e.g. Virtualized Canvas Grid)"
+                                value={node.role}
+                                onChange={(e) =>
+                                  handleUpdateNode(nIdx, { role: e.target.value })
+                                }
+                                className="w-full rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 font-mono text-xs text-ink outline-none focus:border-ink"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                Inspect Details (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Details shown on node inspect..."
+                                value={node.details ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateNode(nIdx, {
+                                    details: e.target.value || undefined,
+                                  })
+                                }
+                                className="w-full rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 text-xs text-muted outline-none focus:border-ink"
+                              />
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Connections / Data Rails */}
-                  <div className="space-y-2 border-t border-rule/60 pt-3">
+                  <div className="space-y-3 border-t border-rule/60 pt-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-mono uppercase text-muted font-semibold">
                         Data Rails ({cs.blueprint.connections.length})
@@ -678,79 +743,106 @@ export function ProjectDetailEditor({ project, onChange }: ProjectDetailEditorPr
                       <button
                         type="button"
                         onClick={handleAddConnection}
-                        className="inline-flex items-center gap-1 rounded border border-rule bg-white px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+                        className="inline-flex items-center gap-1 rounded border border-rule bg-paper px-2 py-0.5 text-xs font-mono text-ink hover:border-ink transition cursor-pointer shadow-2xs"
                       >
                         <Plus className="h-3 w-3" />
                         <span>Add Rail</span>
                       </button>
                     </div>
-                    <div className="space-y-2">
+
+                    <div className="space-y-3">
                       {cs.blueprint.connections.map((conn, cIdx) => (
                         <div
                           key={cIdx}
-                          className="flex flex-wrap items-center gap-2 rounded-lg border border-rule bg-white p-2"
+                          className="group relative rounded-xl border border-rule bg-paper p-4 flex flex-col gap-3 hover:border-ink/30 transition shadow-2xs text-xs"
                         >
-                          <select
-                            value={conn.from}
-                            onChange={(e) =>
-                              handleUpdateConnection(cIdx, {
-                                from: e.target.value,
-                              })
-                            }
-                            className="rounded border border-rule bg-paper px-2 py-1 font-mono text-xs text-ink outline-none focus:border-ink cursor-pointer"
-                          >
-                            <option value="">From…</option>
-                            {cs.blueprint!.nodes.map((n) => (
-                              <option key={n.id} value={n.id}>
-                                {n.label || n.id}
-                              </option>
-                            ))}
-                          </select>
-                          <span className="font-mono text-xs text-muted">→</span>
-                          <select
-                            value={conn.to}
-                            onChange={(e) =>
-                              handleUpdateConnection(cIdx, {
-                                to: e.target.value,
-                              })
-                            }
-                            className="rounded border border-rule bg-paper px-2 py-1 font-mono text-xs text-ink outline-none focus:border-ink cursor-pointer"
-                          >
-                            <option value="">To…</option>
-                            {cs.blueprint!.nodes.map((n) => (
-                              <option key={n.id} value={n.id}>
-                                {n.label || n.id}
-                              </option>
-                            ))}
-                          </select>
-                          <input
-                            type="text"
-                            placeholder="Label (e.g. Atomic Disk I/O)"
-                            value={conn.label ?? ""}
-                            onChange={(e) =>
-                              handleUpdateConnection(cIdx, {
-                                label: e.target.value || undefined,
-                              })
-                            }
-                            className="min-w-0 flex-1 rounded border border-rule bg-paper px-2 py-1 text-xs outline-none focus:border-ink"
+                          <ReorderButtons
+                            variant="corner"
+                            index={cIdx}
+                            canMoveUp={cIdx > 0}
+                            canMoveDown={cIdx < cs.blueprint!.connections.length - 1}
+                            onMoveUp={() => handleMoveConnection(cIdx, "up")}
+                            onMoveDown={() => handleMoveConnection(cIdx, "down")}
+                            onDelete={() => handleDeleteConnection(cIdx)}
+                            deleteTitle="Delete rail"
                           />
-                          <Checkbox
-                            checked={conn.bidirectional ?? false}
-                            onChange={(checked) =>
-                              handleUpdateConnection(cIdx, {
-                                bidirectional: checked,
-                              })
-                            }
-                            label="Bi-dir"
-                          />
-                          <button
-                            type="button"
-                            title="Remove rail"
-                            onClick={() => handleDeleteConnection(cIdx)}
-                            className="p-1 text-muted hover:text-destructive cursor-pointer transition shrink-0"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
+
+                          <div className="flex items-center gap-2 pr-32">
+                            <span className="font-mono text-xs font-bold text-accent uppercase tracking-wider">
+                              Rail #{cIdx + 1}
+                            </span>
+                            {conn.label || (conn.from && conn.to) ? (
+                              <span className="font-medium text-xs text-ink truncate">
+                                — {conn.label || `${conn.from} → ${conn.to}`}
+                              </span>
+                            ) : null}
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end">
+                            <div className="sm:col-span-3">
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                From Node *
+                              </label>
+                              <CustomSelect
+                                value={conn.from}
+                                placeholder="From node..."
+                                onChange={(val) =>
+                                  handleUpdateConnection(cIdx, {
+                                    from: val,
+                                  })
+                                }
+                                options={cs.blueprint!.nodes.map((n) => ({
+                                  value: n.id,
+                                  label: n.label ? `${n.label} (${n.id})` : n.id,
+                                }))}
+                              />
+                            </div>
+                            <div className="sm:col-span-3">
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                To Node *
+                              </label>
+                              <CustomSelect
+                                value={conn.to}
+                                placeholder="To node..."
+                                onChange={(val) =>
+                                  handleUpdateConnection(cIdx, {
+                                    to: val,
+                                  })
+                                }
+                                options={cs.blueprint!.nodes.map((n) => ({
+                                  value: n.id,
+                                  label: n.label ? `${n.label} (${n.id})` : n.id,
+                                }))}
+                              />
+                            </div>
+                            <div className="sm:col-span-4">
+                              <label className="block text-xs font-mono uppercase text-muted mb-1">
+                                Channel / Rail Label
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="Label (e.g. Atomic Disk I/O)"
+                                value={conn.label ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateConnection(cIdx, {
+                                    label: e.target.value || undefined,
+                                  })
+                                }
+                                className="w-full rounded-lg border border-rule bg-soft/40 px-2.5 py-1.5 text-xs outline-none focus:border-ink"
+                              />
+                            </div>
+                            <div className="sm:col-span-2 flex items-center h-8">
+                              <Checkbox
+                                checked={conn.bidirectional ?? false}
+                                onChange={(checked) =>
+                                  handleUpdateConnection(cIdx, {
+                                    bidirectional: checked,
+                                  })
+                                }
+                                label="Bi-dir"
+                              />
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>

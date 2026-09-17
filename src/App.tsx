@@ -5,6 +5,7 @@ import { IntroLoader } from "./components/IntroLoader";
 import { HomePage } from "./pages/HomePage";
 
 const ProjectPage = lazy(() => import("./pages/ProjectPage").then((m) => ({ default: m.ProjectPage })));
+const CustomItemDetailPage = lazy(() => import("./pages/CustomItemDetailPage").then((m) => ({ default: m.CustomItemDetailPage })));
 const AdminPage = lazy(() => import("./pages/AdminPage").then((m) => ({ default: m.AdminPage })));
 const LegalPage = lazy(() => import("./pages/LegalPage").then((m) => ({ default: m.LegalPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
@@ -26,6 +27,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/projects/:slug" element={<ProjectPage />} />
+            <Route path="/custom/:sectionId/:slug" element={<CustomItemDetailPage />} />
             <Route path="/admin" element={<Navigate to="/admin/overview" replace />} />
             <Route path="/admin/:tab" element={<AdminPage />} />
             <Route path="/privacy" element={<LegalPage type="privacy" />} />

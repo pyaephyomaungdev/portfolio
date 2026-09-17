@@ -35,10 +35,13 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-rule pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-rule">
         <div>
+          <p className="font-mono text-xs uppercase tracking-widest text-muted mb-1">
+            Admin · Production Deployment
+          </p>
           <div className="flex items-center gap-2">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-ink">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
               Deploy to Cloudflare Pages
             </h2>
             <span className="inline-flex items-center gap-1 rounded border border-accent/40 bg-accent-soft px-2 py-0.5 font-mono text-xs font-semibold text-accent">
@@ -46,7 +49,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
               <span>Pages Edge</span>
             </span>
           </div>
-          <p className="mt-1 text-xs text-muted">
+          <p className="mt-1 text-sm text-muted">
             Host your portfolio on Cloudflare Pages with zero cost, unlimited bandwidth, and automated Git deployments.
           </p>
         </div>
@@ -55,7 +58,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
           href={pagesListDashboardUrl}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-3 py-1.5 font-mono text-xs text-ink hover:border-ink/40 transition shadow-2xs cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-rule bg-paper px-3.5 py-2 font-mono text-xs text-ink hover:border-ink/40 transition shadow-2xs cursor-pointer self-start sm:self-auto"
         >
           <span>Cloudflare Pages Dashboard</span>
           <ExternalLink className="h-3.5 w-3.5 text-muted" aria-hidden="true" />
@@ -63,7 +66,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
       </div>
 
       {/* Direct Deploy Hero Card */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-5">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-1">
             <h3 className="font-display text-xl font-semibold text-ink">
@@ -142,7 +145,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
       </section>
 
       {/* Terminal Deploy (Wrangler for Pages) */}
-      <section className="rounded-xl border border-rule bg-white p-5 space-y-4">
+      <section className="rounded-xl border border-rule bg-paper p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Terminal className="h-4 w-4 text-ink" aria-hidden="true" />
@@ -179,10 +182,10 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
                 </button>
               </div>
               <p className="text-xs text-muted mt-1">
-                Runs production build and deploys <code className="font-mono bg-white px-1 rounded">dist</code> directly to Cloudflare Pages.
+                Runs production build and deploys <code className="font-mono bg-paper px-1 rounded">dist</code> directly to Cloudflare Pages.
               </p>
             </div>
-            <pre className="mt-3 rounded border border-rule bg-white p-2 font-mono text-xs text-ink">
+            <pre className="mt-3 rounded border border-rule bg-paper p-2 font-mono text-xs text-ink">
               <code>npm run deploy</code>
             </pre>
           </div>
@@ -212,7 +215,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
                 Direct Cloudflare Pages upload command via Wrangler.
               </p>
             </div>
-            <pre className="mt-3 rounded border border-rule bg-white p-2 font-mono text-xs text-ink">
+            <pre className="mt-3 rounded border border-rule bg-paper p-2 font-mono text-xs text-ink">
               <code>npx wrangler pages deploy dist</code>
             </pre>
           </div>
@@ -222,7 +225,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
       {/* SPA Routing & README Badge */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* SPA Routing */}
-        <section className="rounded-xl border border-rule bg-white p-5 space-y-3">
+        <section className="rounded-xl border border-rule bg-paper p-5 space-y-3 shadow-2xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-ink">
               <ShieldCheck className="h-4 w-4 text-success" aria-hidden="true" />
@@ -243,7 +246,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
         </section>
 
         {/* README Badge */}
-        <section className="rounded-xl border border-rule bg-white p-5 space-y-3">
+        <section className="rounded-xl border border-rule bg-paper p-5 space-y-3 shadow-2xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-ink">
               <Code className="h-4 w-4 text-muted" aria-hidden="true" />
@@ -277,7 +280,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
       </div>
 
       {/* Cloudflare Pages Functions & Secrets Card */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-4">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-rule pb-3">
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
@@ -304,7 +307,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
             <button
               type="button"
               onClick={() => copyToClipboard("TELEGRAM_BOT_TOKEN", "env-token")}
-              className="rounded border border-rule bg-white px-2.5 py-1 font-mono text-xs text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+              className="rounded-lg border border-rule bg-paper px-2.5 py-1 font-mono text-xs text-ink hover:border-ink transition cursor-pointer shadow-2xs"
             >
               {copiedKey === "env-token" ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
             </button>
@@ -318,7 +321,7 @@ export function DeploySection({ profile: _profile }: DeploySectionProps = {}) {
             <button
               type="button"
               onClick={() => copyToClipboard("TELEGRAM_CHAT_ID", "env-chat")}
-              className="rounded border border-rule bg-white px-2.5 py-1 font-mono text-xs text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+              className="rounded-lg border border-rule bg-paper px-2.5 py-1 font-mono text-xs text-ink hover:border-ink transition cursor-pointer shadow-2xs"
             >
               {copiedKey === "env-chat" ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
             </button>

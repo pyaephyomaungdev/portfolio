@@ -373,17 +373,17 @@ export function ProjectPage() {
                   {prevProject ? (
                     <Link
                       to={`/projects/${prevProject.slug}`}
-                      className="group flex flex-col justify-between rounded-xl border border-rule bg-white p-5 transition hover:border-ink/40"
+                      className="group flex flex-col justify-between rounded-xl border border-rule bg-white p-5 transition-all hover:border-accent/50 hover:shadow-xs"
                     >
                       <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
-                        <ArrowLeft className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:-translate-x-1 group-hover:text-ink" aria-hidden="true" />
+                        <ArrowLeft className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:-translate-x-1 group-hover:text-accent" aria-hidden="true" />
                         <span>Previous Case Study</span>
                       </div>
                       <div>
                         <span className="text-xs text-muted block mb-1">
                           {prevProject.badge ?? "Case Study"}
                         </span>
-                        <h3 className="font-display text-xl tracking-tight text-ink group-hover:underline">
+                        <h3 className="font-display text-xl tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                           {prevProject.title}
                         </h3>
                         <p className="mt-1 line-clamp-2 text-xs text-muted">
@@ -396,17 +396,17 @@ export function ProjectPage() {
                   {nextProject ? (
                     <Link
                       to={`/projects/${nextProject.slug}`}
-                      className="group flex flex-col justify-between rounded-xl border border-rule bg-white p-5 transition hover:border-ink/40 sm:text-right"
+                      className="group flex flex-col justify-between rounded-xl border border-rule bg-white p-5 transition-all hover:border-accent/50 hover:shadow-xs sm:text-right"
                     >
                       <div className="flex items-center gap-1.5 text-xs text-muted mb-2 sm:justify-end">
                         <span>Next Case Study</span>
-                        <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 group-hover:text-ink" aria-hidden="true" />
+                        <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-1 group-hover:text-accent" aria-hidden="true" />
                       </div>
                       <div>
                         <span className="text-xs text-muted block mb-1">
                           {nextProject.badge ?? "Case Study"}
                         </span>
-                        <h3 className="font-display text-xl tracking-tight text-ink group-hover:underline">
+                        <h3 className="font-display text-xl tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                           {nextProject.title}
                         </h3>
                         <p className="mt-1 line-clamp-2 text-xs text-muted">

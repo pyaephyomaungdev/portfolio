@@ -11,12 +11,16 @@ import { AvailabilityBadge } from "../components/AvailabilityBadge";
 import { ContactModal } from "../components/ContactModal";
 import { ContactForm } from "../components/ContactForm";
 import { ProjectCategoryFilter } from "../components/ProjectCategoryFilter";
+import { CustomSectionView } from "../components/CustomSectionView";
 import { initialPortfolioData } from "../data/portfolioData";
 import { ArrowRight, Check, ExternalLink, Printer } from "lucide-react";
 import { fetchPortfolio, type Portfolio } from "../lib/api";
 import { scrollToId } from "../lib/scrollToId";
+import { applyThemeConfig } from "../lib/theme";
+import { useTheme } from "../context/ThemeContext";
 
 export function HomePage() {
+  const { resolvedTheme, setThemeConfig } = useTheme();
   const [data, setData] = useState<Portfolio>(initialPortfolioData);
   const [copied, setCopied] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -46,8 +50,13 @@ export function HomePage() {
   }, [data.projects, selectedCategory]);
 
   useEffect(() => {
-    void fetchPortfolio().then(setData);
-  }, []);
+    void fetchPortfolio().then((d) => {
+      setData(d);
+      if (d.themeConfig) {
+        setThemeConfig(d.themeConfig);
+      }
+    });
+  }, [setThemeConfig]);
 
   useEffect(() => {
     if (data.profile?.name) {
@@ -67,6 +76,10 @@ export function HomePage() {
     scrollToId(id);
   }, [location.hash, data]);
 
+  useEffect(() => {
+    applyThemeConfig(data.themeConfig, resolvedTheme === "dark");
+  }, [data.themeConfig, resolvedTheme]);
+
   const p = data.profile;
   const vis = {
     stats: true,
@@ -77,6 +90,7 @@ export function HomePage() {
     honors: true,
     licenses: true,
     contact: true,
+    custom: true,
     ...data.sectionVisibility,
   };
 
@@ -247,11 +261,11 @@ export function HomePage() {
                   <Link
                     key={proj.id}
                     to={`/projects/${proj.slug}`}
-                    className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition hover:border-ink/30"
+                    className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs"
                   >
                     <div>
                       <span className="absolute right-3 top-3 text-xs text-muted">{i + 1}</span>
-                      <h3 className="pr-6 font-semibold tracking-tight group-hover:underline">
+                      <h3 className="pr-6 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                         {proj.title}
                       </h3>
                       {proj.period ? (
@@ -291,19 +305,19 @@ export function HomePage() {
                       </div>
                       <div>
                         {proj.url ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-medium text-ink">
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-ink group-hover:text-accent transition-colors">
                             <span>Live</span>
                             <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
                           </span>
                         ) : proj.repoUrl ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-medium text-muted group-hover:text-ink">
+                          <span className="inline-flex items-center gap-1 text-xs font-medium text-muted group-hover:text-accent transition-colors">
                             <span>Source</span>
                             <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-muted">
+                          <span className="inline-flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors">
                             <span>Overview</span>
-                            <ArrowRight className="h-3 w-3 shrink-0" aria-hidden="true" />
+                            <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                           </span>
                         )}
                       </div>
@@ -327,16 +341,16 @@ export function HomePage() {
             </h2>
             <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
               {data.education.map((e) => (
-                <div key={e.id} className="p-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
+                <div key={e.id} className="group/edu p-5 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 transition-colors hover:bg-soft/30">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-ink">{e.school}</h3>
+                      <h3 className="font-semibold text-ink group-hover/edu:text-accent transition-colors">{e.school}</h3>
                       {e.url ? (
                         <a
                           href={e.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-muted hover:text-ink transition"
+                          className="text-muted hover:text-accent transition-colors"
                           aria-label={`Visit ${e.school}`}
                         >
                           <ExternalLink className="h-3.5 w-3.5" />
@@ -373,17 +387,17 @@ export function HomePage() {
             </h2>
             <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
               {data.honors.map((h) => (
-                <div key={h.id} className="p-5">
+                <div key={h.id} className="group/honor p-5 transition-colors hover:bg-soft/30">
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1.5">
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-ink">{h.title}</h3>
+                        <h3 className="font-semibold text-ink group-hover/honor:text-accent transition-colors">{h.title}</h3>
                         {h.url ? (
                           <a
                             href={h.url}
                             target="_blank"
                             rel="noreferrer"
-                            className="text-muted hover:text-ink transition"
+                            className="text-muted hover:text-accent transition-colors"
                             aria-label={`View honor details for ${h.title}`}
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
@@ -438,6 +452,15 @@ export function HomePage() {
               ))}
             </div>
           </section>
+        ) : null}
+
+        {/* Custom Content & Sections */}
+        {vis.custom && data.customSections && data.customSections.length > 0 ? (
+          <div className="space-y-12">
+            {data.customSections.map((sec) => (
+              <CustomSectionView key={sec.id} section={sec} />
+            ))}
+          </div>
         ) : null}
 
         {vis.contact ? (

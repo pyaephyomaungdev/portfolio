@@ -1,11 +1,12 @@
-import { Plus, Trash2 } from "lucide-react";
-import { ReorderButtons, reorderArray } from "../ReorderButtons";
+import { useSearchParams } from "react-router-dom";
+import { HonorsCardList } from "./honors/HonorsCardList";
+import { HonorDetailEditorPage } from "./honors/HonorDetailEditorPage";
 import type { Honor } from "../../../types/portfolio";
 
 interface HonorsSectionProps {
   honors: Honor[];
   onChange: (honors: Honor[]) => void;
-  onOpenAddModal: () => void;
+  onOpenAddModal?: () => void;
   onRequestDelete?: (title: string, onConfirm: () => void) => void;
 }
 
@@ -15,120 +16,92 @@ export function HonorsSection({
   onOpenAddModal,
   onRequestDelete,
 }: HonorsSectionProps) {
-  function moveHonor(index: number, direction: "up" | "down") {
-    onChange(reorderArray(honors, index, direction));
+  const [searchParams, setSearchParams] = useSearchParams();
+  const editId = searchParams.get("edit");
+  const isNew = searchParams.get("new") === "true";
+
+  const activeHonor = isNew
+    ? {
+        id: `honor-${Date.now()}`,
+        title: "New Honor or Award",
+        issuer: "",
+        date: `${new Date().getFullYear()}`,
+        description: "",
+        url: null,
+      }
+    : honors.find((h) => h.id === editId) || null;
+
+  function handleSelectHonor(id: string) {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("edit", id);
+      next.delete("new");
+      return next;
+    });
   }
 
-  function handleDeleteHonor(idx: number, title: string) {
-    const doDelete = () => onChange(honors.filter((_, i) => i !== idx));
+  function handleStartNewHonor() {
+    if (onOpenAddModal) {
+      onOpenAddModal();
+      return;
+    }
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("new", "true");
+      next.delete("edit");
+      return next;
+    });
+  }
+
+  function handleCloseEditor() {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.delete("edit");
+      next.delete("new");
+      return next;
+    });
+  }
+
+  function handleSaveHonor(updated: Honor) {
+    if (isNew) {
+      onChange([...honors, updated]);
+    } else {
+      onChange(honors.map((h) => (h.id === updated.id ? updated : h)));
+    }
+    handleCloseEditor();
+  }
+
+  function handleDeleteHonor(honor: Honor) {
+    const doDelete = () => {
+      onChange(honors.filter((h) => h.id !== honor.id));
+      handleCloseEditor();
+    };
+
     if (onRequestDelete) {
-      onRequestDelete(title || "Honor entry", doDelete);
+      onRequestDelete(honor.title || "Honor record", doDelete);
     } else {
       doDelete();
     }
   }
 
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="font-display text-2xl font-bold">Honors & Awards ({honors.length})</h2>
-          <p className="text-xs text-muted mt-0.5">
-            Recognitions, hackathons, and professional distinctions.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={onOpenAddModal}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-1.5 text-xs font-mono font-medium text-paper hover:opacity-90 transition cursor-pointer"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          <span>Add Honor</span>
-        </button>
-      </div>
+  if (activeHonor) {
+    return (
+      <HonorDetailEditorPage
+        honor={activeHonor}
+        onSave={handleSaveHonor}
+        onCancel={handleCloseEditor}
+        onDelete={!isNew ? handleDeleteHonor : undefined}
+      />
+    );
+  }
 
-      {honors.length === 0 ? (
-        <div className="text-center py-12 border border-dashed border-rule rounded-xl text-muted text-xs font-mono">
-          No honors or awards configured yet. Click "Add Honor" above to create one.
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {honors.map((h, idx) => (
-            <div key={h.id} className="p-4 rounded-xl border border-rule bg-paper space-y-2">
-              <div className="flex justify-between items-center gap-3">
-                <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                  <ReorderButtons
-                    canMoveUp={idx > 0}
-                    canMoveDown={idx < honors.length - 1}
-                    onMoveUp={() => moveHonor(idx, "up")}
-                    onMoveDown={() => moveHonor(idx, "down")}
-                  />
-                  <input
-                    type="text"
-                    value={h.title}
-                    onChange={(e) => {
-                      const updated = [...honors];
-                      updated[idx] = { ...h, title: e.target.value };
-                      onChange(updated);
-                    }}
-                    className="font-semibold text-base text-ink bg-transparent border-b border-transparent focus:border-ink outline-none flex-1 min-w-0"
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteHonor(idx, h.title)}
-                  className="p-1.5 text-muted hover:text-destructive hover:bg-destructive-soft rounded transition cursor-pointer shrink-0"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <div>
-                <span className="text-xs font-mono text-muted uppercase">Issuer</span>
-                <input
-                  type="text"
-                  value={h.issuer || ""}
-                  placeholder="Issuer or organization"
-                  onChange={(e) => {
-                    const updated = [...honors];
-                    updated[idx] = { ...h, issuer: e.target.value || null };
-                    onChange(updated);
-                  }}
-                  className="w-full rounded border border-rule bg-white px-2.5 py-1.5 outline-none focus:border-ink"
-                />
-              </div>
-              <div>
-                <span className="text-xs font-mono text-muted uppercase">Date / Year</span>
-                <input
-                  type="text"
-                  value={h.date || ""}
-                  placeholder="e.g. 2024"
-                  onChange={(e) => {
-                    const updated = [...honors];
-                    updated[idx] = { ...h, date: e.target.value || null };
-                    onChange(updated);
-                  }}
-                  className="w-full rounded border border-rule bg-white px-2.5 py-1.5 font-mono outline-none focus:border-ink"
-                />
-              </div>
-            </div>
-            <div>
-              <span className="text-xs font-mono text-muted uppercase">Description</span>
-              <textarea
-                rows={2}
-                value={h.description || ""}
-                onChange={(e) => {
-                  const updated = [...honors];
-                  updated[idx] = { ...h, description: e.target.value || null };
-                  onChange(updated);
-                }}
-                className="w-full rounded border border-rule bg-white px-2.5 py-1.5 text-xs outline-none focus:border-ink"
-              />
-            </div>
-          </div>
-        ))}
-        </div>
-      )}
-    </div>
+  return (
+    <HonorsCardList
+      honors={honors}
+      onSelectHonor={handleSelectHonor}
+      onAddHonor={handleStartNewHonor}
+      onChange={onChange}
+      onRequestDelete={onRequestDelete}
+    />
   );
 }

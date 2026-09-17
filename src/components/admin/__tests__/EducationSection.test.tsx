@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { EducationSection } from "../sections/EducationSection";
 import { initialPortfolioData } from "../../../data/portfolioData";
 
@@ -11,25 +12,29 @@ describe("Admin EducationSection UI Component", () => {
 
   it("renders education list and Add Education button", () => {
     render(
-      <EducationSection
-        education={initialPortfolioData.education}
-        onChange={vi.fn()}
-        onOpenAddModal={vi.fn()}
-      />
+      <MemoryRouter>
+        <EducationSection
+          education={initialPortfolioData.education}
+          onChange={vi.fn()}
+          onOpenAddModal={vi.fn()}
+        />
+      </MemoryRouter>
     );
 
-    expect(screen.getByText(/education \(/i)).not.toBeNull();
+    expect(screen.getByText(/academic background/i)).not.toBeNull();
     expect(screen.getByRole("button", { name: /add education/i })).not.toBeNull();
   });
 
   it("calls onOpenAddModal when Add Education is clicked", () => {
     const handleAdd = vi.fn();
     render(
-      <EducationSection
-        education={initialPortfolioData.education}
-        onChange={vi.fn()}
-        onOpenAddModal={handleAdd}
-      />
+      <MemoryRouter>
+        <EducationSection
+          education={initialPortfolioData.education}
+          onChange={vi.fn()}
+          onOpenAddModal={handleAdd}
+        />
+      </MemoryRouter>
     );
 
     fireEvent.click(screen.getByRole("button", { name: /add education/i }));

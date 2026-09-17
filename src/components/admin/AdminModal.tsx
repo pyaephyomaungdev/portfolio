@@ -37,7 +37,7 @@ export function AdminModal({
         <span className="pointer-events-none absolute right-2 top-2 font-mono text-xs text-muted/40">+</span>
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-rule bg-white px-6 py-4">
+        <div className="flex items-center justify-between border-b border-rule bg-paper px-6 py-4">
           <div>
             <span className="font-mono text-xs uppercase tracking-widest text-muted">
               {eyebrow}
@@ -66,7 +66,7 @@ export function AdminModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-rule bg-white px-4 py-2 text-xs font-mono uppercase tracking-wider text-muted hover:text-ink hover:border-ink transition cursor-pointer"
+            className="rounded-lg border border-rule bg-paper px-4 py-2 text-xs font-mono uppercase tracking-wider text-muted hover:text-ink hover:border-ink transition cursor-pointer"
           >
             Cancel
           </button>

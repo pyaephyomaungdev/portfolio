@@ -10,6 +10,10 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 
+import { applyThemeConfig } from "../lib/theme";
+import { initialPortfolioData } from "../data/portfolioData";
+import type { ThemeConfig } from "../types/portfolio";
+
 export type Theme = "light" | "dark" | "system";
 export type ResolvedTheme = "light" | "dark";
 
@@ -21,11 +25,14 @@ export type ToggleThemeEvent =
 interface ThemeContextValue {
   theme: Theme;
   resolvedTheme: ResolvedTheme;
+  themeConfig: ThemeConfig;
   setTheme: (theme: Theme) => void;
   toggleTheme: (event?: ToggleThemeEvent) => void;
+  setThemeConfig: (config: ThemeConfig) => void;
 }
 
 const STORAGE_KEY = "ppm_theme";
+const CONFIG_STORAGE_KEY = "ppm_theme_config";
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
@@ -44,7 +51,7 @@ function getStoredTheme(): Theme {
   } catch {
     // Fallback if localStorage is unavailable
   }
-  return "system";
+  return initialPortfolioData.themeConfig?.defaultMode || "system";
 }
 
 function applyRootTheme(isDark: boolean) {
@@ -66,6 +73,19 @@ function applyRootTheme(isDark: boolean) {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => getStoredTheme());
   const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(() => getSystemTheme());
+  const [themeConfig, setThemeConfigState] = useState<ThemeConfig>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(CONFIG_STORAGE_KEY);
+        if (saved) {
+          return JSON.parse(saved) as ThemeConfig;
+        }
+      } catch {
+        // Fallback
+      }
+    }
+    return initialPortfolioData.themeConfig || {};
+  });
 
   // Listen to OS preference changes
   useEffect(() => {
@@ -84,12 +104,41 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     applyRootTheme(resolvedTheme === "dark");
   }, [resolvedTheme]);
 
+  // Synchronously apply accent colors, typography pairings, and border radius whenever themeConfig or resolvedTheme changes
+  useEffect(() => {
+    applyThemeConfig(themeConfig, resolvedTheme === "dark");
+  }, [themeConfig, resolvedTheme]);
+
+  // Listen to cross-tab storage updates
+  useEffect(() => {
+    function handleStorage(e: StorageEvent) {
+      if (e.key === CONFIG_STORAGE_KEY && e.newValue) {
+        try {
+          setThemeConfigState(JSON.parse(e.newValue) as ThemeConfig);
+        } catch {
+          // Ignore
+        }
+      }
+    }
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
     try {
       localStorage.setItem(STORAGE_KEY, newTheme);
     } catch {
       // Ignore localStorage write failures
+    }
+  }, []);
+
+  const setThemeConfig = useCallback((newConfig: ThemeConfig) => {
+    setThemeConfigState(newConfig);
+    try {
+      localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(newConfig));
+    } catch {
+      // Ignore
     }
   }, []);
 
@@ -199,7 +248,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{ theme, resolvedTheme, themeConfig, setTheme, toggleTheme, setThemeConfig }}
+    >
       {children}
     </ThemeContext.Provider>
   );

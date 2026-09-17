@@ -240,7 +240,7 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
                             onMouseLeave={() => setTip(null)}
                             onFocus={(e) => showTip(e.currentTarget, `${d.count} on ${d.date}`)}
                             onBlur={() => setTip(null)}
-                            className={`rounded-xs border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-1 sm:rounded-xs cursor-pointer ${animateCells ? "heatmap-cell" : "opacity-0"
+                            className={`rounded-xs border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 sm:rounded-xs cursor-pointer ${animateCells ? "heatmap-cell" : "opacity-0"
                               } ${needsScroll ? "" : "aspect-square w-full min-w-0"}`}
                             style={{
                               ...(needsScroll ? { width: cell, height: cell } : null),

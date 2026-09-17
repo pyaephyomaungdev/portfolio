@@ -114,7 +114,7 @@ export function SiteHeader({ name, profile, onOpenContact, sectionVisibility }: 
               <button
                 key={item.id}
                 type="button"
-                className="hover:text-ink cursor-pointer"
+                className="hover:text-accent transition-colors cursor-pointer"
                 onClick={() => goSection(item.id)}
               >
                 {item.label}
@@ -125,7 +125,7 @@ export function SiteHeader({ name, profile, onOpenContact, sectionVisibility }: 
               type="button"
               onClick={() => window.print()}
               title="Print or Save Resume as PDF"
-              className="inline-flex items-center gap-1.5 hover:text-ink cursor-pointer transition-colors"
+              className="inline-flex items-center gap-1.5 hover:text-accent cursor-pointer transition-colors"
             >
               <Printer className="h-3.5 w-3.5" aria-hidden="true" />
               <span>Resume</span>

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { 
-  Globe, 
-  Share2, 
-  Plus, 
-  X, 
+import {
+  Globe,
+  Share2,
+  Plus,
+  X,
   Image as ImageIcon,
   Sparkles,
   RotateCcw
@@ -90,15 +90,13 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
   return (
     <div className="space-y-8">
       {/* 1. Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-rule">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-5 border-b border-rule">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-mono text-xs uppercase tracking-widest text-accent">
-              Admin · Search & Social Graph
-            </span>
-          </div>
-          <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
-            SEO & Social Preview
+          <p className="font-mono text-xs uppercase tracking-widest text-muted mb-1">
+            Admin · Search &amp; Social Graph
+          </p>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+            SEO &amp; Social Preview
           </h2>
           <p className="text-sm text-muted mt-1">
             Configure OpenGraph meta tags and test real-time link previews on Twitter/X and LinkedIn.
@@ -108,7 +106,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
         <button
           type="button"
           onClick={handleResetDefaults}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-3 py-1.5 text-xs font-mono text-muted hover:text-ink hover:border-ink/40 transition cursor-pointer shadow-2xs self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3 py-1.5 text-xs font-mono text-muted hover:text-ink hover:border-ink/40 transition cursor-pointer shadow-2xs self-start sm:self-auto"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           <span>Reset Defaults</span>
@@ -119,17 +117,16 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
         {/* Left Column: Form Controls (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Meta Title */}
-          <div className="p-5 rounded-2xl border border-rule bg-white space-y-3 shadow-2xs">
+          <div className="p-5 rounded-xl border border-rule bg-paper space-y-3 shadow-2xs">
             <div className="flex items-center justify-between">
               <label htmlFor="metaTitle" className="block text-xs font-mono uppercase tracking-wider text-muted font-medium">
-                Page Title Tag (`&lt;title&gt;`)
+                Page Title & Tag
               </label>
               <span
-                className={`text-xs font-mono ${
-                  titleLength >= 40 && titleLength <= 65
-                    ? "text-success font-medium"
-                    : "text-muted"
-                }`}
+                className={`text-xs font-mono ${titleLength >= 40 && titleLength <= 65
+                  ? "text-success font-medium"
+                  : "text-muted"
+                  }`}
               >
                 {titleLength} / 60 chars (Recommended: 50–60)
               </span>
@@ -145,17 +142,16 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
           </div>
 
           {/* Meta Description */}
-          <div className="p-5 rounded-2xl border border-rule bg-white space-y-3 shadow-2xs">
+          <div className="p-5 rounded-xl border border-rule bg-paper space-y-3 shadow-2xs">
             <div className="flex items-center justify-between">
               <label htmlFor="metaDescription" className="block text-xs font-mono uppercase tracking-wider text-muted font-medium">
-                Meta Description (`description`)
+                Meta Description
               </label>
               <span
-                className={`text-xs font-mono ${
-                  descLength >= 110 && descLength <= 165
-                    ? "text-success font-medium"
-                    : "text-muted"
-                }`}
+                className={`text-xs font-mono ${descLength >= 110 && descLength <= 165
+                  ? "text-success font-medium"
+                  : "text-muted"
+                  }`}
               >
                 {descLength} / 160 chars (Recommended: 120–160)
               </span>
@@ -171,7 +167,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
           </div>
 
           {/* Social Image & Canonical URLs */}
-          <div className="p-5 rounded-2xl border border-rule bg-white space-y-4 shadow-2xs">
+          <div className="p-5 rounded-xl border border-rule bg-paper space-y-4 shadow-2xs">
             <h3 className="text-xs font-mono uppercase tracking-wider text-muted font-medium">
               OpenGraph Assets & Handles
             </h3>
@@ -229,7 +225,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
           </div>
 
           {/* Keywords Tag Manager */}
-          <div className="p-5 rounded-2xl border border-rule bg-white space-y-3 shadow-2xs">
+          <div className="p-5 rounded-xl border border-rule bg-paper space-y-3 shadow-2xs">
             <label className="block text-xs font-mono uppercase tracking-wider text-muted font-medium">
               Target SEO Keywords ({keywords.length})
             </label>
@@ -285,19 +281,18 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-xs font-mono text-muted uppercase">
                 <Share2 className="h-3.5 w-3.5 text-accent" />
-                <span>Live Share Card Simulation</span>
+                <span>Live Share Card</span>
               </div>
 
               {/* Preview Tabs */}
-              <div className="inline-flex items-center p-0.5 rounded-lg border border-rule bg-white text-xs font-mono">
+              <div className="inline-flex items-center p-0.5 rounded-lg border border-rule bg-paper text-xs font-mono">
                 <button
                   type="button"
                   onClick={() => setActivePreviewTab("twitter")}
-                  className={`px-2.5 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${
-                    activePreviewTab === "twitter"
-                      ? "bg-ink text-paper font-semibold shadow-2xs"
-                      : "text-muted hover:text-ink"
-                  }`}
+                  className={`px-2.5 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${activePreviewTab === "twitter"
+                    ? "bg-ink text-paper font-semibold shadow-2xs"
+                    : "text-muted hover:text-ink"
+                    }`}
                 >
                   <FaXTwitter className="h-3 w-3" />
                   <span>Twitter / X</span>
@@ -305,11 +300,10 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
                 <button
                   type="button"
                   onClick={() => setActivePreviewTab("linkedin")}
-                  className={`px-2.5 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${
-                    activePreviewTab === "linkedin"
-                      ? "bg-ink text-paper font-semibold shadow-2xs"
-                      : "text-muted hover:text-ink"
-                  }`}
+                  className={`px-2.5 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${activePreviewTab === "linkedin"
+                    ? "bg-ink text-paper font-semibold shadow-2xs"
+                    : "text-muted hover:text-ink"
+                    }`}
                 >
                   <FaLinkedin className="h-3 w-3" />
                   <span>LinkedIn</span>
@@ -320,7 +314,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
             {/* Simulation Viewport Card */}
             {activePreviewTab === "twitter" ? (
               /* Twitter / X Large Summary Card */
-              <div className="rounded-2xl border border-rule bg-white p-4 shadow-sm space-y-3 font-sans">
+              <div className="rounded-xl border border-rule bg-paper p-4 shadow-2xs space-y-3 font-sans">
                 <div className="flex items-center gap-2.5 pb-2 border-b border-rule text-xs">
                   <div className="h-8 w-8 rounded-full bg-soft border border-rule flex items-center justify-center font-bold text-ink">
                     P
@@ -336,7 +330,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
 
                 {/* Simulated Shared Card Frame */}
                 <div className="rounded-xl border border-rule overflow-hidden bg-paper/50 hover:border-ink/40 transition">
-                  <div 
+                  <div
                     className="relative w-full bg-soft overflow-hidden flex items-center justify-center border-b border-rule"
                     style={{ aspectRatio: "1.91 / 1" }}
                   >
@@ -370,7 +364,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
               </div>
             ) : (
               /* LinkedIn Post Card */
-              <div className="rounded-2xl border border-rule bg-white p-4 shadow-sm space-y-3 font-sans">
+              <div className="rounded-xl border border-rule bg-paper p-4 shadow-2xs space-y-3 font-sans">
                 <div className="flex items-center gap-2.5 pb-2 border-b border-rule text-xs">
                   <div className="h-8 w-8 rounded-full bg-soft border border-rule flex items-center justify-center font-bold text-ink">
                     P
@@ -383,7 +377,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
 
                 {/* Simulated Shared Card Frame */}
                 <div className="rounded-xl border border-rule overflow-hidden bg-paper/40">
-                  <div 
+                  <div
                     className="relative w-full bg-soft overflow-hidden flex items-center justify-center border-b border-rule"
                     style={{ aspectRatio: "1.91 / 1" }}
                   >

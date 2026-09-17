@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchPortfolio, savePortfolioJson, uploadAvatarImage } from "../lib/api";
+import { useTheme } from "../context/ThemeContext";
+import { applyThemeConfig } from "../lib/theme";
 import type {
   Portfolio,
   Project,
@@ -28,6 +30,8 @@ import { HonorsSection } from "../components/admin/sections/HonorsSection";
 import { LicensesSection } from "../components/admin/sections/LicensesSection";
 import { LayoutSection } from "../components/admin/sections/LayoutSection";
 import { SeoSection } from "../components/admin/sections/SeoSection";
+import { CustomSectionsEditor } from "../components/admin/sections/CustomSectionsEditor";
+import { ThemeSection } from "../components/admin/sections/ThemeSection";
 import { DeploySection } from "../components/admin/sections/DeploySection";
 import { RawJsonSection } from "../components/admin/sections/RawJsonSection";
 
@@ -60,8 +64,10 @@ const VALID_TABS: AdminTab[] = [
   "education",
   "honors",
   "licenses",
+  "custom",
   "layout",
   "seo",
+  "theme",
   "deploy",
   "json",
 ];
@@ -84,7 +90,15 @@ export function AdminPage() {
     navigate(`/admin/${selectedTab}`);
   }
 
+  const { resolvedTheme, setThemeConfig } = useTheme();
   const [data, setData] = useState<Portfolio | null>(null);
+
+  useEffect(() => {
+    if (data?.themeConfig) {
+      applyThemeConfig(data.themeConfig, resolvedTheme === "dark");
+    }
+  }, [data?.themeConfig, resolvedTheme]);
+
   const [savedSnapshot, setSavedSnapshot] = useState<string>("");
   const [jsonText, setJsonText] = useState("");
   const [jsonError, setJsonError] = useState<string | null>(null);
@@ -493,10 +507,11 @@ export function AdminPage() {
             education: data.education?.length || 0,
             honors: data.honors?.length || 0,
             licenses: data.licenses?.length || 0,
+            custom: data.customSections?.length || 0,
           }}
         />
 
-        <main className="flex-1 min-w-0 w-full bg-paper rounded-xl border border-rule p-5 sm:p-6 shadow-xs">
+        <main className="flex-1 min-w-0 w-full pb-12">
           {activeTab === "overview" && (
             <OverviewSection
               portfolio={data}
@@ -590,6 +605,13 @@ export function AdminPage() {
             />
           )}
 
+          {activeTab === "custom" && (
+            <CustomSectionsEditor
+              sections={data.customSections || []}
+              onChange={(customSections) => syncJson({ ...data, customSections })}
+            />
+          )}
+
           {activeTab === "layout" && (
             <LayoutSection
               visibility={data.sectionVisibility}
@@ -602,6 +624,16 @@ export function AdminPage() {
               seo={data.seo}
               profile={data.profile}
               onChange={(seo) => syncJson({ ...data, seo })}
+            />
+          )}
+
+          {activeTab === "theme" && (
+            <ThemeSection
+              themeConfig={data.themeConfig}
+              onChange={(themeConfig) => {
+                syncJson({ ...data, themeConfig });
+                setThemeConfig(themeConfig);
+              }}
             />
           )}
 

@@ -38,7 +38,7 @@ export function ConfirmModal({
         <span className="pointer-events-none absolute right-2.5 top-2.5 font-mono text-xs text-muted/40">+</span>
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-rule bg-white px-5 py-4">
+        <div className="flex items-center justify-between border-b border-rule bg-paper px-5 py-4">
           <div className="flex items-center gap-2.5">
             <div
               className={`flex h-8 w-8 items-center justify-center rounded-lg border ${variant === "destructive"
@@ -77,11 +77,11 @@ export function ConfirmModal({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-end gap-2.5 border-t border-rule bg-white/70 px-5 py-3.5">
+        <div className="flex items-center justify-end gap-2.5 border-t border-rule bg-soft/50 px-5 py-3.5">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-rule bg-white px-4 py-2 text-xs font-mono font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs"
+            className="rounded-lg border border-rule bg-paper px-4 py-2 text-xs font-mono font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs"
           >
             {cancelLabel}
           </button>

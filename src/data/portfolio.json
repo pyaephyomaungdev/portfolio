@@ -635,6 +635,30 @@
             "JavaScript"
           ],
           "sortOrder": 1
+        },
+        {
+          "id": "role-1789630142395",
+          "companyId": "exp-2",
+          "title": "Software Engineer",
+          "employmentType": "Full-Time",
+          "startDate": "2026",
+          "endDate": null,
+          "location": "Remote",
+          "description": "",
+          "skills": [],
+          "sortOrder": 3
+        },
+        {
+          "id": "role-1789630147529",
+          "companyId": "exp-2",
+          "title": "Software Engineer",
+          "employmentType": "Full-Time",
+          "startDate": "2026",
+          "endDate": null,
+          "location": "Remote",
+          "description": "",
+          "skills": [],
+          "sortOrder": 4
         }
       ]
     },
@@ -780,7 +804,8 @@
     "education": true,
     "honors": true,
     "licenses": true,
-    "contact": true
+    "contact": true,
+    "custom": true
   },
   "seo": {
     "metaTitle": "Pyae Phyo Maung — Full-Stack Systems Engineer",
@@ -799,5 +824,51 @@
     "ogImage": "https://pyaephyomaung.dev/avatar.jpg",
     "twitterHandle": "@pyaephyomaung",
     "canonicalUrl": "https://pyaephyomaung.dev"
+  },
+  "customSections": [
+    {
+      "id": "writing-labs",
+      "title": "Architectural Writing & Research",
+      "subtitle": "Technical essays on zero-backend architecture, local-first protocols, and client cryptography",
+      "icon": "PenTool",
+      "layout": "cards",
+      "content": "Exploring the boundaries of **zero-backend web applications**, verifiable client-side cryptography, and decentralized edge architectures.",
+      "items": [
+        {
+          "id": "item-1",
+          "title": "Zero-Leak Architecture: Designing Privacy-First Web Applications",
+          "slug": "zero-leak-architecture",
+          "subtitle": "Client-Side Engineering",
+          "description": "How to build high-performance web applications with zero tracking, zero external telemetry, and AES-GCM client storage.",
+          "content": "## Architectural Overview\n\nTraditional web applications operate under an assumed trust contract: user inputs, application states, and private credentials flow freely to remote servers for validation and persistence. In a **Zero-Leak Architecture**, this paradigm is inverted.\n\nEvery cryptographic operation, credential check, and state transition executes purely within the browser's local sandbox using the **Web Cryptography API (SubtleCrypto)** and ephemeral memory buffers.\n\n### 1. Key Primitives & Cryptographic Storage\n\nTo eliminate server-side storage vulnerabilities, client-side data is sealed using **AES-GCM 256-bit encryption** with unique Initialization Vectors (IV) per record:\n\n```typescript\nasync function encryptPayload(data: unknown, masterKey: CryptoKey): Promise<ArrayBuffer> {\n  const iv = crypto.getRandomValues(new Uint8Array(12));\n  const encoded = new TextEncoder().encode(JSON.stringify(data));\n  return crypto.subtle.encrypt({ name: \"AES-GCM\", iv }, masterKey, encoded);\n}\n```\n\n### 2. Zero Telemetry & Network Hermeticity\n\n- **Zero Tracking:** No third-party analytics pixels, trackers, or foreign script CDNs are loaded.\n- **Content Security Policy (CSP):** Strict `connect-src 'self'` prevents unauthorized external egress.\n- **Deterministic State:** Application state is mirrored directly to client-controlled storage with instant offline recovery.",
+          "url": "https://pyaephyomaung.dev",
+          "tag": "Architecture",
+          "date": "2026"
+        },
+        {
+          "id": "item-2",
+          "title": "Designing Local-First CMS Systems with Zero Databases",
+          "slug": "local-first-cms-zero-databases",
+          "subtitle": "Developer Experience",
+          "description": "Building schema-driven local administrative studios that eliminate cloud database overhead.",
+          "content": "## Architectural Philosophy\n\nMost developer portfolios and content sites deploy heavyweight backend CMS instances (Strapi, Contentful, Supabase) that introduce network latency, database migrations, subscription fees, and uptime dependencies for content that changes once a week.\n\nA **Local-First CMS** architecture eliminates remote databases entirely by treating structured JSON schemas in the local repository as the single source of truth.\n\n### Core Engineering Decisions\n\n1. **Schema-Driven In-Memory Editing:** Content modifications update an in-memory draft state backed by localStorage snapshotting for crash-proof recovery.\n2. **Zero Runtime Database:** At build time, static site generators compile pre-rendered HTML and compressed JSON bundles directly into edge workers (Cloudflare Pages).\n3. **Local Stdio & File System Synchronization:** Development and production sync seamlessly without remote database connection pools or API rate limits.",
+          "url": "https://pyaephyomaung.dev",
+          "tag": "Local-First",
+          "date": "2026"
+        }
+      ],
+      "sortOrder": 1,
+      "visible": true
+    }
+  ],
+  "themeConfig": {
+    "preset": "minimal-slate",
+    "primaryColor": "#18181b",
+    "primaryColorDark": "#f4f4f5",
+    "accentColor": "#475569",
+    "accentColorDark": "#94a3b8",
+    "fontPairing": "editorial",
+    "radiusStyle": "tactile",
+    "defaultMode": "system"
   }
 }

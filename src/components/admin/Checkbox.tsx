@@ -45,7 +45,7 @@ export function Checkbox({
         className={`h-4 w-4 rounded shrink-0 border transition-all flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ink/20 ${
           checked
             ? "border-ink bg-ink text-paper"
-            : "border-rule bg-white hover:border-ink/50"
+            : "border-rule bg-paper hover:border-ink/50"
         }`}
       >
         {checked && <Check className="h-3 w-3" strokeWidth={2.5} aria-hidden="true" />}

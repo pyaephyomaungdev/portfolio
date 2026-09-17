@@ -1,6 +1,8 @@
 import { initialPortfolioData } from "../data/portfolioData";
 import type {
   ContributionYear,
+  CustomSection,
+  CustomSectionItem,
   Portfolio,
   Project,
 } from "../types/portfolio";
@@ -80,6 +82,22 @@ export async function fetchProject(slug: string): Promise<Project> {
     return found;
   }
   throw new Error(`Project not found: ${slug}`);
+}
+
+export async function fetchCustomItem(
+  sectionId: string,
+  slug: string,
+): Promise<{ section: CustomSection; item: CustomSectionItem }> {
+  const portfolio = await fetchPortfolio();
+  const section = portfolio.customSections?.find((s) => s.id === sectionId);
+  if (!section) {
+    throw new Error(`Custom section not found: ${sectionId}`);
+  }
+  const item = section.items?.find((it) => it.slug === slug);
+  if (!item) {
+    throw new Error(`Custom item not found: ${slug}`);
+  }
+  return { section, item };
 }
 
 export async function fetchContributions(year: number, customUsername?: string): Promise<ContributionYear> {

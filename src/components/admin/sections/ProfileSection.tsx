@@ -145,24 +145,25 @@ export function ProfileSection({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-rule pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-5 border-b border-rule">
         <div>
+          <p className="font-mono text-xs uppercase tracking-widest text-muted mb-1">Admin · Identity &amp; Bio</p>
           <div className="flex items-center gap-2">
-            <h2 className="font-display text-2xl font-bold tracking-tight text-ink">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
               Profile &amp; Biography
             </h2>
             <span className="inline-flex items-center gap-1 rounded border border-rule bg-soft px-2 py-0.5 font-mono text-xs font-semibold text-muted">
               CMS Core
             </span>
           </div>
-          <p className="mt-1 text-xs text-muted">
+          <p className="text-sm text-muted mt-1">
             Manage your core identity, avatar photo, direct reachout links, availability radar, and contact settings.
           </p>
         </div>
       </div>
 
       {/* Card 1: Avatar & Visual Representation */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-5">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-rule pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -211,7 +212,7 @@ export function ProfileSection({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingAvatar}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-white px-3.5 py-2 text-xs font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-paper px-3.5 py-2 text-xs font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs disabled:opacity-50"
               >
                 <Upload className="h-3.5 w-3.5" />
                 <span>{isUploadingAvatar ? "Uploading..." : "Upload New Photo"}</span>
@@ -219,7 +220,7 @@ export function ProfileSection({
               <button
                 type="button"
                 onClick={() => onChange({ ...profile, avatarUrl: "/avatar.jpg" })}
-                className="rounded-lg border border-rule bg-white px-3 py-2 text-xs font-medium text-muted hover:text-ink transition cursor-pointer shadow-2xs"
+                className="rounded-lg border border-rule bg-paper px-3 py-2 text-xs font-medium text-muted hover:text-ink transition cursor-pointer shadow-2xs"
               >
                 Reset to Default
               </button>
@@ -246,7 +247,7 @@ export function ProfileSection({
       </section>
 
       {/* Card 2: Personal Details & Direct Engineering Channels */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-5">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-rule pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -404,7 +405,7 @@ export function ProfileSection({
       </section>
 
       {/* Card 3: Live Availability & Timezone Radar */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-5">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-rule pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -432,13 +433,13 @@ export function ProfileSection({
         </div>
 
         {/* Live Preview on Hero (1:1 Hero Simulation) */}
-        <div className="rounded-xl border border-rule bg-paper p-5 space-y-3">
+        <div className="rounded-xl border border-rule bg-soft/40 p-5 space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs uppercase tracking-wider text-muted font-semibold">
                 // LIVE PREVIEW ON HERO
               </span>
-              <span className="inline-flex items-center gap-1 rounded border border-rule bg-white px-2 py-0.5 font-mono text-xs text-muted">
+              <span className="inline-flex items-center gap-1 rounded border border-rule bg-paper px-2 py-0.5 font-mono text-xs text-muted">
                 1:1 Interactive Simulation
               </span>
             </div>
@@ -447,19 +448,19 @@ export function ProfileSection({
             </span>
           </div>
 
-          <div className="flex items-start gap-4 rounded-xl border border-rule/70 bg-white p-4 shadow-2xs">
+          <div className="flex items-start gap-4 rounded-xl border border-rule/70 bg-paper p-4 shadow-2xs">
             <div className="relative shrink-0">
               {profile.avatarUrl ? (
                 <img
                   src={profile.avatarUrl}
                   alt={profile.name}
-                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
+                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = "/avatar.jpg";
                   }}
                 />
               ) : (
-                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-2xl border border-rule bg-soft text-2xl font-semibold text-muted">
+                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-xl border border-rule bg-soft text-2xl font-semibold text-muted">
                   {(profile.name || "P").slice(0, 1)}
                 </div>
               )}
@@ -575,7 +576,7 @@ export function ProfileSection({
       </section>
 
       {/* Card 4: Direct Contact Dialog Settings */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-5">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-rule pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -625,7 +626,7 @@ export function ProfileSection({
       </section>
 
       {/* Card 5: Telegram Instant Notification Bot (Secure Edge Architecture) */}
-      <section className="rounded-2xl border border-rule bg-white p-6 shadow-xs space-y-5">
+      <section className="rounded-xl border border-rule bg-paper p-6 shadow-2xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-rule pb-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -662,8 +663,8 @@ export function ProfileSection({
           </div>
           <p className="text-xs text-muted leading-relaxed">
             Your Telegram Bot Token is <strong>never stored in public JSON or bundled into the client browser</strong>.
-            In local dev, secrets are saved to gitignored <code className="font-mono text-ink bg-white px-1.5 py-0.5 rounded border border-rule">.env.local</code>.
-            When deploying to Cloudflare Pages, set <code className="font-mono text-ink bg-white px-1.5 py-0.5 rounded border border-rule">TELEGRAM_BOT_TOKEN</code> and <code className="font-mono text-ink bg-white px-1.5 py-0.5 rounded border border-rule">TELEGRAM_CHAT_ID</code> under Cloudflare Pages Environment Variables.
+            In local dev, secrets are saved to gitignored <code className="font-mono text-ink bg-paper px-1.5 py-0.5 rounded border border-rule">.env.local</code>.
+            When deploying to Cloudflare Pages, set <code className="font-mono text-ink bg-paper px-1.5 py-0.5 rounded border border-rule">TELEGRAM_BOT_TOKEN</code> and <code className="font-mono text-ink bg-paper px-1.5 py-0.5 rounded border border-rule">TELEGRAM_CHAT_ID</code> under Cloudflare Pages Environment Variables.
           </p>
         </div>
 
@@ -743,9 +744,9 @@ export function ProfileSection({
             </span>
             <span>
               Telegram anti-spam policy prohibits bots from initiating messages to users. Make sure you have opened your bot in Telegram and tapped{" "}
-              <code className="font-mono text-ink bg-white px-1.5 py-0.5 rounded border border-rule">/start</code>{" "}
+              <code className="font-mono text-ink bg-paper px-1.5 py-0.5 rounded border border-rule">/start</code>{" "}
               from the account matching your Chat ID. Otherwise, Telegram API will return{" "}
-              <code className="font-mono text-ink bg-white px-1.5 py-0.5 rounded border border-rule">Bad Request: chat not found</code>.
+              <code className="font-mono text-ink bg-paper px-1.5 py-0.5 rounded border border-rule">Bad Request: chat not found</code>.
             </span>
           </div>
         </div>
@@ -775,7 +776,7 @@ export function ProfileSection({
             type="button"
             disabled={testStatus === "testing" || (!botTokenInput && !chatIdInput && !profile.telegramConfigured)}
             onClick={handleTestTelegramPing}
-            className="inline-flex items-center gap-2 rounded-lg border border-rule bg-white px-4 py-2 text-xs font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-lg border border-rule bg-paper px-4 py-2 text-xs font-medium text-ink hover:border-ink transition cursor-pointer shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {testStatus === "testing" ? (
               <>

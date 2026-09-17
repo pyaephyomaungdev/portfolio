@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { ReorderButtons, reorderArray } from "../ReorderButtons";
 import type { Stat } from "../../../types/portfolio";
 
@@ -30,17 +30,23 @@ export function StatsSection({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-5 border-b border-rule">
         <div>
-          <h2 className="font-display text-2xl font-bold">Key Stats ({stats.length})</h2>
-          <p className="text-xs text-muted mt-0.5">Metrics displayed on the home page header.</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-muted mb-1">Admin · Hero Metrics</p>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+            Key Stats ({stats.length})
+          </h2>
+          <p className="text-sm text-muted mt-1">
+            Metrics and milestones highlighted on the homepage header.
+          </p>
         </div>
         <button
           type="button"
           onClick={onOpenAddModal}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-1.5 text-xs font-mono font-medium text-paper hover:opacity-90 transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-xs font-mono font-medium text-paper hover:opacity-90 transition cursor-pointer shadow-xs self-start sm:self-auto"
         >
-          <Plus className="h-3.5 w-3.5" />
+          <Plus className="size-3.5" />
           <span>Add Stat</span>
         </button>
       </div>
@@ -52,12 +58,14 @@ export function StatsSection({
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {stats.map((s, idx) => (
-            <div key={s.id} className="p-3.5 rounded-lg border border-rule bg-paper flex items-center justify-between gap-3">
+            <div key={s.id} className="p-4 rounded-xl border border-rule bg-paper flex items-center justify-between gap-3 shadow-2xs">
               <ReorderButtons
                 canMoveUp={idx > 0}
                 canMoveDown={idx < stats.length - 1}
                 onMoveUp={() => moveStat(idx, "up")}
                 onMoveDown={() => moveStat(idx, "down")}
+                onDelete={() => handleDeleteStat(idx, s.label)}
+                deleteTitle="Delete stat"
               />
               <div className="flex-1 grid grid-cols-2 gap-2">
                 <div>
@@ -70,7 +78,7 @@ export function StatsSection({
                       updated[idx] = { ...s, label: e.target.value };
                       onChange(updated);
                     }}
-                    className="w-full bg-transparent font-medium text-sm text-ink border-b border-transparent focus:border-ink outline-none"
+                    className="w-full bg-transparent font-sans text-sm text-ink border-b border-transparent focus:border-ink outline-none"
                   />
                 </div>
                 <div>
@@ -87,14 +95,6 @@ export function StatsSection({
                   />
                 </div>
               </div>
-              <button
-                type="button"
-                title="Delete stat"
-                onClick={() => handleDeleteStat(idx, s.label)}
-                className="p-1 text-muted hover:text-destructive cursor-pointer transition"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
             </div>
           ))}
         </div>

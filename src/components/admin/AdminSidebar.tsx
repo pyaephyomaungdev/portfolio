@@ -11,7 +11,9 @@ import {
   FileCode,
   Cloud,
   SlidersVertical,
-  Globe
+  Globe,
+  PenTool,
+  Palette
 } from "lucide-react";
 
 export type AdminTab = 
@@ -23,8 +25,10 @@ export type AdminTab =
   | "education" 
   | "honors" 
   | "licenses" 
+  | "custom"
   | "layout"
   | "seo"
+  | "theme"
   | "deploy"
   | "json";
 
@@ -38,6 +42,7 @@ interface AdminSidebarProps {
     education: number;
     honors: number;
     licenses: number;
+    custom?: number;
   };
 }
 
@@ -55,8 +60,10 @@ export function AdminSidebar({
     { id: "education" as const, label: "Education", icon: GraduationCap, count: counts.education },
     { id: "honors" as const, label: "Honors", icon: Award, count: counts.honors },
     { id: "licenses" as const, label: "Certifications", icon: BadgeCheck, count: counts.licenses },
+    { id: "custom" as const, label: "Custom Content", icon: PenTool, count: counts.custom ?? null },
     { id: "layout" as const, label: "Layout & Visibility", icon: SlidersVertical, count: null },
     { id: "seo" as const, label: "SEO & Social", icon: Globe, count: null },
+    { id: "theme" as const, label: "Theme Studio", icon: Palette, count: null },
     { id: "deploy" as const, label: "Deploy & Hosting", icon: Cloud, count: null },
     { id: "json" as const, label: "Raw JSON", icon: FileCode, count: null },
   ];
@@ -76,7 +83,7 @@ export function AdminSidebar({
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium whitespace-nowrap transition cursor-pointer shrink-0 ${
                 isActive
                   ? "bg-ink text-paper font-semibold shadow-2xs"
-                  : "bg-white border border-rule text-muted hover:text-ink hover:border-ink/40"
+                  : "bg-paper border border-rule text-muted hover:text-ink hover:border-ink/40"
               }`}
             >
               <Icon className="h-3.5 w-3.5 shrink-0" />

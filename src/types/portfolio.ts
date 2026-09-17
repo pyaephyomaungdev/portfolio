@@ -155,6 +155,7 @@ export type SectionVisibility = {
   honors?: boolean;
   licenses?: boolean;
   contact?: boolean;
+  custom?: boolean;
 };
 
 export type SeoConfig = {
@@ -164,6 +165,54 @@ export type SeoConfig = {
   ogImage?: string;
   twitterHandle?: string;
   canonicalUrl?: string;
+};
+
+export type CustomSectionItem = {
+  id: string;
+  title: string;
+  slug?: string;
+  subtitle?: string;
+  description?: string;
+  content?: string;
+  url?: string;
+  tag?: string;
+  date?: string;
+};
+
+export type CustomSection = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  icon?: string;
+  layout: "prose" | "cards" | "list";
+  content?: string;
+  items?: CustomSectionItem[];
+  sortOrder: number;
+  visible: boolean;
+};
+
+export type ThemePreset =
+  | "signal-orange"
+  | "electric-cyan"
+  | "emerald-forest"
+  | "cyber-violet"
+  | "rose-crimson"
+  | "monokai-amber"
+  | "minimal-slate"
+  | "custom";
+
+export type FontPairing = "editorial" | "modern" | "technical";
+export type RadiusStyle = "sharp" | "tactile" | "pill";
+
+export type ThemeConfig = {
+  preset?: ThemePreset;
+  primaryColor?: string;
+  primaryColorDark?: string;
+  accentColor?: string;
+  accentColorDark?: string;
+  fontPairing?: FontPairing;
+  radiusStyle?: RadiusStyle;
+  defaultMode?: "system" | "dark" | "light";
 };
 
 export type Portfolio = {
@@ -176,6 +225,8 @@ export type Portfolio = {
   licenses: License[];
   sectionVisibility?: SectionVisibility;
   seo?: SeoConfig;
+  customSections?: CustomSection[];
+  themeConfig?: ThemeConfig;
 };
 
 export type ContributionDay = {

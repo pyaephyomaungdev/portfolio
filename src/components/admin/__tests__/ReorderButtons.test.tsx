@@ -70,4 +70,42 @@ describe("ReorderButtons UI Component", () => {
     fireEvent.click(screen.getByRole("button", { name: /move down/i }));
     expect(handleDown).toHaveBeenCalledTimes(1);
   });
+
+  it("renders corner variant with index and calls onDelete when clicked", () => {
+    const handleDelete = vi.fn();
+    render(
+      <ReorderButtons
+        variant="corner"
+        index={2}
+        onMoveUp={vi.fn()}
+        onMoveDown={vi.fn()}
+        canMoveUp={true}
+        canMoveDown={true}
+        onDelete={handleDelete}
+        deleteTitle="Delete item"
+      />
+    );
+
+    expect(screen.getByText("#3")).not.toBeNull();
+    const deleteBtn = screen.getByRole("button", { name: "Delete item" });
+    fireEvent.click(deleteBtn);
+    expect(handleDelete).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders delete button in default variant when onDelete is provided", () => {
+    const handleDelete = vi.fn();
+    render(
+      <ReorderButtons
+        onMoveUp={vi.fn()}
+        onMoveDown={vi.fn()}
+        canMoveUp={true}
+        canMoveDown={true}
+        onDelete={handleDelete}
+      />
+    );
+
+    const deleteBtn = screen.getByRole("button", { name: /delete/i });
+    fireEvent.click(deleteBtn);
+    expect(handleDelete).toHaveBeenCalledTimes(1);
+  });
 });

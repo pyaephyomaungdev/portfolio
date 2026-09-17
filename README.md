@@ -7,7 +7,7 @@
   <p>
     <a href="https://pyaephyomaung.dev"><img src="https://img.shields.io/badge/Live_Site-pyaephyomaung.dev-blue?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Live Site" /></a>
     <a href="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml"><img src="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
-    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-135_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
+    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-169_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
     <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.1-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" /></a>
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
@@ -219,6 +219,35 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 
 </details>
 
+<details>
+<summary><strong><img src=".github/assets/icons/layers.svg" width="18" height="18" align="absmiddle" /> 16. Theme & Aesthetic Studio with Dual-Token Palette & Custom Color Picker (`/admin/theme`)</strong> (Click to expand)</summary>
+
+* **Dual-Token Theme Engine**: Complete separation of **Primary Button Color** (`--primary` / `--primary-fg` driving `.btn-primary` CTAs) and **Accent Color** (`--accent` driving interactive tags, hover highlights, radar beacons, and focus rings).
+* **Curated Harmonic Pairs**: Curated preset combinations (Signal Orange + Electric Cyan, Cyber Violet + Neon Mint, Rose Crimson + Editorial Teal, etc.) with smart complementary accent auto-suggestions (`getSuggestedAccent`).
+* **Custom HSV Color Picker**: Built-in 2D Saturation/Value gradient canvas with a rainbow Hue rail slider and bidirectional HEX synchronization—completely eliminating OS native color picker limitations.
+* **Dynamic Contribution Matrix**: Heatmap cells dynamically derive level tints from the active primary color, while cell hover and focus states highlight with the accent color border (`box-shadow: 0 0 0 1.5px var(--accent)`).
+* **Typographic & Border Curvature Tokens**: Selectable typographic pairings (Editorial Swiss, Modern Bauhaus, Technical Monospace) and dynamic border radius scaling (`data-radius="sharp" | "tactile" | "pill"`).
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/box.svg" width="18" height="18" align="absmiddle" /> 17. Custom Content Blocks with Independent Detail Pages (`/custom/:sectionId/:slug`)</strong> (Click to expand)</summary>
+
+* **Extensible Content Framework**: Create arbitrary custom sections with configurable layouts (Cards, List, Table, Markdown text).
+* **Project-Like Detail Pages**: Items can have their own dedicated detail page routes (`/custom/:sectionId/:slug`) featuring full Markdown content rendering, key specification sidebars, external links, and bilateral next/previous article navigation.
+* **Middle URL Truncation**: Administrative path inputs feature clean middle truncation (e.g. `/custo...ng-labs/`) to preserve layout alignment and legibility on compact displays.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/zap.svg" width="18" height="18" align="absmiddle" /> 18. Career Role Expansion & Harmonized Design System</strong> (Click to expand)</summary>
+
+* **Multi-Role Company Accordion**: Companies with 3 or more career positions automatically display the top 2 roles and collapse older roles behind a tactile `Show more roles` button with accent micro-interactions.
+* **Border-Integrated Corner Notch**: Standardized reordering controls (`[ #1 | ↑ ↓ | 🗑 ]`) integrated directly onto card borders with zero visual clutter across all CMS card lists.
+* **Universal Accent Hover Feedback**: Consistent accent color transitions across project cards, custom section entries, timeline nodes, education cards, and navigation links.
+
+</details>
+
 ---
 
 ## <img src=".github/assets/icons/terminal.svg" width="22" height="22" align="absmiddle" /> Quickstart & Installation
@@ -303,12 +332,16 @@ Built upon an architectural drafting philosophy combining high-contrast ink, war
 | :--- | :--- | :--- | :--- | :--- |
 | **Paper (Base)** | `--paper` | `#fbfbfa` | `#0c0d0e` | Canvas background |
 | **Ink (Text)** | `--ink` | `#1a1a1a` | `#f4f4f2` | Primary headlines & body text |
+| **Primary (Action)** | `--primary` | `#f54e00` / dynamic | `#ff5c1a` / dynamic | Major CTA buttons (`.btn-primary`), active filters, heatmap cells |
+| **Primary FG** | `--primary-fg` | `#ffffff` / dynamic | `#111111` / dynamic | High-contrast readable foreground on primary background |
+| **Accent (Highlight)** | `--accent` | `#0284c7` / dynamic | `#38bdf8` / dynamic | Interactive tags, hover highlights, radar beacon, focus rings |
 | **Muted** | `--muted` | `#6b6b6b` | `#8e8f96` | Subtitles, dates, and metadata |
 | **Rule (Borders)** | `--rule` | `#e8e8e6` | `#23252a` | Architectural gridlines & dividers |
 | **Soft (Surface)** | `--soft` | `#f4f4f2` | `#15161a` | Secondary surfaces & badge backgrounds |
 | **White (Cards)** | `--white` | `#ffffff` | `#1a1b20` | Elevated cards & inputs |
 | **Pure White** | `--pure-white` | `#ffffff` | `#ffffff` | Absolute high-contrast button text |
-| **Accent (Signal)**| `--accent` | `#f54e00` | `#ff5c1a` | Signal orange status dots & active states |
+| **Heatmap 0–4** | `--heatmap-0..4` | Dynamic scale | Dynamic scale | GitHub contribution matrix levels (derived from `--primary`) |
+
 
 ### Typographic Hierarchy
 
@@ -344,16 +377,21 @@ portfolio/
 │   ├── components/             # Reusable UI components
 │   │   ├── admin/              # Visual CMS editors, modals, reorder controls
 │   │   │   ├── modals/         # ConfirmModal, AddCompanyModal, AddLicenseModal
-│   │   │   └── sections/       # Section editors (Profile, Projects, Exp, Deploy)
+│   │   │   ├── sections/       # Section editors (Profile, Projects, Exp, Theme, Custom)
+│   │   │   ├── ColorPicker.tsx # Custom 2D HSV gradient & rainbow hue rail color picker
+│   │   │   ├── CustomActionMenu.tsx # Three-dot contextual action menu
+│   │   │   └── CustomSelect.tsx # Accessible Swiss dropdown selector
 │   │   ├── ArchitectureBlueprint.tsx # Interactive Swiss drafting case study blueprints
 │   │   ├── AvailabilityBadge.tsx     # Avatar corner radar beacon with popover notch
 │   │   ├── BackToTopButton.tsx       # Smooth-scrolling floating action button
 │   │   ├── BuyMeACoffeeButton.tsx    # Official brand BMC support button & card
 │   │   ├── ContactForm.tsx           # Honeypot & rate-limited edge note form
 │   │   ├── ContactModal.tsx          # Direct engineering channels hub dialog
-│   │   ├── ContributionHeatmap.tsx   # Live SVG GitHub matrix
+│   │   ├── ContributionHeatmap.tsx   # Live SVG GitHub matrix (dynamic primary + accent hover)
+│   │   ├── CustomSectionView.tsx     # Extensible custom blocks renderer (Cards, List, Table)
 │   │   ├── ExpandableText.tsx        # Truncated description accordion
 │   │   ├── IntroLoader.tsx           # Kinetic typographic preloader
+│   │   ├── MarkdownRenderer.tsx      # Safe client-side Markdown parser
 │   │   ├── ProjectCategoryFilter.tsx # Zero-scrollbar momentum chip track with gradient blur
 │   │   ├── SiteChrome.tsx            # SiteHeader, SiteFooter, mobile navigation
 │   │   └── ThemeToggle.tsx           # Sun/Moon morphing button with View Transitions
@@ -365,9 +403,11 @@ portfolio/
 │   ├── lib/
 │   │   ├── __tests__/          # Vitest unit test suites (helpers & schema integrity)
 │   │   ├── api.ts              # Type-safe client data & GitHub fetch routines
-│   │   └── scrollToId.ts       # Cross-browser smooth anchor scrolling engine
+│   │   ├── scrollToId.ts       # Cross-browser smooth anchor scrolling engine
+│   │   └── theme.ts            # Dynamic CSS variable injector & color harmony engine
 │   ├── pages/
 │   │   ├── AdminPage.tsx       # Local CMS layout & tab controller (code-split)
+│   │   ├── CustomItemDetailPage.tsx # Dedicated custom entry article view
 │   │   ├── HomePage.tsx        # Editorial single-page portfolio layout
 │   │   ├── LegalPage.tsx       # Privacy policy, terms & cookie policies
 │   │   ├── NotFoundPage.tsx    # Architectural 404 Not Found error view

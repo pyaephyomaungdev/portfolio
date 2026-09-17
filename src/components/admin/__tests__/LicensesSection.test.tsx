@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { LicensesSection } from "../sections/LicensesSection";
 import { initialPortfolioData } from "../../../data/portfolioData";
 
@@ -11,25 +12,29 @@ describe("Admin LicensesSection UI Component", () => {
 
   it("renders licenses list and Add Certification button", () => {
     render(
-      <LicensesSection
-        licenses={initialPortfolioData.licenses}
-        onChange={vi.fn()}
-        onOpenAddModal={vi.fn()}
-      />
+      <MemoryRouter>
+        <LicensesSection
+          licenses={initialPortfolioData.licenses}
+          onChange={vi.fn()}
+          onOpenAddModal={vi.fn()}
+        />
+      </MemoryRouter>
     );
 
-    expect(screen.getByText(/certifications & licenses/i)).not.toBeNull();
+    expect(screen.getByText(/certifications & credentials/i)).not.toBeNull();
     expect(screen.getByRole("button", { name: /add certification/i })).not.toBeNull();
   });
 
   it("calls onOpenAddModal when Add Certification button is clicked", () => {
     const handleAdd = vi.fn();
     render(
-      <LicensesSection
-        licenses={initialPortfolioData.licenses}
-        onChange={vi.fn()}
-        onOpenAddModal={handleAdd}
-      />
+      <MemoryRouter>
+        <LicensesSection
+          licenses={initialPortfolioData.licenses}
+          onChange={vi.fn()}
+          onOpenAddModal={handleAdd}
+        />
+      </MemoryRouter>
     );
 
     fireEvent.click(screen.getByRole("button", { name: /add certification/i }));
@@ -38,32 +43,42 @@ describe("Admin LicensesSection UI Component", () => {
 
   it("displays empty placeholder when licenses list is empty", () => {
     render(
-      <LicensesSection
-        licenses={[]}
-        onChange={vi.fn()}
-        onOpenAddModal={vi.fn()}
-      />
+      <MemoryRouter>
+        <LicensesSection
+          licenses={[]}
+          onChange={vi.fn()}
+          onOpenAddModal={vi.fn()}
+        />
+      </MemoryRouter>
     );
 
     expect(
-      screen.getByText(/no certifications or licenses configured yet/i)
+      screen.getByText(/no certifications recorded yet/i)
     ).not.toBeNull();
   });
 
-  it("triggers onChange when license name is modified", () => {
+  it("triggers onChange when license name is modified in dedicated editor", () => {
     const handleChange = vi.fn();
     render(
-      <LicensesSection
-        licenses={initialPortfolioData.licenses}
-        onChange={handleChange}
-        onOpenAddModal={vi.fn()}
-      />
+      <MemoryRouter>
+        <LicensesSection
+          licenses={initialPortfolioData.licenses}
+          onChange={handleChange}
+          onOpenAddModal={vi.fn()}
+        />
+      </MemoryRouter>
     );
 
-    const nameInputs = screen.getAllByRole("textbox");
-    if (nameInputs.length > 0) {
-      fireEvent.change(nameInputs[0], { target: { value: "Updated Certification" } });
-      expect(handleChange).toHaveBeenCalled();
-    }
+    const editBtns = screen.getAllByRole("button", { name: /edit/i });
+    expect(editBtns.length).toBeGreaterThan(0);
+    fireEvent.click(editBtns[0]);
+
+    const nameInput = screen.getByPlaceholderText(/e\.g\. aws certified/i);
+    fireEvent.change(nameInput, { target: { value: "Updated Certification" } });
+
+    const saveBtn = screen.getByRole("button", { name: /save changes/i });
+    fireEvent.click(saveBtn);
+
+    expect(handleChange).toHaveBeenCalled();
   });
 });

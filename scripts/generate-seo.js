@@ -50,6 +50,20 @@ export function generateSeo() {
     }
   }
 
+  // Custom section article detail routes
+  const customSections = portfolio.customSections || [];
+  for (const sec of customSections) {
+    if (sec.visible !== false && sec.items) {
+      for (const it of sec.items) {
+        if (it.slug) {
+          sitemapUrls.push(
+            `  <url>\n    <loc>${siteUrl}/custom/${sec.id}/${it.slug}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>`
+          );
+        }
+      }
+    }
+  }
+
   // Legal & compliance routes
   for (const legalRoute of ["privacy", "terms", "cookies"]) {
     sitemapUrls.push(

@@ -32,7 +32,7 @@ describe("Admin SeoSection UI Component", () => {
     expect(screen.getByDisplayValue("Building reliable local-first tools and web systems.")).not.toBeNull();
     expect(screen.getByText("React")).not.toBeNull();
     expect(screen.getByText("TypeScript")).not.toBeNull();
-    expect(screen.getByText(/live share card simulation/i)).not.toBeNull();
+    expect(screen.getByText(/live share card/i)).not.toBeNull();
   });
 
   it("triggers onChange when editing meta title", () => {

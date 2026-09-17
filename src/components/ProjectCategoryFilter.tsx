@@ -105,15 +105,15 @@ export function ProjectCategoryFilter({
               className={`group inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition cursor-pointer whitespace-nowrap ${
                 isActive
                   ? "border-ink bg-ink text-paper shadow-2xs"
-                  : "border-rule bg-white text-muted hover:border-ink/40 hover:text-ink"
+                  : "border-rule bg-white text-muted hover:border-accent/50 hover:text-accent"
               }`}
             >
               <span>{cat.name}</span>
               <span
-                className={`rounded-full px-1.5 py-0.5 font-mono text-xs leading-none ${
+                className={`rounded-full px-1.5 py-0.5 font-mono text-xs leading-none transition-colors ${
                   isActive
                     ? "bg-paper/20 text-paper"
-                    : "bg-soft text-muted group-hover:text-ink"
+                    : "bg-soft text-muted group-hover:text-accent group-hover:bg-accent/10"
                 }`}
               >
                 {cat.count}
