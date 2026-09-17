@@ -35,7 +35,7 @@
 
 ---
 
-## One-Click Deployment
+## <img src=".github/assets/icons/zap.svg" width="22" height="22" align="absmiddle" /> One-Click Deployment
 
 Deploy your own personal portfolio in seconds to your preferred edge cloud. No database, server, or API keys required:
 
@@ -48,29 +48,29 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 
 ---
 
-## Why This Portfolio System?
+## <img src=".github/assets/icons/layers.svg" width="22" height="22" align="absmiddle" /> Why This Portfolio System?
 
 | Dimension | Generic Portfolio Templates | Notion / Framer Sites | This Portfolio System |
 | :--- | :--- | :--- | :--- |
-| **Data Privacy & Storage** | External backend / MongoDB | Proprietary vendor lock-in | **100% Client-Side JSON + Zero Backend** |
-| **Theme Switching UX** | Flash of unstyled white / snap | Abrupt CSS toggle | **Zero-FOUC + Circular View Transition Wave** |
-| **Live Availability & Timezone** | Static text lines | None | **Avatar Corner Radar Badge with Live Clock & Swiss Popover** |
-| **Direct Contact Notifications** | Generic mailto links only | Formspree / Typeform ($29/mo) | **Telegram Bot Zero-Leak Edge Dispatch (`functions/api/send-note.ts`)** |
-| **Category Tech Filtering** | Clunky wrapping lists | Multi-select dropdowns | **Zero-Scrollbar Momentum Chip Track with Gradient Blur Navigation** |
-| **Engineering Blueprints** | Uninteractive static screenshots | Heavy embed widgets | **Interactive Swiss Drafting System Architecture Blueprints** |
-| **CMS Experience** | Manual code edits only | Clunky block editor | **Built-in Local Visual CMS (`/admin`) with JSON Sync** |
-| **Contribution Matrix** | Static screenshots or heavy embeds | Third-party iframe widgets | **Live Dynamic SVG GitHub Heatmap (No API Key Required)** |
-| **Print / CV Capability** | Broken layouts with print headers | Watermarked PDF exports | **Resume-Ready `@media print` Clean Executive CV** |
-| **Performance (Lighthouse)** | ~70–80 (bloated libraries) | ~60–75 (heavy script runtime) | **100 / 100 / 100 / 100 (<250ms Build)** |
-| **Editorial Typography** | Generic Inter / Roboto | Restricted web font sets | **Swiss Instrument Serif + DM Sans + SFMono** |
-| **Cost & Hosting** | Monthly server costs | $15–$35 / month subscription | **$0 Forever (MIT License)** |
+| **Data Privacy & Storage** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> External backend / MongoDB | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Proprietary vendor lock-in | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **100% Client-Side JSON + Zero Backend** |
+| **Theme Switching UX** | <img src=".github/assets/icons/x.svg" width="16" height="16" align="absmiddle" /> Flash of unstyled white / snap | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Abrupt CSS toggle | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Zero-FOUC + Circular View Transition Wave** |
+| **Live Availability & Timezone** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Static text lines | <img src=".github/assets/icons/x.svg" width="16" height="16" align="absmiddle" /> None | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Avatar Corner Radar Badge with Live Clock & Swiss Popover** |
+| **Direct Contact Notifications** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Generic mailto links only | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Formspree / Typeform ($29/mo) | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Telegram Bot Zero-Leak Edge Dispatch (`functions/api/send-note.ts`)** |
+| **Category Tech Filtering** | <img src=".github/assets/icons/x.svg" width="16" height="16" align="absmiddle" /> Clunky wrapping lists | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Multi-select dropdowns | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Zero-Scrollbar Momentum Chip Track with Gradient Blur Navigation** |
+| **Engineering Blueprints** | <img src=".github/assets/icons/x.svg" width="16" height="16" align="absmiddle" /> Uninteractive static screenshots | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Heavy embed widgets | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Interactive Swiss Drafting System Architecture Blueprints** |
+| **CMS Experience** | <img src=".github/assets/icons/x.svg" width="16" height="16" align="absmiddle" /> Manual code edits only | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Clunky block editor | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Built-in Local Visual CMS (`/admin`) with JSON Sync** |
+| **Contribution Matrix** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Static screenshots or heavy embeds | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Third-party iframe widgets | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Live Dynamic SVG GitHub Heatmap (No API Key Required)** |
+| **Print / CV Capability** | <img src=".github/assets/icons/x.svg" width="16" height="16" align="absmiddle" /> Broken layouts with print headers | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Watermarked PDF exports | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Resume-Ready `@media print` Clean Executive CV** |
+| **Performance (Lighthouse)** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> ~70–80 (bloated libraries) | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> ~60–75 (heavy script runtime) | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **100 / 100 / 100 / 100 (<250ms Build)** |
+| **Editorial Typography** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Generic Inter / Roboto | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Restricted web font sets | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **Swiss Instrument Serif + DM Sans + SFMono** |
+| **Cost & Hosting** | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> Monthly server costs | <img src=".github/assets/icons/alert.svg" width="16" height="16" align="absmiddle" /> $15–$35 / month subscription | <img src=".github/assets/icons/check.svg" width="16" height="16" align="absmiddle" /> **$0 Forever (MIT License)** |
 
 ---
 
-## Feature Tour
+## <img src=".github/assets/icons/box.svg" width="22" height="22" align="absmiddle" /> Feature Tour
 
 <details open>
-<summary><strong>1. Live Availability & Timezone Radar Badge (Corner Anchor)</strong> (Click to collapse)</summary>
+<summary><strong><img src=".github/assets/icons/zap.svg" width="18" height="18" align="absmiddle" /> 1. Live Availability & Timezone Radar Badge (Corner Anchor)</strong> (Click to collapse)</summary>
 
 * **Avatar Bottom-Right Anchor**: Completely eliminates lengthy horizontal hero text; anchors a sleek, space-efficient circular radar beacon at the bottom-right corner of the avatar (`AvailabilityBadge.tsx`).
 * **Real-Time Pulsing Beacon**: Live pulsing green indicator (`animate-ping bg-success`) with tactile ring boundary (`ring-2 ring-paper border-rule`).
@@ -81,7 +81,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details open>
-<summary><strong>2. Telegram Bot Instant Notification & Zero-Leak Edge Architecture</strong> (Click to collapse)</summary>
+<summary><strong><img src=".github/assets/icons/bot.svg" width="18" height="18" align="absmiddle" /> 2. Telegram Bot Instant Notification & Zero-Leak Edge Architecture</strong> (Click to collapse)</summary>
 
 * **Zero-Leak Secret Isolation**: Telegram Bot Token and Chat ID are **never exposed in client-side bundles or public JSON**.
 * **Cloudflare Pages Edge Function** ([`functions/api/send-note.ts`](functions/api/send-note.ts)): Contact note submissions from the browser call `POST /api/send-note`. The Cloudflare Pages serverless function reads `context.env.TELEGRAM_BOT_TOKEN` & `context.env.TELEGRAM_CHAT_ID` and dispatches markdown notifications directly to Telegram server-to-server.
@@ -92,7 +92,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details open>
-<summary><strong>3. Horizontally Scrollable Tech Stack Filters with Gradient Blur Navigation</strong> (Click to collapse)</summary>
+<summary><strong><img src=".github/assets/icons/refresh.svg" width="18" height="18" align="absmiddle" /> 3. Horizontally Scrollable Tech Stack Filters with Gradient Blur Navigation</strong> (Click to collapse)</summary>
 
 * **Zero-Scrollbar Momentum Track**: Dynamically derives project category tags into a single clean horizontal track with native momentum scrolling and completely hidden scrollbars (`.no-scrollbar`).
 * **Real-Time Edge Blur Indicators**: Dynamically detects scroll boundaries; renders smooth transparent gradient overlays (`from-paper via-paper/90 to-transparent backdrop-blur-xs`) on the left and right edges when more content is available.
@@ -102,7 +102,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details open>
-<summary><strong>4. Interactive System Architecture Blueprints for Case Studies</strong> (Click to collapse)</summary>
+<summary><strong><img src=".github/assets/icons/layers.svg" width="18" height="18" align="absmiddle" /> 4. Interactive System Architecture Blueprints for Case Studies</strong> (Click to collapse)</summary>
 
 * **Swiss Drafting Aesthetic**: Every featured engineering case study includes an architectural blueprint (`[BLUEPRINT // FIG 1.0]`) featuring boundary crosshairs (`+`), headline, narrative, and transport protocol badges.
 * **Taxonomic Node Isolation**: Interactive nodes categorized by system role (`CLIENT`, `ENGINE`, `STORAGE`, `AGENT`, `NETWORK`). Clicking any node isolates its inbound and outbound channels and dims unrelated components.
@@ -111,7 +111,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>5. Hardware-Accelerated View Transitions Light & Dark Mode</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/refresh.svg" width="18" height="18" align="absmiddle" /> 5. Hardware-Accelerated View Transitions Light & Dark Mode</strong> (Click to expand)</summary>
 
 * **Circular Ripple Wave Engine**: Toggling between Light and Dark mode triggers a smooth circular clip-path wave originating from the exact `(x, y)` coordinates of the toggle button using the modern `document.startViewTransition()` API.
 * **Synchronous DOM Snapshotting**: Injects `.dark` and `data-theme` state synchronously inside the transition callback, preventing DOM layout thrashing.
@@ -121,7 +121,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>6. Local-First Visual Admin CMS (`/admin`)</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/table.svg" width="18" height="18" align="absmiddle" /> 6. Local-First Visual Admin CMS (`/admin`)</strong> (Click to expand)</summary>
 
 * **No Backend Required**: Runs client-side in the browser, manipulating structured portfolio data models in memory with instant disk persistence.
 * **1:1 Hero Avatar Simulation**: Profile Section includes an authentic interactive preview of the hero avatar and corner availability beacon with live popover testing.
@@ -133,7 +133,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>7. Cloudflare Pages Deployment & Edge Secret Hub (`/admin/deploy`)</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/globe.svg" width="18" height="18" align="absmiddle" /> 7. Cloudflare Pages Deployment & Edge Secret Hub (`/admin/deploy`)</strong> (Click to expand)</summary>
 
 * **Deploy Hub**: Dedicated admin section with 1-click Wrangler CLI commands (`npm run deploy`), build settings copies, and direct Cloudflare dashboard project creation shortcuts.
 * **SPA Routing Protection**: Includes `public/_redirects` (`/* /index.html 200`) automatically bundled into `dist/` on build to prevent 404s on deep links.
@@ -142,7 +142,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>8. Kinetic Typographic Intro Loader</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/code.svg" width="18" height="18" align="absmiddle" /> 8. Kinetic Typographic Intro Loader</strong> (Click to expand)</summary>
 
 * **Precision Drafting Frame**: Opens with Swiss architectural corner crosshairs (`+`), system OK status badge, and real-time year coordinates (`PPM // 2026`).
 * **Staggered Letter Reveal**: Animates initials and full name using kinetic translateY easing.
@@ -152,7 +152,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>9. Dynamic GitHub Contribution Matrix</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/git-pull-request.svg" width="18" height="18" align="absmiddle" /> 9. Dynamic GitHub Contribution Matrix</strong> (Click to expand)</summary>
 
 * **Zero API Token Required**: Extracts public contribution data directly via username scraping with cached fallback.
 * **Adaptive Theme Palette**: Contribution squares dynamically shift between Light mode ink scale (`#ececea` → `#111110`) and Dark mode obsidian scale (`#1a1b20` → `#f4f4f2`) via CSS variables (`--heatmap-0` to `--heatmap-4`).
@@ -162,7 +162,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>10. Resume-Ready Print Engine (`@media print`)</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/download.svg" width="18" height="18" align="absmiddle" /> 10. Resume-Ready Print Engine (`@media print`)</strong> (Click to expand)</summary>
 
 * **Executive CV Format**: Hitting `Cmd + P` or `Ctrl + P` in any browser automatically transforms the web portfolio into a clean, monochrome curriculum vitae.
 * **Web UI Elimination**: Strips out navigation bars, intro loader, floating buttons, back-to-top pill, and external links automatically.
@@ -171,7 +171,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong>11. Two-Way Case Study Navigation & Dedicated 404</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/box.svg" width="18" height="18" align="absmiddle" /> 11. Two-Way Case Study Navigation & Dedicated 404</strong> (Click to expand)</summary>
 
 * **Bilateral Navigation**: Project case study detail pages feature a responsive 2-column grid at the bottom linking to both `← Previous Case Study` and `Next Case Study →`.
 * **Architectural 404 Page**: Missing routes render an editorial `// 404 ERROR` canvas with drafting crosshairs and one-click navigation back to home or project archives.
@@ -181,7 +181,7 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 
 ---
 
-## Quickstart & Installation
+## <img src=".github/assets/icons/terminal.svg" width="22" height="22" align="absmiddle" /> Quickstart & Installation
 
 ### Prerequisites
 - Node.js 18.0.0 or higher
@@ -220,7 +220,7 @@ Compiles production build and deploys to Cloudflare Pages edge network via Wrang
 
 ---
 
-## Visual Admin CMS (`/admin`)
+## <img src=".github/assets/icons/table.svg" width="22" height="22" align="absmiddle" /> Visual Admin CMS (`/admin`)
 
 The built-in CMS allows developers and non-developers to customize their entire portfolio without writing a line of code:
 
@@ -245,7 +245,7 @@ The built-in CMS allows developers and non-developers to customize their entire 
 
 ---
 
-## Design Tokens & Typography
+## <img src=".github/assets/icons/code.svg" width="22" height="22" align="absmiddle" /> Design Tokens & Typography
 
 Built upon an architectural drafting philosophy combining high-contrast ink, warm tactile paper, and signal orange highlights:
 
@@ -272,7 +272,7 @@ Built upon an architectural drafting philosophy combining high-contrast ink, war
 
 ---
 
-## Architecture & Project Structure
+## <img src=".github/assets/icons/layers.svg" width="22" height="22" align="absmiddle" /> Architecture & Project Structure
 
 ```
 portfolio/
@@ -327,7 +327,7 @@ portfolio/
 
 ---
 
-## Verification & Quality
+## <img src=".github/assets/icons/shield.svg" width="22" height="22" align="absmiddle" /> Verification & Quality
 
 The codebase adheres to rigorous linting and type-safety standards with zero tolerance for warnings:
 
@@ -348,7 +348,7 @@ npm run build
 
 ---
 
-## Community & Contributing
+## <img src=".github/assets/icons/check.svg" width="22" height="22" align="absmiddle" /> Community & Contributing
 
 We welcome community feedback, bug reports, and architectural contributions!
 
@@ -359,7 +359,7 @@ We welcome community feedback, bug reports, and architectural contributions!
 
 ---
 
-## Security Policy
+## <img src=".github/assets/icons/shield.svg" width="22" height="22" align="absmiddle" /> Security Policy
 
 Security vulnerabilities can be reported privately according to our **[Security Policy](SECURITY.md)** or via **[contact@pyaephyomaung.dev](mailto:contact@pyaephyomaung.dev)**.
 
@@ -367,7 +367,7 @@ RFC 9116 Vulnerability Disclosure metadata is published at `https://pyaephyomaun
 
 ---
 
-## Support the Creator
+## <img src="public/buy-me-a-coffee-icon.svg" width="22" height="22" align="absmiddle" /> Support the Creator
 
 If this architectural portfolio system, zero-FOUC circular theme engine, or local visual CMS tooling has inspired your own engineering presence, consider keeping me caffeinated:
 
@@ -383,7 +383,7 @@ Every cup fuels late-night open-source craftsmanship, design token polish, and z
 
 ---
 
-## License
+## <img src=".github/assets/icons/file-text.svg" width="22" height="22" align="absmiddle" /> License
 
 This project is open source and available under the **[MIT License](LICENSE)**.
 
