@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Clock, Share2, Check } from "lucide-react";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { MarkdownRenderer } from "../components/MarkdownRenderer";
+import { ReadingProgressBar } from "../components/ReadingProgressBar";
+import { calculateReadingTime } from "../lib/readingTime";
 import {
   fetchCustomItem,
   fetchPortfolio,
@@ -20,6 +22,7 @@ export function CustomItemDetailPage() {
   const [section, setSection] = useState<CustomSection | null>(null);
   const [item, setItem] = useState<CustomSectionItem | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(
     () => initialPortfolioData.profile,
   );
@@ -29,6 +32,12 @@ export function CustomItemDetailPage() {
   const [websiteUrl, setWebsiteUrl] = useState<string | null>(
     () => initialPortfolioData.profile?.websiteUrl ?? null,
   );
+
+  function handleShare() {
+    void navigator.clipboard.writeText(window.location.href);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  }
 
   useEffect(() => {
     if (!sectionId || !slug) return;
@@ -103,8 +112,13 @@ export function CustomItemDetailPage() {
     }
   }
 
+  const readingTime = calculateReadingTime(
+    [item?.content, item?.description, item?.subtitle].filter(Boolean).join(" "),
+  );
+
   return (
     <div className="min-h-screen">
+      <ReadingProgressBar />
       <SiteHeader name={siteName} profile={profile} />
 
       <main id="main-content" className="mx-auto max-w-3xl px-5 pb-24 pt-10">
@@ -147,20 +161,45 @@ export function CustomItemDetailPage() {
           </div>
         ) : item ? (
           <article className="mt-8">
-            {/* Metadata Bar */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-soft px-3 py-1 text-xs font-semibold text-accent">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                {item.tag || section?.title || "Article"}
-              </span>
-              {item.date ? (
-                <span className="font-mono text-xs text-muted">{item.date}</span>
-              ) : null}
-              {section?.title ? (
-                <span className="font-mono text-xs text-muted">
-                  · {section.title}
+            {/* Metadata Bar & Actions */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-soft px-3 py-1 text-xs font-semibold text-accent">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  {item.tag || section?.title || "Article"}
                 </span>
-              ) : null}
+                {item.date ? (
+                  <span className="font-mono text-xs text-muted">{item.date}</span>
+                ) : null}
+                <span className="inline-flex items-center gap-1 font-mono text-xs text-muted">
+                  <Clock className="h-3 w-3 shrink-0 text-muted" aria-hidden="true" />
+                  <span>{readingTime}</span>
+                </span>
+                {section?.title ? (
+                  <span className="font-mono text-xs text-muted">
+                    · {section.title}
+                  </span>
+                ) : null}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Share article link"
+                className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-white px-2.5 py-1 font-mono text-xs text-muted hover:border-accent/50 hover:text-accent shadow-2xs transition-colors cursor-pointer"
+              >
+                {copiedLink ? (
+                  <>
+                    <Check className="h-3 w-3 text-accent" />
+                    <span className="text-accent">Copied link</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="h-3 w-3" />
+                    <span>Share</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* Headline */}

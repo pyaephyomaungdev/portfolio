@@ -23,7 +23,7 @@ export function BackToTopButton() {
       type="button"
       onClick={scrollToTop}
       aria-label="Back to top"
-      className="fixed bottom-6 right-6 z-40 flex items-center gap-1.5 rounded-full border border-rule bg-white/90 px-3.5 py-2 text-xs font-mono text-muted backdrop-blur-md shadow-md transition hover:border-ink hover:text-ink hover:shadow-lg cursor-pointer"
+      className="fixed bottom-6 right-6 z-40 flex items-center gap-1.5 rounded-full border border-rule bg-white/90 px-3.5 py-2 text-xs font-mono text-muted backdrop-blur-md shadow-md transition-all hover:border-accent/50 hover:text-accent hover:shadow-lg cursor-pointer"
     >
       <ArrowUp className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <span className="hidden sm:inline">Top</span>

@@ -1,4 +1,5 @@
-import { Plus, PenTool, Edit3, Eye, EyeOff, FileText, Grid, ListFilter } from "lucide-react";
+import { useState } from "react";
+import { Plus, PenTool, Edit3, Eye, EyeOff, FileText, Grid, ListFilter, Search } from "lucide-react";
 import { ReorderButtons, reorderArray } from "../../ReorderButtons";
 import type { CustomSection } from "../../../../types/portfolio";
 
@@ -17,6 +18,8 @@ export function CustomSectionsCardList({
   onChange,
   onRequestDelete,
 }: CustomSectionsCardListProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
   function moveSection(index: number, direction: "up" | "down") {
     onChange(reorderArray(sections, index, direction));
   }
@@ -34,6 +37,19 @@ export function CustomSectionsCardList({
       doDelete();
     }
   }
+
+  const filteredSections = sections.filter((sec) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      sec.title.toLowerCase().includes(q) ||
+      (sec.subtitle && sec.subtitle.toLowerCase().includes(q)) ||
+      (sec.content && sec.content.toLowerCase().includes(q)) ||
+      sec.id.toLowerCase().includes(q) ||
+      sec.layout.toLowerCase().includes(q) ||
+      (sec.items && sec.items.some((it) => it.title.toLowerCase().includes(q)))
+    );
+  });
 
   return (
     <div className="flex flex-col gap-5">
@@ -58,6 +74,29 @@ export function CustomSectionsCardList({
         </button>
       </div>
 
+      {/* Search Input */}
+      {sections.length > 0 && (
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Filter custom sections by title, description, or items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-lg border border-rule bg-paper pl-9 pr-3 py-1.5 text-xs text-ink outline-none focus:border-ink font-mono placeholder:text-muted/60"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted hover:text-ink font-mono cursor-pointer"
+            >
+              clear
+            </button>
+          )}
+        </div>
+      )}
+
       {sections.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-12 rounded-xl border border-dashed border-rule bg-soft/20 text-center">
           <PenTool className="size-8 text-muted opacity-40 mb-2" />
@@ -66,9 +105,13 @@ export function CustomSectionsCardList({
             Click &ldquo;Add Section&rdquo; to build custom writing, speaking, or essay modules.
           </p>
         </div>
+      ) : filteredSections.length === 0 ? (
+        <div className="p-8 rounded-xl border border-dashed border-rule text-center">
+          <p className="text-sm text-muted">No custom sections match &ldquo;{searchQuery}&rdquo;</p>
+        </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {sections.map((sec, idx) => {
+          {filteredSections.map((sec, idx) => {
             const LayoutIcon =
               sec.layout === "prose" ? FileText : sec.layout === "list" ? ListFilter : Grid;
 

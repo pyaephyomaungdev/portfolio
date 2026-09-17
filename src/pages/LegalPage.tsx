@@ -37,14 +37,14 @@ export function LegalPage({ type }: LegalPageProps) {
             <span>Back to Home</span>
           </Link>
 
-          <div className="inline-flex items-center p-1 rounded-lg border border-rule bg-white text-xs font-mono">
+          <div className="flex items-center gap-1 border-b border-rule text-xs font-mono">
             <button
               type="button"
               onClick={() => setActiveTab("privacy")}
-              className={`px-3 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-2 border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "privacy"
-                  ? "bg-ink text-paper font-semibold shadow-2xs"
-                  : "text-muted hover:text-ink"
+                  ? "border-accent text-ink font-semibold -mb-px"
+                  : "border-transparent text-muted hover:text-ink"
               }`}
             >
               <ShieldCheck className="h-3.5 w-3.5" />
@@ -53,10 +53,10 @@ export function LegalPage({ type }: LegalPageProps) {
             <button
               type="button"
               onClick={() => setActiveTab("terms")}
-              className={`px-3 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-2 border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "terms"
-                  ? "bg-ink text-paper font-semibold shadow-2xs"
-                  : "text-muted hover:text-ink"
+                  ? "border-accent text-ink font-semibold -mb-px"
+                  : "border-transparent text-muted hover:text-ink"
               }`}
             >
               <Scale className="h-3.5 w-3.5" />
@@ -65,10 +65,10 @@ export function LegalPage({ type }: LegalPageProps) {
             <button
               type="button"
               onClick={() => setActiveTab("cookies")}
-              className={`px-3 py-1 rounded-md transition cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3 py-2 border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "cookies"
-                  ? "bg-ink text-paper font-semibold shadow-2xs"
-                  : "text-muted hover:text-ink"
+                  ? "border-accent text-ink font-semibold -mb-px"
+                  : "border-transparent text-muted hover:text-ink"
               }`}
             >
               <Cookie className="h-3.5 w-3.5" />

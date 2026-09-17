@@ -6,7 +6,9 @@ import { TechIcon } from "../components/TechIcon";
 import { ExpandableText } from "../components/ExpandableText";
 import { BuyMeACoffeeButton, BuyMeACoffeeCard } from "../components/BuyMeACoffeeButton";
 import { ArchitectureBlueprint } from "../components/ArchitectureBlueprint";
-import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Clock, Share2, Check } from "lucide-react";
+import { ReadingProgressBar } from "../components/ReadingProgressBar";
+import { calculateReadingTime } from "../lib/readingTime";
 import { fetchPortfolio, fetchProject, type Project, type Profile } from "../lib/api";
 import { initialPortfolioData } from "../data/portfolioData";
 import { scrollToId } from "../lib/scrollToId";
@@ -17,10 +19,17 @@ export function ProjectPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [allProjects, setAllProjects] = useState<Project[]>(() => initialPortfolioData.projects ?? []);
   const [error, setError] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(() => initialPortfolioData.profile);
   const [siteName, setSiteName] = useState<string | null>(() => initialPortfolioData.profile?.name ?? null);
   const [buyMeACoffeeUrl, setBuyMeACoffeeUrl] = useState<string | null>(() => initialPortfolioData.profile?.buyMeACoffeeUrl ?? null);
   const [websiteUrl, setWebsiteUrl] = useState<string | null>(() => initialPortfolioData.profile?.websiteUrl ?? null);
+
+  function handleShare() {
+    void navigator.clipboard.writeText(window.location.href);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  }
 
   useEffect(() => {
     if (!slug) return;
@@ -89,8 +98,25 @@ export function ProjectPage() {
 
   const cs = project?.caseStudy;
 
+  const readingTime = calculateReadingTime(
+    [
+      project?.title,
+      project?.summary,
+      project?.body,
+      cs?.headline,
+      cs?.problem,
+      cs?.constraints,
+      cs?.outcome,
+      ...(cs?.decisions ?? []),
+      ...(cs?.architectureHighlights ?? []),
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
+
   return (
     <div className="min-h-screen">
+      <ReadingProgressBar />
       <SiteHeader name={siteName} profile={profile} />
 
       <main id="main-content" className="mx-auto max-w-3xl px-5 pb-24 pt-10">
@@ -144,15 +170,40 @@ export function ProjectPage() {
           </div>
         ) : (
           <article className="mt-8">
-            {/* Header / Meta */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-soft px-3 py-1 text-xs font-medium text-ink">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                {project.badge ?? "Case Study"}
-              </span>
-              {project.period ? (
-                <span className="text-xs text-muted">{project.period}</span>
-              ) : null}
+            {/* Header / Meta & Actions */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-soft px-3 py-1 text-xs font-medium text-ink">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  {project.badge ?? "Case Study"}
+                </span>
+                {project.period ? (
+                  <span className="font-mono text-xs text-muted">{project.period}</span>
+                ) : null}
+                <span className="inline-flex items-center gap-1 font-mono text-xs text-muted">
+                  <Clock className="h-3 w-3 shrink-0 text-muted" aria-hidden="true" />
+                  <span>{readingTime}</span>
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Share case study link"
+                className="inline-flex items-center gap-1.5 rounded-md border border-rule bg-white px-2.5 py-1 font-mono text-xs text-muted hover:border-accent/50 hover:text-accent shadow-2xs transition-colors cursor-pointer"
+              >
+                {copiedLink ? (
+                  <>
+                    <Check className="h-3 w-3 text-accent" />
+                    <span className="text-accent">Copied link</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="h-3 w-3" />
+                    <span>Share</span>
+                  </>
+                )}
+              </button>
             </div>
 
             <h1 className="mt-3 font-display text-4xl tracking-tight sm:text-5xl">

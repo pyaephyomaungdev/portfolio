@@ -7,7 +7,7 @@
   <p>
     <a href="https://pyaephyomaung.dev"><img src="https://img.shields.io/badge/Live_Site-pyaephyomaung.dev-blue?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Live Site" /></a>
     <a href="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml"><img src="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
-    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-169_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
+    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-179_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
     <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.1-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" /></a>
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
@@ -245,6 +245,25 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 * **Multi-Role Company Accordion**: Companies with 3 or more career positions automatically display the top 2 roles and collapse older roles behind a tactile `Show more roles` button with accent micro-interactions.
 * **Border-Integrated Corner Notch**: Standardized reordering controls (`[ #1 | ↑ ↓ | 🗑 ]`) integrated directly onto card borders with zero visual clutter across all CMS card lists.
 * **Universal Accent Hover Feedback**: Consistent accent color transitions across project cards, custom section entries, timeline nodes, education cards, and navigation links.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/layers.svg" width="18" height="18" align="absmiddle" /> 19. Technical Article & Reading Experience (`ReadingProgressBar.tsx` & `readingTime.ts`)</strong> (Click to expand)</summary>
+
+* **Top Accent Reading Progress Bar**: Real-time 2px accent progress bar fixed to the top viewport (`z-50`), dynamically computing scroll percentage through long-form case studies and technical research articles.
+* **Estimated Reading Time Engine**: Calculates reading duration (e.g. `~3 min read`) based on word density across technical markdown content.
+* **1-Click Code Snippet Copy**: Integrated copy button with tactile visual checkmark feedback across code fences and snippets.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/code.svg" width="18" height="18" align="absmiddle" /> 20. Architectural Underline Tabs & Studio Markdown Engine with Excalidraw & Asset Uploads</strong> (Click to expand)</summary>
+
+* **Architectural Underline Tabs**: Replaces pill/boxed tabs with clean underline navigation (`border-b-2 border-accent text-ink -mb-px`) sitting on an authentic `border-b border-rule` baseline across project editors, web editor, and legal views.
+* **GFM Table Support**: Full GitHub Flavored Markdown table parsing and responsive layout rendering with column alignment (`:---`, `:---:`, `---:`) and 1-click table starters.
+* **Asset Upload with Custom Subfolder**: Built-in asset upload middleware (`/api/admin/upload-asset`) writing local images to `public/assets/<custom-folder>/<fileName>` with presets (`projects`, `case-studies`, `articles`, `diagrams`), preview thumbnails, and automatic markdown insertion.
+* **Excalidraw Diagramming Support**: Native `ExcalidrawBlock` rendering for Excalidraw SVG and scene JSON structures, diagram file upload (`.svg`, `.excalidraw`), scene pasting, and quick architecture starter templates (Client-Edge-DB, Event Stream Pipeline).
 
 </details>
 

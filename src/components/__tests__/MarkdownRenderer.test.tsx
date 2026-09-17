@@ -47,4 +47,41 @@ describe("MarkdownRenderer UI Component", () => {
 
     expect(screen.getByText(/const x = 42;/)).not.toBeNull();
   });
+
+  it("renders markdown tables with headers and aligned cells", () => {
+    const markdown = `| Column 1 | Column 2 |
+| :--- | ---: |
+| Value A | 100% |
+| Value B | 200% |`;
+    render(<MarkdownRenderer content={markdown} />);
+
+    expect(screen.getByRole("table")).not.toBeNull();
+    expect(screen.getByText("Column 1")).not.toBeNull();
+    expect(screen.getByText("Column 2")).not.toBeNull();
+    expect(screen.getByText("Value A")).not.toBeNull();
+    expect(screen.getByText("100%")).not.toBeNull();
+    expect(screen.getByText("Value B")).not.toBeNull();
+    expect(screen.getByText("200%")).not.toBeNull();
+  });
+
+  it("renders markdown images with alt text and figure captions", () => {
+    const markdown = `![Architecture Diagram](/assets/projects/architecture.png)`;
+    render(<MarkdownRenderer content={markdown} />);
+
+    const img = screen.getByRole("img", { name: /architecture diagram/i });
+    expect(img).not.toBeNull();
+    expect(img.getAttribute("src")).toBe("/assets/projects/architecture.png");
+    expect(screen.getByText("Architecture Diagram")).not.toBeNull();
+  });
+
+  it("renders excalidraw codeblocks with SVG markup", () => {
+    const markdown = `\`\`\`excalidraw
+<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" /></svg>
+\`\`\``;
+    const { container } = render(<MarkdownRenderer content={markdown} />);
+
+    expect(screen.getByText(/architecture diagram/i)).not.toBeNull();
+    expect(container.querySelector("svg")).not.toBeNull();
+    expect(container.querySelector("circle")).not.toBeNull();
+  });
 });

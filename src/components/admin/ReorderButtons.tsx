@@ -39,14 +39,14 @@ export function ReorderButtons({
   if (variant === "corner") {
     return (
       <div
-        className={`absolute -top-px -right-px flex items-center gap-1.5 rounded-tr-xl rounded-bl-xl border-b border-l border-rule bg-soft/80 px-2.5 py-1 text-xs font-mono text-muted shadow-2xs transition-colors group-hover:border-ink/30 z-10 ${className}`}
+        className={`absolute -top-px -right-px flex items-center gap-1.5 rounded-tr-xl rounded-bl-xl border-b border-l border-rule bg-soft/80 px-2.5 py-1 text-xs font-mono text-muted shadow-2xs transition-colors group-hover:border-accent/50 z-10 ${className}`}
       >
         {index !== undefined ? (
           <span className="font-semibold text-ink select-none text-xs">
             #{index + 1}
           </span>
         ) : null}
-        <div className="h-3 w-px bg-rule transition-colors group-hover:bg-ink/20" />
+        <div className="h-3 w-px bg-rule transition-colors group-hover:bg-accent/30" />
         <div className="flex items-center gap-0.5">
           <button
             type="button"

@@ -65,6 +65,27 @@ export async function uploadAvatarImage(dataUrl: string): Promise<string> {
   return result.url;
 }
 
+export async function uploadAssetImage({
+  dataUrl,
+  fileName,
+  folder,
+}: {
+  dataUrl: string;
+  fileName: string;
+  folder: string;
+}): Promise<{ url: string; fileName: string; folder: string }> {
+  const res = await fetch("/api/admin/upload-asset", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ dataUrl, fileName, folder }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Asset upload failed" }));
+    throw new Error(err.error || "Failed to upload asset");
+  }
+  return (await res.json()) as { url: string; fileName: string; folder: string };
+}
+
 export async function fetchProject(slug: string): Promise<Project> {
   if (API_BASE) {
     try {

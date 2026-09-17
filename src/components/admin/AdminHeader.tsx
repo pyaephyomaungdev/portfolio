@@ -113,15 +113,27 @@ export function AdminHeader({
           <span className="hidden md:inline">Export</span>
         </button>
 
-        <button
-          type="button"
-          onClick={onRequestRevert || onRevert}
-          title="Reload fresh from disk"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-soft px-2.5 py-1.5 text-xs font-mono text-muted hover:text-ink hover:border-ink/40 transition-colors shadow-2xs cursor-pointer"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-          <span className="hidden md:inline">Revert</span>
-        </button>
+        {isDirty ? (
+          <button
+            type="button"
+            onClick={onRequestRevert || onRevert}
+            title="Discard unsaved edits and reload fresh from disk"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-2.5 py-1.5 text-xs font-mono text-destructive hover:bg-destructive/20 transition-colors shadow-2xs cursor-pointer"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Discard</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onRequestRevert || onRevert}
+            title="Reload fresh from disk"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-rule bg-soft px-2.5 py-1.5 text-xs font-mono text-muted hover:text-ink hover:border-ink/40 transition-colors shadow-2xs cursor-pointer"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span className="hidden md:inline">Revert</span>
+          </button>
+        )}
 
         <button
           type="button"

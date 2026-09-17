@@ -61,7 +61,7 @@ describe("ProjectCategoryFilter UI Component", () => {
     );
 
     const activeBtn = screen.getByRole("button", { name: /full-stack/i });
-    // Active chip has ink background or distinct styling
-    expect(activeBtn.className).toContain("bg-ink");
+    // Active chip has primary button styling
+    expect(activeBtn.className).toContain("btn-primary");
   });
 });

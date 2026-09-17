@@ -102,6 +102,83 @@ function portfolioAdminPlugin(): Plugin {
         res.end("Method Not Allowed");
       });
 
+      server.middlewares.use("/api/admin/upload-asset", (req, res) => {
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => {
+            body += chunk;
+          });
+          req.on("end", () => {
+            try {
+              const { dataUrl, fileName, folder } = JSON.parse(body || "{}");
+              if (!dataUrl) {
+                res.statusCode = 400;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ error: "Missing dataUrl" }));
+                return;
+              }
+
+              const safeFolder = (folder || "general")
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9_-]/g, "-")
+                .replace(/-+/g, "-")
+                .replace(/^-|-$/g, "") || "general";
+
+              const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/);
+              const mime = mimeMatch ? mimeMatch[1].toLowerCase() : "";
+              const originalExtMatch = fileName ? fileName.match(/\.([a-zA-Z0-9_-]+)$/) : null;
+              const originalExt = originalExtMatch ? originalExtMatch[1].toLowerCase() : "";
+
+              let ext = originalExt || "png";
+              if (mime.includes("svg")) {
+                ext = "svg";
+              } else if (mime.includes("json") || originalExt === "excalidraw") {
+                ext = originalExt || "excalidraw";
+              } else if (mime.includes("jpeg") || mime.includes("jpg")) {
+                ext = "jpg";
+              } else if (mime.includes("webp")) {
+                ext = "webp";
+              } else if (mime.includes("png")) {
+                ext = "png";
+              } else if (mime.includes("gif")) {
+                ext = "gif";
+              }
+
+              const baseName = (fileName || `asset-${Date.now()}`)
+                .replace(/\.[^/.]+$/, "")
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9_-]/g, "-");
+              const safeFileName = `${baseName || "asset"}.${ext}`;
+
+              const cleanBase64 = dataUrl.replace(/^data:[^;]+;base64,/, "");
+              const buffer = Buffer.from(cleanBase64, "base64");
+
+              const targetDir = path.resolve(process.cwd(), "public/assets", safeFolder);
+              if (!fs.existsSync(targetDir)) {
+                fs.mkdirSync(targetDir, { recursive: true });
+              }
+
+              const targetPath = path.join(targetDir, safeFileName);
+              fs.writeFileSync(targetPath, buffer);
+
+              const publicUrl = `/assets/${safeFolder}/${safeFileName}`;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ success: true, url: publicUrl, fileName: safeFileName, folder: safeFolder }));
+            } catch (err: unknown) {
+              res.statusCode = 500;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ error: err instanceof Error ? err.message : "Failed to upload asset" }));
+            }
+          });
+          return;
+        }
+
+        res.statusCode = 405;
+        res.end("Method Not Allowed");
+      });
+
       // Helper to read gitignored .env.local secrets
       function getTelegramSecrets() {
         let botToken = process.env.TELEGRAM_BOT_TOKEN || "";
@@ -336,5 +413,8 @@ function portfolioAdminPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), portfolioAdminPlugin()],
+  define: {
+    "process.env.IS_PREACT": JSON.stringify("true"),
+  },
   server: { port: 5173 },
 });
