@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { MarkdownRenderer } from "../MarkdownRenderer";
 import { uploadAssetImage } from "../../lib/api";
+import { sanitizeUrl } from "../../lib/sanitizeUrl";
 
 const ExcalidrawCanvasModal = React.lazy(() => import("./ExcalidrawCanvasModal"));
 
@@ -557,10 +558,10 @@ export function WebEditor({
               )}
 
               {/* Preview Thumbnail */}
-              {imageUrl && (
+              {Boolean(imageUrl && sanitizeUrl(imageUrl)) && (
                 <div className="rounded-lg border border-rule bg-paper p-2 flex items-center gap-2.5">
                   <img
-                    src={imageUrl}
+                    src={sanitizeUrl(imageUrl)}
                     alt={imageAlt || "Preview"}
                     className="h-10 w-10 object-cover rounded border border-rule shrink-0"
                     onError={(e) => {

@@ -8,7 +8,8 @@ export function parseGitHubRepo(repoUrl: string | null | undefined): { owner: st
   if (!repoUrl) return null;
   try {
     const url = new URL(repoUrl);
-    if (!url.hostname.includes("github.com")) return null;
+    const host = url.hostname.toLowerCase();
+    if (host !== "github.com" && host !== "www.github.com") return null;
     const parts = url.pathname.replace(/^\//, "").replace(/\.git$/, "").split("/");
     if (parts.length >= 2 && parts[0] && parts[1]) {
       return { owner: parts[0], repo: parts[1] };

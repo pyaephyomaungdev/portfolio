@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Copy, Check, PenTool } from "lucide-react";
+import DOMPurify from "dompurify";
+import { sanitizeUrl } from "../lib/sanitizeUrl";
 
 interface MarkdownRendererProps {
   content: string;
@@ -52,11 +54,16 @@ function ExcalidrawBlock({ code }: { code: string }) {
       .replace(/(<rect\b[^>]*\bfill=)["'](?:#ffffff|#fff|white)["']/gi, '$1"transparent"')
       .replace(/(<rect\b[^>]*\bx=["']0["'][^>]*\by=["']0["'][^>]*\bfill=)["'][^"']*["']/gi, '$1"transparent"');
 
+    // Sanitize SVG using DOMPurify with SVG profile to prevent XSS
+    const sanitizedSvg = DOMPurify.sanitize(transparentSvg, {
+      USE_PROFILES: { svg: true, svgFilters: true },
+    });
+
     return (
       <figure className="my-8 flex flex-col items-center">
         <div
           className="w-full flex justify-center overflow-x-auto [&>svg]:max-w-full [&>svg]:h-auto bg-transparent"
-          dangerouslySetInnerHTML={{ __html: transparentSvg }}
+          dangerouslySetInnerHTML={{ __html: sanitizedSvg }}
         />
         <figcaption className="mt-3 text-xs font-mono text-muted/60 select-none tracking-wide text-center">
           Powered by Excalidraw
@@ -156,10 +163,12 @@ function renderInline(text: string): React.ReactNode[] {
     const imgMatch = part.match(/^!\[(.*?)\]\((.*?)\)$/);
     if (imgMatch) {
       const [, altText, url] = imgMatch;
+      const safeUrl = sanitizeUrl(url);
+      if (!safeUrl) return null;
       return (
         <img
           key={index}
-          src={url}
+          src={safeUrl}
           alt={altText}
           className="inline-block max-w-full h-auto rounded border border-rule my-1 shadow-2xs"
           loading="lazy"
@@ -170,11 +179,13 @@ function renderInline(text: string): React.ReactNode[] {
     const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
     if (linkMatch) {
       const [, linkText, url] = linkMatch;
-      const isExternal = url.startsWith("http://") || url.startsWith("https://");
+      const safeUrl = sanitizeUrl(url);
+      if (!safeUrl) return <span key={index}>{linkText}</span>;
+      const isExternal = safeUrl.startsWith("http://") || safeUrl.startsWith("https://");
       return (
         <a
           key={index}
-          href={url}
+          href={safeUrl}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
           className="font-medium text-accent underline underline-offset-4 hover:opacity-80 transition"
@@ -364,21 +375,24 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
       flushList();
       flushTable();
       const [, altText, url] = standaloneImgMatch;
-      elements.push(
-        <figure key={`img-${i}`} className="my-5 space-y-2 text-center">
-          <img
-            src={url}
-            alt={altText}
-            className="rounded-xl border border-rule max-w-full h-auto mx-auto object-cover shadow-xs"
-            loading="lazy"
-          />
-          {altText ? (
-            <figcaption className="text-center font-mono text-xs text-muted">
-              {altText}
-            </figcaption>
-          ) : null}
-        </figure>
-      );
+      const safeUrl = sanitizeUrl(url);
+      if (safeUrl) {
+        elements.push(
+          <figure key={`img-${i}`} className="my-5 space-y-2 text-center">
+            <img
+              src={safeUrl}
+              alt={altText}
+              className="rounded-xl border border-rule max-w-full h-auto mx-auto object-cover shadow-xs"
+              loading="lazy"
+            />
+            {altText ? (
+              <figcaption className="text-center font-mono text-xs text-muted">
+                {altText}
+              </figcaption>
+            ) : null}
+          </figure>
+        );
+      }
       return;
     }
 

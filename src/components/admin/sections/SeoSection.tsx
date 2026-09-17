@@ -9,6 +9,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { FaXTwitter, FaLinkedin } from "react-icons/fa6";
+import { sanitizeUrl } from "../../../lib/sanitizeUrl";
 import type { SeoConfig, Profile } from "../../../types/portfolio";
 
 interface SeoSectionProps {
@@ -41,6 +42,7 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
     "Systems Architecture"
   ];
   const ogImage = seo.ogImage ?? (profile?.avatarUrl ? `https://pyaephyomaung.dev${profile.avatarUrl}` : "https://pyaephyomaung.dev/avatar.jpg");
+  const safeOgImage = sanitizeUrl(ogImage);
   const twitterHandle = seo.twitterHandle ?? (profile?.handle ? `@${profile.handle}` : "@pyaephyomaung");
   const canonicalUrl = seo.canonicalUrl ?? "https://pyaephyomaung.dev";
 
@@ -334,9 +336,9 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
                     className="relative w-full bg-soft overflow-hidden flex items-center justify-center border-b border-rule"
                     style={{ aspectRatio: "1.91 / 1" }}
                   >
-                    {ogImage ? (
+                    {safeOgImage ? (
                       <img
-                        src={ogImage}
+                        src={safeOgImage}
                         alt="OG Preview"
                         className="h-full w-full object-cover"
                         onError={(e) => {
@@ -381,9 +383,9 @@ export function SeoSection({ seo = {}, profile, onChange }: SeoSectionProps) {
                     className="relative w-full bg-soft overflow-hidden flex items-center justify-center border-b border-rule"
                     style={{ aspectRatio: "1.91 / 1" }}
                   >
-                    {ogImage ? (
+                    {safeOgImage ? (
                       <img
-                        src={ogImage}
+                        src={safeOgImage}
                         alt="LinkedIn Preview"
                         className="h-full w-full object-cover"
                         onError={(e) => {

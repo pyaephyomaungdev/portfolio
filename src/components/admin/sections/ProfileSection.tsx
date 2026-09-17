@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Checkbox } from "../Checkbox";
 import { AvailabilityBadge } from "../../AvailabilityBadge";
+import { sanitizeUrl } from "../../../lib/sanitizeUrl";
 import type { Profile, AvailabilityConfig } from "../../../types/portfolio";
 
 interface ProfileSectionProps {
@@ -184,7 +185,7 @@ export function ProfileSection({
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
           <div className="relative shrink-0">
             <img
-              src={profile.avatarUrl || "/avatar.jpg"}
+              src={sanitizeUrl(profile.avatarUrl, "/avatar.jpg")}
               alt={profile.name}
               className="h-24 w-24 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5 bg-white"
               onError={(e) => {
