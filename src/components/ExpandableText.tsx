@@ -20,11 +20,13 @@ export function ExpandableText({
 
   useEffect(() => {
     if (textRef.current) {
-      // Check if text exceeds ~3 lines (around 75px)
-      const isOverflowing = textRef.current.scrollHeight > 75;
+      // Check if text exceeds ~3 lines (around 75px) or length fallback in headless environments
+      const isOverflowing =
+        textRef.current.scrollHeight > 75 ||
+        (textRef.current.scrollHeight === 0 && text.length > threshold);
       setShouldTruncate(isOverflowing);
     }
-  }, [text]);
+  }, [text, threshold]);
 
   if (!shouldTruncate) {
     return (
