@@ -107,15 +107,19 @@ export function HomePage() {
         <section className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
           {p?.avatarUrl ? (
             <div className="relative shrink-0">
-              <img
-                src={p.avatarUrl}
-                alt={p.name}
-                width={112}
-                height={112}
-                loading="eager"
-                decoding="async"
-                className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
-              />
+              <picture>
+                <source srcSet="/avatar.webp" type="image/webp" />
+                <img
+                  src={p.avatarUrl}
+                  alt={p.name}
+                  width={112}
+                  height={112}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="h-24 w-24 sm:h-28 sm:w-28 rounded-2xl border border-rule object-cover shadow-xs ring-1 ring-black/5"
+                />
+              </picture>
               <AvailabilityBadge config={p?.availability} onOpenContact={() => setContactModalOpen(true)} variant="corner" />
             </div>
           ) : (
@@ -258,9 +262,8 @@ export function HomePage() {
             ) : (
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 {filteredProjects.map((proj, i) => (
-                  <Link
+                  <div
                     key={proj.id}
-                    to={`/projects/${proj.slug}`}
                     className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs"
                   >
                     <div>
@@ -272,20 +275,25 @@ export function HomePage() {
                       </div>
 
                       <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
-                        {proj.title}
+                        <Link to={`/projects/${proj.slug}`} className="focus:outline-none">
+                          <span className="absolute inset-0 z-0" aria-hidden="true" />
+                          {proj.title}
+                        </Link>
                       </h3>
                       {proj.period ? (
                         <p className="mt-1 text-xs text-muted">{proj.period}</p>
                       ) : null}
                       {proj.summary ? (
-                        <ExpandableText
-                          text={proj.summary}
-                          className="mt-2 text-sm text-muted leading-relaxed"
-                          threshold={110}
-                        />
+                        <div className="relative z-10">
+                          <ExpandableText
+                            text={proj.summary}
+                            className="mt-2 text-sm text-muted leading-relaxed"
+                            threshold={110}
+                          />
+                        </div>
                       ) : null}
                       {proj.categories?.length ? (
-                        <div className="mt-2.5 flex flex-wrap gap-1">
+                        <div className="mt-2.5 flex flex-wrap gap-1 relative z-10">
                           {proj.categories.map((cat) => (
                             <span
                               key={cat}
@@ -298,7 +306,7 @@ export function HomePage() {
                       ) : null}
                     </div>
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2.5 relative z-10">
                         {proj.language ? (
                           <p className="inline-flex items-center gap-1.5 text-xs text-muted">
                             <TechIcon name={proj.language} className="h-3 w-3 shrink-0 text-muted" />
@@ -309,26 +317,42 @@ export function HomePage() {
                           <GitHubStarBadge repoUrl={proj.repoUrl} />
                         ) : null}
                       </div>
-                      <div>
+                      <div className="relative z-10">
                         {proj.url ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-medium text-ink group-hover:text-accent transition-colors">
+                          <a
+                            href={proj.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Live demo of ${proj.title}`}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-ink hover:text-accent transition-colors cursor-pointer"
+                          >
                             <span>Live</span>
                             <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
-                          </span>
+                          </a>
                         ) : proj.repoUrl ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-medium text-muted group-hover:text-accent transition-colors">
+                          <a
+                            href={proj.repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Source repository of ${proj.title}`}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-muted hover:text-accent transition-colors cursor-pointer"
+                          >
                             <span>Source</span>
                             <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
-                          </span>
+                          </a>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors">
+                          <Link
+                            to={`/projects/${proj.slug}`}
+                            aria-label={`Project overview: ${proj.title}`}
+                            className="inline-flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors"
+                          >
                             <span>Overview</span>
                             <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                          </span>
+                          </Link>
                         )}
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             )}

@@ -157,7 +157,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         typeof document.startViewTransition === "function" &&
         !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      if (!hasViewTransition || !event) {
+      if (!hasViewTransition) {
         applyRootTheme(isNextDark);
         setTheme(next);
         return;
@@ -167,6 +167,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       let x: number | null = null;
       let y: number | null = null;
 
+      // Priority 1: Check event target and closest button
       if (event) {
         const rawTarget =
           ("currentTarget" in event && event.currentTarget) ||
@@ -185,18 +186,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
         if ((x === null || y === null) && "clientX" in event && typeof event.clientX === "number" && event.clientX > 0) {
           x = event.clientX;
-          y = typeof event.clientY === "number" && event.clientY > 0 ? event.clientY : 28;
+          y = typeof event.clientY === "number" && event.clientY > 0 ? event.clientY : null;
         }
       }
 
-      // Priority 2: Query the DOM for visible theme button
+      // Priority 2: Query the DOM for any theme toggle button
       if (x === null || y === null || x <= 0) {
         if (typeof document !== "undefined") {
-          const visibleBtn = Array.from(
-            document.querySelectorAll<HTMLElement>('button[aria-label*="Switch to"], button[aria-label*="theme"]')
-          ).find((b) => b.offsetWidth > 0 && b.offsetHeight > 0);
+          const candidates = Array.from(
+            document.querySelectorAll<HTMLElement>(
+              '[data-theme-toggle="true"], button[aria-label*="Switch to"], button[aria-label*="theme"], button[aria-label*="Theme"]'
+            )
+          );
+          const visibleBtn = candidates.find((b) => b.offsetWidth > 0 && b.offsetHeight > 0) || candidates[0];
 
-          if (visibleBtn) {
+          if (visibleBtn && typeof visibleBtn.getBoundingClientRect === "function") {
             const rect = visibleBtn.getBoundingClientRect();
             if (rect.width > 0 && rect.height > 0) {
               x = rect.left + rect.width / 2;
@@ -206,7 +210,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      // Priority 3: Absolute fallback — always top-right header coordinates
       const finalX =
         x !== null && x > 0
           ? x
@@ -215,15 +218,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             : 320;
       const finalY = y !== null && y > 0 ? y : 28;
 
-      // Generous buffer to ensure the circle smoothly exits all 4 screen corners
+      // Radius ensuring the circle completely covers all 4 screen corners
       const endRadius = Math.ceil(
         Math.hypot(
-          Math.max(finalX, window.innerWidth - finalX),
-          Math.max(finalY, window.innerHeight - finalY),
-        ) + 60,
+          Math.max(finalX, (typeof window !== "undefined" ? window.innerWidth : 1024) - finalX),
+          Math.max(finalY, (typeof window !== "undefined" ? window.innerHeight : 768) - finalY),
+        ) + 40,
       );
 
-      // Set CSS variables synchronously before starting the view transition
+      // Set CSS variables synchronously for fallback
       document.documentElement.style.setProperty("--vt-x", `${finalX}px`);
       document.documentElement.style.setProperty("--vt-y", `${finalY}px`);
       document.documentElement.style.setProperty("--vt-radius", `${endRadius}px`);
@@ -238,11 +241,42 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         });
       });
 
-      transition.finished
-        .catch(() => {})
-        .finally(() => {
-          isTransitioningRef.current = false;
-        });
+      // Animate from the exact button center using Web Animations API
+      if (transition && "ready" in transition && typeof (transition.ready as unknown as Promise<unknown>)?.then === "function") {
+        transition.ready
+          .then(() => {
+            if (typeof document.documentElement.animate === "function") {
+              try {
+                document.documentElement.animate(
+                  {
+                    clipPath: [
+                      `circle(0px at ${finalX}px ${finalY}px)`,
+                      `circle(${endRadius}px at ${finalX}px ${finalY}px)`,
+                    ],
+                  },
+                  {
+                    duration: 400,
+                    easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+                    pseudoElement: "::view-transition-new(root)",
+                  },
+                );
+              } catch {
+                // Ignore if pseudoElement WAAPI isn't supported in running browser
+              }
+            }
+          })
+          .catch(() => {});
+      }
+
+      if (transition && "finished" in transition && typeof (transition.finished as unknown as Promise<unknown>)?.then === "function") {
+        transition.finished
+          .catch(() => {})
+          .finally(() => {
+            isTransitioningRef.current = false;
+          });
+      } else {
+        isTransitioningRef.current = false;
+      }
     },
     [resolvedTheme, setTheme],
   );

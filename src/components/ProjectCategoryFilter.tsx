@@ -35,12 +35,20 @@ export function ProjectCategoryFilter({
     const el = scrollContainerRef.current;
     if (!el) return;
 
-    checkScrollState();
+    let frameId: number | null = null;
+    if (typeof requestAnimationFrame === "function") {
+      frameId = requestAnimationFrame(checkScrollState);
+    } else {
+      checkScrollState();
+    }
 
     el.addEventListener("scroll", checkScrollState, { passive: true });
     window.addEventListener("resize", checkScrollState, { passive: true });
 
     return () => {
+      if (frameId !== null && typeof cancelAnimationFrame === "function") {
+        cancelAnimationFrame(frameId);
+      }
       el.removeEventListener("scroll", checkScrollState);
       window.removeEventListener("resize", checkScrollState);
     };

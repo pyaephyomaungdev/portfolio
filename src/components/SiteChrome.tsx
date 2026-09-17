@@ -305,6 +305,7 @@ export function SiteFooter({ name, className = "" }: SiteFooterProps) {
             href="https://pyaephyomaung.dev"
             target="_blank"
             rel="noreferrer"
+            aria-label="Pyae Phyo Maung developer site"
             className="text-ink underline underline-offset-4 hover:text-accent transition font-medium"
           >
             Pyae Phyo Maung

@@ -46,10 +46,18 @@ def main():
     ico_img = make_circular_icon(avatar_path, favicon_png, 64)
     make_circular_icon(avatar_path, apple_icon_png, 180)
     ico_img.save(favicon_ico, sizes=[(16, 16), (32, 32), (48, 48), (64, 64)])
-    print("Circular favicons generated successfully:")
+
+    avatar_webp = os.path.join(repo_root, "public", "avatar.webp")
+    if os.path.exists(avatar_path):
+        img = Image.open(avatar_path).convert("RGB")
+        resized = img.resize((240, 240), Image.Resampling.LANCZOS)
+        resized.save(avatar_webp, "WEBP", quality=88, method=6)
+
+    print("Circular favicons & webp generated successfully:")
     print(f" - {favicon_png} (64x64)")
     print(f" - {apple_icon_png} (180x180)")
     print(f" - {favicon_ico} (16, 32, 48, 64)")
+    print(f" - {avatar_webp} (240x240 WebP)")
 
 if __name__ == "__main__":
     main()

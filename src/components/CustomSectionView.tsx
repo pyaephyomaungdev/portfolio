@@ -53,9 +53,8 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
 
             if (hasDetailPage) {
               return (
-                <Link
+                <div
                   key={item.id}
-                  to={detailUrl}
                   className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs text-left"
                 >
                   <div>
@@ -67,7 +66,10 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                     </div>
 
                     <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
-                      {item.title}
+                      <Link to={detailUrl} className="focus:outline-none">
+                        <span className="absolute inset-0 z-0" aria-hidden="true" />
+                        {item.title}
+                      </Link>
                     </h3>
 
                     {item.subtitle ? (
@@ -81,7 +83,7 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                     ) : null}
 
                     {item.tag ? (
-                      <div className="mt-2.5 flex flex-wrap gap-1">
+                      <div className="mt-2.5 flex flex-wrap gap-1 relative z-10">
                         <span className="inline-block rounded border border-rule/70 bg-soft/60 px-1.5 py-0.5 font-mono text-xs text-muted">
                           {item.tag}
                         </span>
@@ -90,13 +92,13 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                   </div>
 
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-rule pt-3 text-xs">
-                    <div>
+                    <div className="relative z-10">
                       {item.url ? (
                         <a
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
+                          aria-label={`Source publication for ${item.title}`}
                           className="inline-flex items-center gap-1 font-medium text-muted hover:text-accent transition-colors"
                         >
                           <span>Source</span>
@@ -104,14 +106,18 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                         </a>
                       ) : null}
                     </div>
-                    <div>
-                      <span className="inline-flex items-center gap-1 font-medium text-ink group-hover:text-accent group-hover:underline transition-colors">
+                    <div className="relative z-10">
+                      <Link
+                        to={detailUrl}
+                        aria-label={`Read article: ${item.title}`}
+                        className="inline-flex items-center gap-1 font-medium text-ink group-hover:text-accent group-hover:underline transition-colors"
+                      >
                         <span>Read article</span>
                         <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                      </span>
+                      </Link>
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             }
 

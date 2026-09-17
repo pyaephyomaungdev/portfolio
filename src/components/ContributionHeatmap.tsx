@@ -233,15 +233,12 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
                         return (
                           <div
                             key={d.date}
-                            role="gridcell"
-                            tabIndex={0}
-                            aria-label={`${d.date}: ${d.count} contribution${d.count === 1 ? "" : "s"}`}
+                            title={`${d.count} contribution${d.count === 1 ? "" : "s"} on ${d.date}`}
                             onMouseEnter={(e) => showTip(e.currentTarget, `${d.count} on ${d.date}`)}
                             onMouseLeave={() => setTip(null)}
-                            onFocus={(e) => showTip(e.currentTarget, `${d.count} on ${d.date}`)}
-                            onBlur={() => setTip(null)}
-                            className={`rounded-xs border-0 p-0 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 sm:rounded-xs cursor-pointer ${animateCells ? "heatmap-cell" : "opacity-0"
-                              } ${needsScroll ? "" : "aspect-square w-full min-w-0"}`}
+                            className={`rounded-xs border-0 p-0 outline-none sm:rounded-xs ${
+                              animateCells ? "heatmap-cell" : "opacity-0"
+                            } ${needsScroll ? "" : "aspect-square w-full min-w-0"}`}
                             style={{
                               ...(needsScroll ? { width: cell, height: cell } : null),
                               backgroundColor: LEVEL_VARS[level],

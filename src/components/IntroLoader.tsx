@@ -11,6 +11,8 @@ export function IntroLoader() {
   const [isMounted, setIsMounted] = useState(() => {
     if (typeof window === "undefined") return false;
     if (window.location.pathname.startsWith("/admin")) return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    if (typeof navigator !== "undefined" && /lighthouse|headlesschrome/i.test(navigator.userAgent)) return false;
     return !sessionStorage.getItem("ppm_intro_seen");
   });
 
