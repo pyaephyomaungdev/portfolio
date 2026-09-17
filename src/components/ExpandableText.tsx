@@ -78,13 +78,13 @@ export function ExpandableText({
             e.stopPropagation();
             setIsExpanded((prev) => !prev);
           }}
-          className={`group inline-flex items-center gap-1.5 rounded-full border border-rule px-3 py-1 text-xs font-mono text-muted hover:text-ink hover:border-ink/30 hover:bg-soft shadow-2xs hover:shadow-xs transition-all cursor-pointer ${
+          className={`group inline-flex items-center gap-1.5 rounded-full border border-rule px-3 py-1 text-xs font-mono text-muted hover:text-accent hover:border-accent/40 hover:bg-soft shadow-2xs hover:shadow-xs transition-all cursor-pointer ${
             isPaper ? "bg-paper" : "bg-white"
           }`}
           aria-expanded={isExpanded}
           aria-label={isExpanded ? "Show less description" : "Show full description"}
         >
-          <span>{isExpanded ? "Show less" : "Read more"}</span>
+          <span className="transition-colors group-hover:text-accent">{isExpanded ? "Show less" : "Read more"}</span>
           <ChevronDown
             className={`h-3.5 w-3.5 transition-transform duration-300 group-hover:text-accent ${
               isExpanded ? "rotate-180 text-accent" : ""
