@@ -87,18 +87,8 @@ export async function uploadAssetImage({
 }
 
 export async function fetchProject(slug: string): Promise<Project> {
-  if (API_BASE) {
-    try {
-      const res = await fetch(`${API_BASE}/api/public/projects/${slug}`, { credentials: "include" });
-      if (res.ok) {
-        return (await res.json()) as Project;
-      }
-    } catch {
-      // Fall through to static data
-    }
-  }
-
-  const found = initialPortfolioData.projects.find((p) => p.slug === slug);
+  const portfolio = await fetchPortfolio();
+  const found = portfolio.projects?.find((p) => p.slug === slug);
   if (found) {
     return found;
   }

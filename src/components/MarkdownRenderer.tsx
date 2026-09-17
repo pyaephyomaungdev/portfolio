@@ -47,20 +47,21 @@ function ExcalidrawBlock({ code }: { code: string }) {
   const isSvg = trimmed.startsWith("<svg") || trimmed.includes("<svg");
 
   if (isSvg) {
+    // Strip solid white backgrounds so the diagram has a completely transparent background
+    const transparentSvg = trimmed
+      .replace(/(<rect\b[^>]*\bfill=)["'](?:#ffffff|#fff|white)["']/gi, '$1"transparent"')
+      .replace(/(<rect\b[^>]*\bx=["']0["'][^>]*\by=["']0["'][^>]*\bfill=)["'][^"']*["']/gi, '$1"transparent"');
+
     return (
-      <div className="my-5 rounded-xl border border-rule bg-paper p-4 overflow-x-auto shadow-2xs">
-        <div className="flex items-center justify-between gap-2 pb-2 mb-3 border-b border-rule/60 text-xs font-mono text-muted">
-          <div className="flex items-center gap-1.5">
-            <PenTool className="h-3.5 w-3.5 text-accent" />
-            <span className="font-semibold text-ink uppercase tracking-wider">Architecture Diagram</span>
-          </div>
-          <span className="text-xs font-mono bg-soft px-1.5 py-0.5 rounded border border-rule">Excalidraw SVG</span>
-        </div>
+      <figure className="my-8 flex flex-col items-center">
         <div
-          className="flex justify-center [&>svg]:max-w-full [&>svg]:h-auto"
-          dangerouslySetInnerHTML={{ __html: trimmed }}
+          className="w-full flex justify-center overflow-x-auto [&>svg]:max-w-full [&>svg]:h-auto bg-transparent"
+          dangerouslySetInnerHTML={{ __html: transparentSvg }}
         />
-      </div>
+        <figcaption className="mt-3 text-xs font-mono text-muted/60 select-none tracking-wide text-center">
+          Powered by Excalidraw
+        </figcaption>
+      </figure>
     );
   }
 
@@ -68,21 +69,15 @@ function ExcalidrawBlock({ code }: { code: string }) {
     const data = JSON.parse(trimmed);
     const elements = Array.isArray(data) ? data : data.elements || [];
     return (
-      <div className="my-5 rounded-xl border border-rule bg-paper p-4 overflow-x-auto shadow-2xs">
-        <div className="flex items-center justify-between gap-2 pb-2 mb-3 border-b border-rule/60 text-xs font-mono text-muted">
-          <div className="flex items-center gap-1.5">
-            <PenTool className="h-3.5 w-3.5 text-accent" />
-            <span className="font-semibold text-ink uppercase tracking-wider">Excalidraw Scene</span>
-          </div>
-          <span className="text-xs font-mono bg-soft px-1.5 py-0.5 rounded border border-rule">
-            {elements.length} elements
-          </span>
-        </div>
-        <div className="bg-soft/40 p-6 rounded-lg border border-rule/60 font-mono text-xs text-muted text-center flex flex-col items-center gap-2">
+      <figure className="my-8 flex flex-col items-center">
+        <div className="w-full py-6 text-center font-mono text-xs text-muted flex flex-col items-center gap-2 bg-transparent">
           <PenTool className="h-5 w-5 text-accent/60" />
-          <span>Excalidraw Architecture Diagram ({elements.length} vector objects)</span>
+          <span>Excalidraw Diagram ({elements.length} vector objects)</span>
         </div>
-      </div>
+        <figcaption className="mt-2 text-xs font-mono text-muted/60 select-none tracking-wide text-center">
+          Powered by Excalidraw
+        </figcaption>
+      </figure>
     );
   } catch {
     return <CodeBlock code={code} />;

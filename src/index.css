@@ -374,6 +374,9 @@ body {
   nav,
   button,
   .btn-primary,
+  form,
+  [data-form],
+  .contact-form,
   [aria-label="Back to top"],
   [aria-label="Theme"],
   a[href="#main-content"],
@@ -381,6 +384,18 @@ body {
   .heatmap-scroll,
   .heatmap-cell {
     display: none !important;
+  }
+
+  :root {
+    --rule: #9ca3af !important;
+    --color-rule: #9ca3af !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-box-decoration-break: clone !important;
+    box-decoration-break: clone !important;
   }
 
   html,
@@ -397,6 +412,25 @@ body {
     margin: 0 !important;
   }
 
+  section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-top: 1.5rem !important;
+  }
+
+  /* Prevent orphaned headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p:has(+ h2),
+  p:has(+ h3) {
+    break-after: avoid-page !important;
+    page-break-after: avoid !important;
+  }
+
   /* Clean, crisp monochrome borders and prevent awkward mid-card page splits */
   article,
   section,
@@ -405,8 +439,21 @@ body {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    border-color: #d1d5db !important;
+    border-color: #9ca3af !important;
     background: #ffffff !important;
+  }
+
+  .border,
+  [class*="border-"],
+  .divide-y > :not([hidden]) ~ :not([hidden]) {
+    border-color: #9ca3af !important;
+  }
+
+  footer {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-top: 2.5rem !important;
+    padding-top: 1.5rem !important;
   }
 
   a {

@@ -8,6 +8,7 @@ import { BuyMeACoffeeButton, BuyMeACoffeeCard } from "../components/BuyMeACoffee
 import { ArchitectureBlueprint } from "../components/ArchitectureBlueprint";
 import { ArrowLeft, ArrowRight, ExternalLink, Clock, Share2, Check } from "lucide-react";
 import { ReadingProgressBar } from "../components/ReadingProgressBar";
+import { MarkdownRenderer } from "../components/MarkdownRenderer";
 import { calculateReadingTime } from "../lib/readingTime";
 import { fetchPortfolio, fetchProject, type Project, type Profile } from "../lib/api";
 import { initialPortfolioData } from "../data/portfolioData";
@@ -282,6 +283,21 @@ export function ProjectPage() {
               </section>
             ) : null}
 
+            {/* Project Narrative & Detailed Documentation (Markdown, Tables & Transparent Excalidraw) */}
+            {project.body ? (
+              <section className="mt-10 border-t border-rule pt-8">
+                <MarkdownRenderer content={project.body} />
+              </section>
+            ) : paragraphs.length && !cs ? (
+              <section className="mt-10 space-y-4 text-base leading-relaxed text-ink">
+                {paragraphs.map((para, i) => (
+                  <p key={i} className="whitespace-pre-line text-muted first:text-ink">
+                    {para}
+                  </p>
+                ))}
+              </section>
+            ) : null}
+
             {/* Case Study Core Narrative Sections */}
             {cs ? (
               <div className="mt-12 space-y-8 border-t border-rule pt-8">
@@ -382,7 +398,7 @@ export function ProjectPage() {
 
             {/* Tech Stack */}
             {project.techStack?.length ? (
-              <section className="mt-12">
+              <section className="mt-12 border-t border-rule pt-8">
                 <h2 className="text-sm font-semibold tracking-tight">Tech Stack</h2>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {project.techStack.map((t) => (
@@ -395,17 +411,6 @@ export function ProjectPage() {
                     </li>
                   ))}
                 </ul>
-              </section>
-            ) : null}
-
-            {/* Additional Detailed Narrative / Breakdown */}
-            {paragraphs.length && !cs ? (
-              <section className="mt-10 space-y-4 text-base leading-relaxed text-ink">
-                {paragraphs.map((para, i) => (
-                  <p key={i} className="whitespace-pre-line text-muted first:text-ink">
-                    {para}
-                  </p>
-                ))}
               </section>
             ) : null}
 

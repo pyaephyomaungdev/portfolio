@@ -264,8 +264,14 @@ export function HomePage() {
                     className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs"
                   >
                     <div>
-                      <span className="absolute right-3 top-3 text-xs text-muted">{i + 1}</span>
-                      <h3 className="pr-6 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
+                      {/* Border-Integrated Corner Index Notch */}
+                      <div className="absolute -top-px -right-px flex items-center rounded-tr-xl rounded-bl-xl border-b border-l border-rule bg-soft/80 px-2.5 py-1 text-xs font-mono text-muted shadow-2xs transition-colors group-hover:border-accent/50 group-hover:text-accent z-10">
+                        <span className="font-semibold text-ink/90 group-hover:text-accent transition-colors">
+                          #{i + 1}
+                        </span>
+                      </div>
+
+                      <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                         {proj.title}
                       </h3>
                       {proj.period ? (
@@ -544,8 +550,8 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Direct Note Form - Only rendered when Telegram dispatch is configured */}
-          {p?.telegramConfigured ? <ContactForm profile={p} className="mt-6" /> : null}
+          {/* Direct Note Form - Only rendered when Telegram dispatch is configured, hidden in print */}
+          {p?.telegramConfigured ? <ContactForm profile={p} className="mt-6 print:hidden" /> : null}
         </section>
         ) : null}
       </main>

@@ -273,14 +273,15 @@ export function SiteHeader({ name, profile, onOpenContact, sectionVisibility }: 
 interface SiteFooterProps {
   name?: string | null;
   websiteUrl?: string | null;
+  className?: string;
 }
 
-export function SiteFooter({ name }: SiteFooterProps) {
+export function SiteFooter({ name, className = "" }: SiteFooterProps) {
   const p = initialPortfolioData.profile;
   const displayName = name || p?.name || "Portfolio";
 
   return (
-    <footer className="border-t border-rule py-8 text-center text-sm text-muted">
+    <footer className={`mt-16 print:mt-10 border-t border-rule py-8 text-center text-sm text-muted ${className}`}>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 font-mono text-xs">
         <span>© {new Date().getFullYear()} {displayName}</span>
         <span className="hidden sm:inline text-muted/40">•</span>

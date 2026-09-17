@@ -26,7 +26,7 @@ describe("HomePage Component", () => {
     expect(screen.getByText("Career")).not.toBeNull();
   });
 
-  it("renders contact form section and quick channels", () => {
+  it("renders contact section, direct reachout channels, and direct note dispatch", () => {
     render(
       <MemoryRouter>
         <ThemeProvider>
@@ -35,7 +35,8 @@ describe("HomePage Component", () => {
       </MemoryRouter>
     );
 
+    expect(screen.getAllByText("Let's build together").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole("button", { name: /direct channels hub/i })).not.toBeNull();
     expect(screen.getByText("Direct Message Dispatch")).not.toBeNull();
-    expect(screen.getByRole("button", { name: /send note/i })).not.toBeNull();
   });
 });

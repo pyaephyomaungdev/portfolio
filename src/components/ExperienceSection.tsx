@@ -11,13 +11,13 @@ export function ExperienceSection({ companies }: { companies: ExperienceCompany[
   if (!companies.length) return null;
 
   return (
-    <section id="experience" className="mt-16 scroll-mt-24">
+    <section id="experience" className="mt-16 print:mt-6 scroll-mt-24">
       <p className="text-xs font-semibold uppercase tracking-wider text-muted">
         Experience
       </p>
       <h2 className="mt-1 font-display text-3xl tracking-tight">Career</h2>
 
-      <div className="mt-6 divide-y divide-rule rounded-xl border border-rule bg-white">
+      <div className="mt-6 print:mt-3 divide-y divide-rule rounded-xl border border-rule bg-white print:rounded-xl overflow-hidden print:overflow-hidden">
         {companies.map((co) => (
           <ExperienceCompanyArticle key={co.id} co={co} />
         ))}
@@ -33,7 +33,7 @@ function ExperienceCompanyArticle({ co }: { co: ExperienceCompany }) {
   if (!multi && co.roles[0]) {
     const role = co.roles[0];
     return (
-      <article className="flex gap-4 p-5">
+      <article className="flex gap-4 p-5 print:p-4">
         <Logo name={co.name} url={co.logoUrl} />
         <div className="min-w-0 flex-1">
           <h3 className="text-base font-semibold">{role.title}</h3>
@@ -69,7 +69,7 @@ function ExperienceCompanyArticle({ co }: { co: ExperienceCompany }) {
   const hiddenCount = co.roles.length - 2;
 
   return (
-    <article className="p-5">
+    <article className="p-5 print:p-4">
       <div className="flex gap-4">
         <Logo name={co.name} url={co.logoUrl} />
         <div>
@@ -79,13 +79,13 @@ function ExperienceCompanyArticle({ co }: { co: ExperienceCompany }) {
           ) : null}
         </div>
       </div>
-      <ol className="relative ml-5 mt-4 border-l border-rule pl-6">
+      <ol className="relative ml-5 mt-4 border-l border-rule pl-6 print:mt-3">
         {co.roles.map((role, rIdx) => {
           const isHidden = !isExpanded && rIdx >= 2;
           return (
             <li
               key={role.id}
-              className={`group/role relative pb-5 last:pb-0 ${
+              className={`group/role relative pb-5 last:pb-0 print:pb-3 ${
                 isHidden ? "hidden print:block" : ""
               }`}
             >

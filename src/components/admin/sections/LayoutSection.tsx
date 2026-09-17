@@ -78,8 +78,8 @@ const SECTIONS: SectionMeta[] = [
   },
   {
     key: "contact",
-    title: "Direct Message Dispatch",
-    description: "Inline interactive contact form with edge Telegram notification forwarding.",
+    title: "Direct Reachout Channels",
+    description: "Contact card with direct engineering reachout channels, verified email, and social handles.",
     icon: Send,
     recommended: true,
   },

@@ -59,17 +59,14 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                   className="group relative flex flex-col justify-between rounded-xl border border-rule bg-white p-4 transition-all hover:border-accent/50 hover:shadow-xs text-left"
                 >
                   <div>
-                    {item.date ? (
-                      <span className="absolute right-3 top-3 font-mono text-xs text-muted">
-                        {item.date}
+                    {/* Border-Integrated Corner Date/Index Notch */}
+                    <div className="absolute -top-px -right-px flex items-center rounded-tr-xl rounded-bl-xl border-b border-l border-rule bg-soft/80 px-2.5 py-1 text-xs font-mono text-muted shadow-2xs transition-colors group-hover:border-accent/50 group-hover:text-accent z-10">
+                      <span className="font-semibold text-ink/90 group-hover:text-accent transition-colors">
+                        {item.date || `#${index + 1}`}
                       </span>
-                    ) : (
-                      <span className="absolute right-3 top-3 font-mono text-xs text-muted">
-                        {index + 1}
-                      </span>
-                    )}
+                    </div>
 
-                    <h3 className="pr-12 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
+                    <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                       {item.title}
                     </h3>
 
@@ -137,17 +134,14 @@ export function CustomSectionView({ section }: CustomSectionViewProps) {
                 }`}
               >
                 <div>
-                  {item.date ? (
-                    <span className="absolute right-3 top-3 font-mono text-xs text-muted">
-                      {item.date}
+                  {/* Border-Integrated Corner Date/Index Notch */}
+                  <div className="absolute -top-px -right-px flex items-center rounded-tr-xl rounded-bl-xl border-b border-l border-rule bg-soft/80 px-2.5 py-1 text-xs font-mono text-muted shadow-2xs transition-colors group-hover:border-accent/50 group-hover:text-accent z-10">
+                    <span className="font-semibold text-ink/90 group-hover:text-accent transition-colors">
+                      {item.date || `#${index + 1}`}
                     </span>
-                  ) : (
-                    <span className="absolute right-3 top-3 font-mono text-xs text-muted">
-                      {index + 1}
-                    </span>
-                  )}
+                  </div>
 
-                  <h3 className="pr-12 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
+                  <h3 className="pr-16 font-semibold tracking-tight text-ink group-hover:text-accent group-hover:underline transition-colors">
                     {item.title}
                   </h3>
 

@@ -86,7 +86,7 @@ export function ContactForm({ profile, className = "" }: ContactFormProps) {
   }
 
   return (
-    <div className={`relative rounded-xl border border-rule bg-white p-6 sm:p-7 shadow-xs ${className}`}>
+    <div className={`relative rounded-xl border border-rule bg-white p-6 sm:p-7 shadow-xs print:hidden ${className}`}>
       <div className="flex items-center justify-between border-b border-rule pb-3.5 mb-5">
         <div>
           <h3 className="font-display text-xl font-semibold text-ink mt-0.5">

@@ -50,4 +50,28 @@ describe("ProjectPage Component", () => {
 
     expect(screen.getByRole("link", { name: /view all projects/i })).not.toBeNull();
   });
+
+  it("renders markdown body and excalidraw diagram when project.body is present", async () => {
+    const projectWithBody = {
+      ...initialPortfolioData.projects[0],
+      slug: "test-diagram-project",
+      body: "### Deep Dive Analysis\n\n```excalidraw\n<svg viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"40\" /></svg>\n```\n",
+    };
+    vi.spyOn(await import("../../lib/api"), "fetchProject").mockResolvedValue(projectWithBody as unknown as import("../../lib/api").Project);
+
+    render(
+      <MemoryRouter initialEntries={["/projects/test-diagram-project"]}>
+        <ThemeProvider>
+          <Routes>
+            <Route path="/projects/:slug" element={<ProjectPage />} />
+          </Routes>
+        </ThemeProvider>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Deep Dive Analysis")).not.toBeNull();
+      expect(screen.getByText(/powered by excalidraw/i)).not.toBeNull();
+    });
+  });
 });

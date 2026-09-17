@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   Save,
@@ -51,6 +51,18 @@ export function ProjectDetailEditorPage({
     });
   }
 
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        e.stopPropagation();
+        handleSave();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
+  }, [draft, categoryInput, techInput]);
+
   const [activeTab, setActiveTab] = useState<"general" | "narrative" | "casestudy">("general");
 
   return (
@@ -95,10 +107,12 @@ export function ProjectDetailEditorPage({
           <button
             type="button"
             onClick={handleSave}
+            title="Apply changes to portfolio (Cmd+S)"
             className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-4 py-1.5 text-xs font-mono font-medium text-paper hover:opacity-90 transition cursor-pointer shadow-xs"
           >
             <Save className="size-3.5" />
             <span>Save Changes</span>
+            <kbd className="hidden sm:inline-block rounded bg-paper/20 px-1 py-0.5 text-xs text-paper/90 font-mono">⌘S</kbd>
           </button>
         </div>
       </div>

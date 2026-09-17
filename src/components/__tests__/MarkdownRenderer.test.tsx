@@ -80,7 +80,7 @@ describe("MarkdownRenderer UI Component", () => {
 \`\`\``;
     const { container } = render(<MarkdownRenderer content={markdown} />);
 
-    expect(screen.getByText(/architecture diagram/i)).not.toBeNull();
+    expect(screen.getByText(/powered by excalidraw/i)).not.toBeNull();
     expect(container.querySelector("svg")).not.toBeNull();
     expect(container.querySelector("circle")).not.toBeNull();
   });

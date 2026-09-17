@@ -7,7 +7,7 @@
   <p>
     <a href="https://pyaephyomaung.dev"><img src="https://img.shields.io/badge/Live_Site-pyaephyomaung.dev-blue?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Live Site" /></a>
     <a href="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml"><img src="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
-    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-179_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
+    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-180_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
     <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.1-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" /></a>
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
@@ -164,11 +164,16 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong><img src=".github/assets/icons/download.svg" width="18" height="18" align="absmiddle" /> 10. Resume-Ready Print Engine (`@media print`)</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/download.svg" width="18" height="18" align="absmiddle" /> 10. Resume-Ready Print & PDF Engine (`@media print`)</strong> (Click to expand)</summary>
 
-* **Executive CV Format**: Hitting `Cmd + P` or `Ctrl + P` in any browser automatically transforms the web portfolio into a clean, monochrome curriculum vitae.
-* **Web UI Elimination**: Strips out navigation bars, intro loader, floating buttons, back-to-top pill, and external links automatically.
-* **Page Break Protection**: Enforces `break-inside: avoid` on career roles and education cards to prevent awkward mid-card page splits across printed pages.
+* **Executive CV Transformation**: Hitting `Cmd + P` or `Ctrl + P` in any modern browser instantly formats the portfolio into an executive, monochrome single/multi-page curriculum vitae.
+* **Orphan Heading Elimination**: Enforces strict `break-after: avoid-page !important` and `page-break-after: avoid !important` on all section headers (`h1..h6`, `p:has(+ h2)`), permanently preventing isolated titles at the bottom of pages.
+* **Section Cohesion & Break Isolation**: `break-inside: avoid !important` on `section` containers keeps entire blocks (e.g. `EXPERIENCE / Career`) intact and pushes them together to the top of subsequent sheets rather than splitting headers from cards.
+* **Multi-Page Box Decoration Clone**: Implements `-webkit-box-decoration-break: clone !important` and `box-decoration-break: clone !important`, guaranteeing that when large lists paginate across sheets, every page fragment closes with a full 4-sided border and rounded corners.
+* **Contact Form Suppression**: Interactive form inputs (`ContactForm.tsx`) are suppressed in print via `print:hidden` and `@media print { form { display: none !important; } }`, leaving only verified reachout channels (`Telegram ↗`, `GitHub ↗`).
+* **Footer Divider Breathing Room**: Generous 40px (`2.5rem`) top margin (`footer { margin-top: 2.5rem !important; padding-top: 1.5rem !important; }`) prevents visual collisions between the contact card and the footer divider rule.
+* **Contrast-Hardened Monochrome Stroke**: Explicit `--rule: #9ca3af !important; border-color: #9ca3af !important;` ensures crisp 1px borders render reliably even when "Background graphics" is disabled in Chromium print settings.
+* **Interactive Element Stripping**: Automatically omits headers, navigation bars, theme toggles, floating action buttons, back-to-top pills, and contribution matrices.
 
 </details>
 
@@ -258,12 +263,38 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 </details>
 
 <details>
-<summary><strong><img src=".github/assets/icons/code.svg" width="18" height="18" align="absmiddle" /> 20. Architectural Underline Tabs & Studio Markdown Engine with Excalidraw & Asset Uploads</strong> (Click to expand)</summary>
+<summary><strong><img src=".github/assets/icons/code.svg" width="18" height="18" align="absmiddle" /> 20. Architectural Underline Tabs & Studio Markdown Engine with Fullscreen Excalidraw Canvas & Asset Uploads</strong> (Click to expand)</summary>
 
 * **Architectural Underline Tabs**: Replaces pill/boxed tabs with clean underline navigation (`border-b-2 border-accent text-ink -mb-px`) sitting on an authentic `border-b border-rule` baseline across project editors, web editor, and legal views.
 * **GFM Table Support**: Full GitHub Flavored Markdown table parsing and responsive layout rendering with column alignment (`:---`, `:---:`, `---:`) and 1-click table starters.
 * **Asset Upload with Custom Subfolder**: Built-in asset upload middleware (`/api/admin/upload-asset`) writing local images to `public/assets/<custom-folder>/<fileName>` with presets (`projects`, `case-studies`, `articles`, `diagrams`), preview thumbnails, and automatic markdown insertion.
-* **Excalidraw Diagramming Support**: Native `ExcalidrawBlock` rendering for Excalidraw SVG and scene JSON structures, diagram file upload (`.svg`, `.excalidraw`), scene pasting, and quick architecture starter templates (Client-Edge-DB, Event Stream Pipeline).
+* **In-App Fullscreen Excalidraw Drawing Canvas (`ExcalidrawCanvasModal.tsx`)**: Launchable directly from the Markdown Studio toolbar; allows engineers to sketch freehand blueprints and system architectures inside a fullscreen modal dialog and insert rendered SVG directly into content.
+* **Transparent Cardless Diagram Presentation**: Excalidraw SVG blocks automatically strip solid white backgrounds (`svg.replace(/background:\s*#ffffff;?/g, "background: transparent;")`), rendering vector diagrams borderless and transparent with an understated caption: `Powered by Excalidraw`.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/layers.svg" width="18" height="18" align="absmiddle" /> 21. Unified Editorial Case Study Architecture (`/projects/:slug`)</strong> (Click to expand)</summary>
+
+* **Unfragmented Storytelling Flow**: Eliminates multi-tab fragmentation (`Case Study & Blueprint` vs `Narrative & Deep Dive` vs `Full Story`) in favor of a single, continuous editorial layout engineered for maximum retention by technical leads.
+* **Pragmatic Structural Pipeline**:
+  1. **Executive Header**: Headline, project duration, live deployment links, and source code repository badges.
+  2. **Core Framing**: Problem statement, operational constraints, and architectural decisions.
+  3. **Interactive Blueprint**: Taxonomic node isolation, protocol direction rails, and real-time inspector.
+  4. **Quantified Metrics**: Numerical impact strips (`Cloud Footprint`, `Variable Integrity`, `Sync Latency`).
+  5. **Narrative Deep Dive**: Full GitHub Flavored Markdown body with syntax-highlighted code blocks, tables, and Excalidraw vector architecture.
+* **Bilateral Navigation**: Footer features responsive 2-column previous/next case study links with keyboard and touch accessibility.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/box.svg" width="18" height="18" align="absmiddle" /> 22. Border-Integrated Corner Notch Badging System</strong> (Click to expand)</summary>
+
+* **Visual Drafting Crosshair Notch**: Extends the signature border-integrated notch design from the admin CMS across all public-facing cards:
+  * **Selected Work Project Cards**: Top-right corner notch badge displaying `#{i + 1}` (`rounded-tr-xl rounded-bl-xl border-b border-l border-rule bg-soft/80`).
+  * **Custom Section Article Cards**: Top-right corner notch badge displaying `{item.date || #${index + 1}}`.
+* **Collision-Free Typography**: Card title elements include explicit right-padding offset (`pr-16`) to guarantee long titles never collide with or wrap underneath the notch badge.
+* **Micro-Interaction Hover Glow**: Notch badges seamlessly track parent card hover states, transitioning from subtle muted ink to high-contrast signal accent (`group-hover:border-accent/50 group-hover:text-accent`).
 
 </details>
 
@@ -399,7 +430,8 @@ portfolio/
 │   │   │   ├── sections/       # Section editors (Profile, Projects, Exp, Theme, Custom)
 │   │   │   ├── ColorPicker.tsx # Custom 2D HSV gradient & rainbow hue rail color picker
 │   │   │   ├── CustomActionMenu.tsx # Three-dot contextual action menu
-│   │   │   └── CustomSelect.tsx # Accessible Swiss dropdown selector
+│   │   │   ├── CustomSelect.tsx # Accessible Swiss dropdown selector
+│   │   │   └── ExcalidrawCanvasModal.tsx # Fullscreen vector drawing canvas studio dialog
 │   │   ├── ArchitectureBlueprint.tsx # Interactive Swiss drafting case study blueprints
 │   │   ├── AvailabilityBadge.tsx     # Avatar corner radar beacon with popover notch
 │   │   ├── BackToTopButton.tsx       # Smooth-scrolling floating action button
