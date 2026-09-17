@@ -8,7 +8,6 @@ import {
   BarChart2,
   Radio,
   Send,
-  Printer,
   ArrowRight,
   FileCode2,
   Eye,

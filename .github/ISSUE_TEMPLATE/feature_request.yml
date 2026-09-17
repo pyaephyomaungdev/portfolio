@@ -1,0 +1,24 @@
+name: Feature Request
+description: Suggest an enhancement or new feature idea for the portfolio.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Feature Description
+      description: Describe the feature or improvement you would like to see.
+      placeholder: Add support for...
+    validations:
+      required: true
+  - type: dropdown
+    id: section
+    attributes:
+      label: Affected Section
+      options:
+        - Homepage Hero & Availability
+        - Projects & Case Studies
+        - Work Experience Timeline
+        - Contact Modal / Edge Note Dispatch
+        - Admin CMS Dashboard
+        - SEO / Performance / Accessibility

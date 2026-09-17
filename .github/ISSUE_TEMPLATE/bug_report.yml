@@ -1,0 +1,39 @@
+name: Bug Report
+description: Report a bug, rendering glitch, or issue in the portfolio.
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please describe the problem clearly below.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is the issue or unexpected behavior?
+      placeholder: Describe what happened...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can this issue be reproduced?
+      placeholder: |
+        1. Navigate to...
+        2. Click on...
+        3. Observe...
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser / Environment
+      multiple: true
+      options:
+        - Chrome / Chromium
+        - Safari (macOS / iOS)
+        - Firefox
+        - Edge
+        - Mobile Browser

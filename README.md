@@ -11,6 +11,7 @@
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
     <a href="https://developers.cloudflare.com/pages"><img src="https://img.shields.io/badge/Edge-Cloudflare_Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" alt="Cloudflare Edge" /></a>
     <a href="https://github.com/oxc-project/oxc"><img src="https://img.shields.io/badge/Oxlint-0_Warnings-emerald?style=for-the-badge&logo=oxc&logoColor=white" alt="Oxlint Clean" /></a>
+    <a href="SECURITY.md"><img src="https://img.shields.io/badge/Security-Policy-brightgreen?style=for-the-badge&logo=shield&logoColor=white" alt="Security Policy" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License MIT" /></a>
   </p>
 
@@ -25,7 +26,8 @@
     <a href="#quickstart--installation">Quickstart</a> •
     <a href="#visual-admin-cms-admin">Admin CMS</a> •
     <a href="#design-tokens--typography">Design System</a> •
-    <a href="#architecture--project-structure">Architecture</a> •
+    <a href="#community--contributing">Contributing</a> •
+    <a href="#security-policy">Security</a> •
     <a href="#verification--quality">Quality Assurance</a>
   </p>
 </div>
@@ -342,6 +344,25 @@ npm run build
 - **Oxlint**: Verified with 99 rules across all `.ts` and `.tsx` files (0 warnings, 0 errors).
 - **TypeScript**: Configured with `strict: true`, `noUnusedLocals: true`, and `noUnusedParameters: true`.
 - **Bundle Efficiency**: Minified production build compiles in ~250ms with zero heavy UI libraries or analytics tracking bloat.
+
+---
+
+## Community & Contributing
+
+We welcome community feedback, bug reports, and architectural contributions!
+
+- **[Contributing Guidelines](CONTRIBUTING.md)**: Local dev setup, design token guidelines, and quality standards.
+- **[Code of Conduct](CODE_OF_CONDUCT.md)**: Contributor Covenant standards.
+- **[Issue Templates](.github/ISSUE_TEMPLATE/)**: Structured forms for [Bug Reports](.github/ISSUE_TEMPLATE/bug_report.yml) and [Feature Requests](.github/ISSUE_TEMPLATE/feature_request.yml).
+- **[Pull Request Template](.github/PULL_REQUEST_TEMPLATE.md)**: Quality checklist for all PRs.
+
+---
+
+## Security Policy
+
+Security vulnerabilities can be reported privately according to our **[Security Policy](SECURITY.md)** or via **[contact@pyaephyomaung.dev](mailto:contact@pyaephyomaung.dev)**.
+
+RFC 9116 Vulnerability Disclosure metadata is published at `https://pyaephyomaung.dev/.well-known/security.txt`.
 
 ---
 
