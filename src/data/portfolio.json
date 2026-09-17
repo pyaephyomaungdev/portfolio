@@ -635,30 +635,6 @@
             "JavaScript"
           ],
           "sortOrder": 1
-        },
-        {
-          "id": "role-1789630142395",
-          "companyId": "exp-2",
-          "title": "Software Engineer",
-          "employmentType": "Full-Time",
-          "startDate": "2026",
-          "endDate": null,
-          "location": "Remote",
-          "description": "",
-          "skills": [],
-          "sortOrder": 3
-        },
-        {
-          "id": "role-1789630147529",
-          "companyId": "exp-2",
-          "title": "Software Engineer",
-          "employmentType": "Full-Time",
-          "startDate": "2026",
-          "endDate": null,
-          "location": "Remote",
-          "description": "",
-          "skills": [],
-          "sortOrder": 4
         }
       ]
     },
