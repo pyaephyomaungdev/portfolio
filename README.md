@@ -181,6 +181,26 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 
 </details>
 
+<details>
+<summary><strong><img src=".github/assets/icons/zap.svg" width="18" height="18" align="absmiddle" /> 12. Route-Level Dynamic Code Splitting & Performance Hardening</strong> (Click to expand)</summary>
+
+* **On-Demand Route Loading**: Core entry bundle is decoupled from heavy sub-pages using `React.lazy()` and `<Suspense>`.
+* **45% Initial Bundle Reduction**: Main visitor landing page bundle drops from 604 kB to **330 kB (104 kB gzipped)**, completely eliminating Vite's 500 kB chunk threshold warnings.
+* **Isolated Admin CMS**: The entire 148 kB Visual Studio CMS (`AdminPage.tsx`) is only downloaded when navigating to `/admin`.
+* **Instant Fallback**: Minimalist typographic loading skeletons ensure zero perceptible lag during on-demand route transitions.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/shield.svg" width="18" height="18" align="absmiddle" /> 13. Enterprise Privacy, Compliance & Security Disclosures Hub</strong> (Click to expand)</summary>
+
+* **Dedicated Legal Routes**: Single unified `LegalPage.tsx` component powering `/privacy`, `/terms`, and `/cookies` with instant keyboard and tab-switching controls.
+* **Zero Tracking Guarantee**: Zero tracking cookies, zero marketing profiling pixels, and zero third-party telemetry scripts.
+* **RFC 9116 Vulnerability Disclosure**: Published `/.well-known/security.txt` and explicit `ads.txt` declaring authorized digital operations.
+* **Local Storage Audit**: Full transparent disclosure table of client-side storage keys (`ppm_theme` and `portfolio_admin_draft`).
+
+</details>
+
 ---
 
 ## <img src=".github/assets/icons/terminal.svg" width="22" height="22" align="absmiddle" /> Quickstart & Installation
@@ -350,24 +370,48 @@ portfolio/
 The codebase adheres to rigorous linting, automated testing, and type-safety standards with zero tolerance for warnings:
 
 ```bash
-# Verify 0 oxlint warnings and 0 errors across all files
+# 1. Verify 0 oxlint warnings and 0 errors across all files (<250ms)
 npm run lint
 
-# Verify strict TypeScript type compilation
+# 2. Verify strict TypeScript type compilation with zero type assertions
 npm run typecheck
 
-# Run automated Vitest unit test suites (100% pass rate)
+# 3. Run automated Vitest unit & component test suites (100% pass rate)
 npm test
 
-# Verify production static build & SEO compilation
+# 4. Verify production static build & SEO compilation
 npm run build
 ```
 
+### <img src=".github/assets/icons/git-pull-request.svg" width="20" height="20" align="absmiddle" /> Automated Continuous Integration Pipeline (`.github/workflows/ci.yml`)
+
+Every push to `main` and all incoming pull requests automatically trigger the GitHub Actions verification matrix:
+
+| Stage | Command | Purpose | SLA |
+| :--- | :--- | :--- | :--- |
+| **1. Checkout & Cache** | `actions/checkout@v4` + `setup-node@v4` | Pre-installs Node.js 22 and caches `~/.npm` dependencies | ~10s |
+| **2. Clean Install** | `npm ci` | Strict, deterministic dependency installation from `package-lock.json` | ~5s |
+| **3. High-Speed Linter** | `npm run lint` | Scans 99 rules using `oxlint` across 10 threads (zero warnings permitted) | <300ms |
+| **4. Strict Typecheck** | `npm run typecheck` | Compiles entire project with `tsc --noEmit` under strict TypeScript rules | ~1.5s |
+| **5. Automated Testing** | `npm test` | Runs 126 unit & UI component tests across 40 suites via Vitest & JSDOM | ~4.5s |
+| **6. Production Build** | `npm run build` | Compiles sitemap.xml, robots.txt, and rolls optimized static chunks | ~300ms |
+
+> **Concurrency Grouping**: Built with `group: ${{ github.workflow }}-${{ github.ref }}` and `cancel-in-progress: true` to abort stale runs on rapid pushes and save GitHub Actions runner minutes.
+
+### <img src=".github/assets/icons/layers.svg" width="20" height="20" align="absmiddle" /> Complete Test Suite Matrix (126 Tests / 40 Suites)
+
+| Test Layer | Test Files | Tests | Core Behaviors & Edge Cases Validated |
+| :--- | :--- | :--- | :--- |
+| **Core Utilities & API** | `src/lib/__tests__/*` | 24 | GitHub URL parsing, XSS sanitization, sliding window IP rate limiting, SEO & sitemap XML schema, DOM `scrollToId` animation, API fallbacks. |
+| **Theme & Context** | `src/context/__tests__/*`, `src/components/__tests__/ThemeToggle*` | 8 | `ThemeProvider`, localStorage persistence, circular view transition toggle, accessible aria-labels. |
+| **Public UI Components** | `src/components/__tests__/*` | 43 | Honeypot spam bot trapping, contact modal channels, availability beacon popover, category filters, BMC branding, TechIcon mapping, blueprint data rails, expandable text fallback, contribution heatmap. |
+| **Public Route Pages** | `src/pages/__tests__/*` | 9 | HomePage sections, ProjectPage technical case studies, NotFoundPage editorial 404, LegalPage (Privacy/Terms/Cookies tabs). |
+| **Admin Studio CMS** | `src/components/admin/__tests__/*` | 42 | Sidebar nav, dirty indicator, save/import/export JSON buttons, status radar, project filters, experience roles, education, honors, licenses, reorder helpers, checkbox, confirm dialogs. |
+| **Total** | **40 Suites** | **126 Tests** | **100% Pass Rate** |
+
 - **Oxlint**: Verified with 99 rules across all `.ts` and `.tsx` files (0 warnings, 0 errors).
 - **TypeScript**: Configured with `strict: true`, `noUnusedLocals: true`, and `noUnusedParameters: true`.
-- **Vitest Automated Test Suite**: 126 unit & UI component tests across 40 test suites validating form handling, availability popovers, category filtering, BMC branding, technology icons, username parsing edge cases, context providers, admin studio sections, legal disclosures, and portfolio schema integrity (100% pass rate).
 - **Route-Level Code Splitting**: Utilizes `React.lazy()` and `<Suspense>` to reduce initial visitor bundle size by 45% (down to 330 kB / 104 kB gzipped) with zero Vite 500 kB chunk warnings.
-- **Continuous Integration**: GitHub Actions CI (`.github/workflows/ci.yml`) runs lint, typecheck, test, and build pipelines automatically on every push and pull request to `main`.
 - **Edge Resilience**: Cloudflare Function `/api/send-note` enforces HTML entity escaping, Telegram Bot format stability, and sliding window IP rate limiting.
 
 ---
