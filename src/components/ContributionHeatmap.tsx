@@ -28,7 +28,7 @@ function monthLabelForWeek(week: ContributionDay[], weekIndex: number, weeks: Co
   return month !== prevMonth ? MONTHS[month] : null;
 }
 
-function extractGitHubUsername(url?: string | null): string | undefined {
+export function extractGitHubUsername(url?: string | null): string | undefined {
   if (!url) return undefined;
   const trimmed = url.trim().replace(/\/+$/, "");
   const match = trimmed.match(/(?:github\.com\/|^@?)([^/]+)$/i);
@@ -95,7 +95,7 @@ export function ContributionHeatmap({ githubUrl }: ContributionHeatmapProps = {}
     return () => {
       cancelled = true;
     };
-  }, [year]);
+  }, [year, username]);
 
   const weeks = useMemo(() => {
     const days = data?.days ?? [];

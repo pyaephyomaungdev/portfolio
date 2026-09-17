@@ -96,7 +96,7 @@ export function ContactForm({ profile, className = "" }: ContactFormProps) {
       </div>
 
       {status === "success" ? (
-        <div className="rounded-xl border border-success/30 bg-success-soft p-6 text-center space-y-3">
+        <div role="status" aria-live="polite" className="rounded-xl border border-success/30 bg-success-soft p-6 text-center space-y-3">
           <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success">
             <Sparkles className="h-6 w-6" />
           </div>
@@ -119,7 +119,7 @@ export function ContactForm({ profile, className = "" }: ContactFormProps) {
           </div>
         </div>
       ) : status === "fallback" ? (
-        <div className="rounded-xl border border-rule bg-soft p-6 text-center space-y-3">
+        <div role="status" aria-live="polite" className="rounded-xl border border-rule bg-soft p-6 text-center space-y-3">
           {errorMessage && (
             <div className="inline-flex items-center gap-1.5 rounded-md bg-destructive-soft px-3 py-1 text-xs text-destructive">
               <AlertCircle className="h-3.5 w-3.5" />

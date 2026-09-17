@@ -10,11 +10,52 @@ interface RequestBody {
   hp_trap?: string;
 }
 
+// In-memory sliding window rate limiter (max 5 requests per 10 minutes per IP)
+const ipRequestHistory = new Map<string, number[]>();
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (ipRequestHistory.get(ip) || []).filter((t) => now - t < WINDOW_MS);
+  if (timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+    ipRequestHistory.set(ip, timestamps);
+    return true;
+  }
+  timestamps.push(now);
+  ipRequestHistory.set(ip, timestamps);
+  return false;
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export async function onRequestPost(context: {
   request: Request;
   env: Env;
 }): Promise<Response> {
   try {
+    const clientIp =
+      context.request.headers.get("cf-connecting-ip") ||
+      context.request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "127.0.0.1";
+
+    if (isRateLimited(clientIp)) {
+      return new Response(
+        JSON.stringify({ error: "Too many messages sent. Please wait a few minutes or reach out directly via email." }),
+        {
+          status: 429,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     const body = (await context.request.json().catch(() => ({}))) as RequestBody;
     const { name, email, message, hp_trap } = body;
 
@@ -47,22 +88,28 @@ export async function onRequestPost(context: {
     }
 
     const timestamp = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
-    const formattedText = `📬 *New Project Note from Portfolio*\n\n👤 *From:* ${name?.trim() || "Anonymous"}\n📧 *Email:* ${email?.trim() || "N/A"}\n\n💬 *Message:*\n${message.trim()}\n\n---\n⏰ _Time: ${timestamp} (UTC+7)_`;
+    const safeName = escapeHtml(name?.trim() || "Anonymous");
+    const safeEmail = escapeHtml(email?.trim() || "N/A");
+    const safeMessage = escapeHtml(message.trim());
+    const safeTime = escapeHtml(`${timestamp} (UTC+7)`);
+
+    const formattedHtml = `📬 <b>New Project Note from Portfolio</b>\n\n👤 <b>From:</b> ${safeName}\n📧 <b>Email:</b> ${safeEmail}\n\n💬 <b>Message:</b>\n${safeMessage}\n\n---\n⏰ <i>Time: ${safeTime}</i>`;
 
     const telegramRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
-        text: formattedText,
-        parse_mode: "Markdown",
+        text: formattedHtml,
+        parse_mode: "HTML",
       }),
     });
 
     if (!telegramRes.ok) {
       const errText = await telegramRes.text();
+      console.error("[send-note] Telegram API error:", errText);
       return new Response(
-        JSON.stringify({ error: "Failed to dispatch note to Telegram API", details: errText }),
+        JSON.stringify({ error: "Failed to dispatch note to Telegram API. Please use direct email." }),
         {
           status: 502,
           headers: { "Content-Type": "application/json" },

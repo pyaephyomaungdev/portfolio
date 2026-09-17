@@ -174,15 +174,22 @@ function portfolioAdminPlugin(): Plugin {
               }
 
               const timestamp = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
-              const formattedText = `📬 *New Project Note from Portfolio*\n\n👤 *From:* ${name?.trim() || "Anonymous"}\n📧 *Email:* ${email?.trim() || "N/A"}\n\n💬 *Message:*\n${message.trim()}\n\n---\n⏰ _Time: ${timestamp} (UTC+7)_`;
+              const escapeHtml = (s: string) =>
+                s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+              const safeName = escapeHtml(name?.trim() || "Anonymous");
+              const safeEmail = escapeHtml(email?.trim() || "N/A");
+              const safeMessage = escapeHtml(message.trim());
+              const safeTime = escapeHtml(`${timestamp} (UTC+7)`);
+
+              const formattedHtml = `📬 <b>New Project Note from Portfolio</b>\n\n👤 <b>From:</b> ${safeName}\n📧 <b>Email:</b> ${safeEmail}\n\n💬 <b>Message:</b>\n${safeMessage}\n\n---\n⏰ <i>Time: ${safeTime}</i>`;
 
               const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   chat_id: chatId,
-                  text: formattedText,
-                  parse_mode: "Markdown",
+                  text: formattedHtml,
+                  parse_mode: "HTML",
                 }),
               });
 
@@ -190,10 +197,11 @@ function portfolioAdminPlugin(): Plugin {
                 res.setHeader("Content-Type", "application/json");
                 res.end(JSON.stringify({ success: true }));
               } else {
-                const tgErr = await tgRes.json().catch(() => ({}));
+                const tgErr = await tgRes.text().catch(() => "");
+                console.error("[dev-admin] Telegram API error:", tgErr);
                 res.statusCode = 502;
                 res.setHeader("Content-Type", "application/json");
-                res.end(JSON.stringify({ error: "Telegram API error", details: tgErr }));
+                res.end(JSON.stringify({ error: "Failed to dispatch note to Telegram API. Please use direct email." }));
               }
             } catch (err: unknown) {
               res.statusCode = 500;
