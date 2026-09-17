@@ -51,13 +51,15 @@ export function HomePage() {
 
   useEffect(() => {
     if (data.profile?.name) {
-      document.title = `${data.profile.name} — ${data.profile.headline || "Software Engineer & Full-Stack Developer"}`;
+      document.title =
+        data.seo?.metaTitle ||
+        `${data.profile.name} — ${data.profile.headline || "Software Engineer & Full-Stack Developer"}`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc && data.profile.bio) {
-        metaDesc.setAttribute("content", data.profile.bio);
+      if (metaDesc) {
+        metaDesc.setAttribute("content", data.seo?.metaDescription || data.profile.bio || "");
       }
     }
-  }, [data.profile]);
+  }, [data.profile, data.seo]);
 
   useEffect(() => {
     const id = location.hash.replace(/^#/, "");
@@ -66,10 +68,26 @@ export function HomePage() {
   }, [location.hash, data]);
 
   const p = data.profile;
+  const vis = {
+    stats: true,
+    heatmap: true,
+    projects: true,
+    experience: true,
+    education: true,
+    honors: true,
+    licenses: true,
+    contact: true,
+    ...data.sectionVisibility,
+  };
 
   return (
     <div className="min-h-screen">
-      <SiteHeader name={p?.name} profile={p} onOpenContact={() => setContactModalOpen(true)} />
+      <SiteHeader
+        name={p?.name}
+        profile={p}
+        onOpenContact={() => setContactModalOpen(true)}
+        sectionVisibility={vis}
+      />
 
       <main id="main-content" className="mx-auto max-w-3xl px-5 pb-24 pt-10">
         <section className="flex flex-col sm:flex-row items-start gap-5 sm:gap-6">
@@ -170,7 +188,7 @@ export function HomePage() {
           </div>
         </section>
 
-        {data.stats?.length ? (
+        {vis.stats && data.stats?.length ? (
           <section className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {data.stats.map((s) => (
               <div key={s.id}>
@@ -181,13 +199,13 @@ export function HomePage() {
           </section>
         ) : null}
 
-        {p?.githubUrl?.trim() ? (
+        {vis.heatmap && p?.githubUrl?.trim() ? (
           <div data-no-print className="print:hidden">
             <ContributionHeatmap githubUrl={p.githubUrl} />
           </div>
         ) : null}
 
-        {data.projects?.length ? (
+        {vis.projects && data.projects?.length ? (
           <section id="projects" className="mt-16 scroll-mt-24">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted">
               Projects
@@ -297,9 +315,9 @@ export function HomePage() {
           </section>
         ) : null}
 
-        <ExperienceSection companies={data.experience ?? []} />
+        {vis.experience ? <ExperienceSection companies={data.experience ?? []} /> : null}
 
-        {data.education?.length ? (
+        {vis.education && data.education?.length ? (
           <section id="education" className="mt-16 scroll-mt-24">
             <p className="font-mono text-xs uppercase tracking-widest text-muted">
               Education
@@ -345,7 +363,7 @@ export function HomePage() {
           </section>
         ) : null}
 
-        {data.honors?.length ? (
+        {vis.honors && data.honors?.length ? (
           <section className="mt-16">
             <p className="font-mono text-xs uppercase tracking-widest text-muted">
               Recognition
@@ -385,7 +403,7 @@ export function HomePage() {
           </section>
         ) : null}
 
-        {data.licenses?.length ? (
+        {vis.licenses && data.licenses?.length ? (
           <section className="mt-16">
             <p className="font-mono text-xs uppercase tracking-widest text-muted">
               Credentials
@@ -422,7 +440,8 @@ export function HomePage() {
           </section>
         ) : null}
 
-        <section id="contact" className="mt-16 scroll-mt-24">
+        {vis.contact ? (
+          <section id="contact" className="mt-16 scroll-mt-24">
           <p className="text-xs font-semibold uppercase tracking-wider text-muted">
             Contact
           </p>
@@ -505,6 +524,7 @@ export function HomePage() {
           {/* Direct Note Form - Only rendered when Telegram dispatch is configured */}
           {p?.telegramConfigured ? <ContactForm profile={p} className="mt-6" /> : null}
         </section>
+        ) : null}
       </main>
 
       <SiteFooter name={p?.name} websiteUrl={p?.websiteUrl} />

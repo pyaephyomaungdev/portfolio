@@ -26,6 +26,8 @@ import { ExperienceSection } from "../components/admin/sections/ExperienceSectio
 import { EducationSection } from "../components/admin/sections/EducationSection";
 import { HonorsSection } from "../components/admin/sections/HonorsSection";
 import { LicensesSection } from "../components/admin/sections/LicensesSection";
+import { LayoutSection } from "../components/admin/sections/LayoutSection";
+import { SeoSection } from "../components/admin/sections/SeoSection";
 import { DeploySection } from "../components/admin/sections/DeploySection";
 import { RawJsonSection } from "../components/admin/sections/RawJsonSection";
 
@@ -58,6 +60,8 @@ const VALID_TABS: AdminTab[] = [
   "education",
   "honors",
   "licenses",
+  "layout",
+  "seo",
   "deploy",
   "json",
 ];
@@ -583,6 +587,21 @@ export function AdminPage() {
               onChange={(licenses) => syncJson({ ...data, licenses })}
               onOpenAddModal={() => setActiveModal("add-license")}
               onRequestDelete={requestDelete}
+            />
+          )}
+
+          {activeTab === "layout" && (
+            <LayoutSection
+              visibility={data.sectionVisibility}
+              onChange={(sectionVisibility) => syncJson({ ...data, sectionVisibility })}
+            />
+          )}
+
+          {activeTab === "seo" && (
+            <SeoSection
+              seo={data.seo}
+              profile={data.profile}
+              onChange={(seo) => syncJson({ ...data, seo })}
             />
           )}
 

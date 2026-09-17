@@ -7,7 +7,7 @@
   <p>
     <a href="https://pyaephyomaung.dev"><img src="https://img.shields.io/badge/Live_Site-pyaephyomaung.dev-blue?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Live Site" /></a>
     <a href="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml"><img src="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
-    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-126_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
+    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-135_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
     <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.1-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" /></a>
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
@@ -201,6 +201,24 @@ Deploy your own personal portfolio in seconds to your preferred edge cloud. No d
 
 </details>
 
+<details>
+<summary><strong><img src=".github/assets/icons/layers.svg" width="18" height="18" align="absmiddle" /> 14. Section Visibility & Homepage Layout Builder (`/admin/layout`)</strong> (Click to expand)</summary>
+
+* **Modular Section Toggles**: Granular show/hide switches for all 8 core homepage sections (`projects`, `experience`, `education`, `honors`, `licenses`, `heatmap`, `stats`, `contact`).
+* **Dynamic Header & Navigation Sync**: Desktop navigation bar links and mobile drawer items automatically update to reflect only active sections.
+* **Instant Safety Controls**: One-click "Show All" and "Reset to Defaults" buttons with live visual badge indicators.
+
+</details>
+
+<details>
+<summary><strong><img src=".github/assets/icons/globe.svg" width="18" height="18" align="absmiddle" /> 15. SEO, OpenGraph & Real-Time Social Preview Simulator (`/admin/seo`)</strong> (Click to expand)</summary>
+
+* **Granular Meta Tags & Keywords**: Real-time editor for meta title (with 50–60 char guidance), meta description (with 120–160 char guidance), and interactive keywords chip manager.
+* **Dual-Platform Social Card Preview**: Interactive live preview switcher between Twitter/X Summary Large Image Card and LinkedIn Feed Post preview.
+* **Automated Edge & Build-Time Sync**: Synchronizes with automated static build generator (`scripts/generate-seo.js`) and dynamic document title injection.
+
+</details>
+
 ---
 
 ## <img src=".github/assets/icons/terminal.svg" width="22" height="22" align="absmiddle" /> Quickstart & Installation
@@ -261,6 +279,8 @@ The built-in CMS allows developers and non-developers to customize their entire 
 ├── /admin/honors         → Competitions, Hackathons, Awards, Organizations, Reordering
 ├── /admin/licenses       → Certifications, Issuers, Credential IDs, Verification URLs
 ├── /admin/stats          → Metric Badges, Numerical Values, Subtitles, Reordering
+├── /admin/layout         → Section Visibility Controls, Show/Hide Homepage Modules & Nav
+├── /admin/seo            → Meta Title/Description, Keywords, OG Image, Twitter/LinkedIn Live Preview
 ├── /admin/deploy         → Cloudflare Pages Edge Deployment, Secrets & SPA Routing
 └── /admin/json           → Raw JSON Direct Import & Export Hub
 ```
@@ -393,12 +413,12 @@ Every push to `main` and all incoming pull requests automatically trigger the Gi
 | **2. Clean Install** | `npm ci` | Strict, deterministic dependency installation from `package-lock.json` | ~5s |
 | **3. High-Speed Linter** | `npm run lint` | Scans 99 rules using `oxlint` across 10 threads (zero warnings permitted) | <300ms |
 | **4. Strict Typecheck** | `npm run typecheck` | Compiles entire project with `tsc --noEmit` under strict TypeScript rules | ~1.5s |
-| **5. Automated Testing** | `npm test` | Runs 126 unit & UI component tests across 40 suites via Vitest & JSDOM | ~4.5s |
+| **5. Automated Testing** | `npm test` | Runs 135 unit & UI component tests across 42 suites via Vitest & JSDOM | ~4.5s |
 | **6. Production Build** | `npm run build` | Compiles sitemap.xml, robots.txt, and rolls optimized static chunks | ~300ms |
 
 > **Concurrency Grouping**: Built with `group: ${{ github.workflow }}-${{ github.ref }}` and `cancel-in-progress: true` to abort stale runs on rapid pushes and save GitHub Actions runner minutes.
 
-### <img src=".github/assets/icons/layers.svg" width="20" height="20" align="absmiddle" /> Complete Test Suite Matrix (126 Tests / 40 Suites)
+### <img src=".github/assets/icons/layers.svg" width="20" height="20" align="absmiddle" /> Complete Test Suite Matrix (135 Tests / 42 Suites)
 
 | Test Layer | Test Files | Tests | Core Behaviors & Edge Cases Validated |
 | :--- | :--- | :--- | :--- |
@@ -406,8 +426,8 @@ Every push to `main` and all incoming pull requests automatically trigger the Gi
 | **Theme & Context** | `src/context/__tests__/*`, `src/components/__tests__/ThemeToggle*` | 8 | `ThemeProvider`, localStorage persistence, circular view transition toggle, accessible aria-labels. |
 | **Public UI Components** | `src/components/__tests__/*` | 43 | Honeypot spam bot trapping, contact modal channels, availability beacon popover, category filters, BMC branding, TechIcon mapping, blueprint data rails, expandable text fallback, contribution heatmap. |
 | **Public Route Pages** | `src/pages/__tests__/*` | 9 | HomePage sections, ProjectPage technical case studies, NotFoundPage editorial 404, LegalPage (Privacy/Terms/Cookies tabs). |
-| **Admin Studio CMS** | `src/components/admin/__tests__/*` | 42 | Sidebar nav, dirty indicator, save/import/export JSON buttons, status radar, project filters, experience roles, education, honors, licenses, reorder helpers, checkbox, confirm dialogs. |
-| **Total** | **40 Suites** | **126 Tests** | **100% Pass Rate** |
+| **Admin Studio CMS** | `src/components/admin/__tests__/*` | 51 | Sidebar nav, dirty indicator, save/import/export JSON buttons, status radar, project filters, experience roles, education, honors, licenses, layout section visibility switches, SEO previewer tabs & keyword manager, reorder helpers, checkbox, confirm dialogs. |
+| **Total** | **42 Suites** | **135 Tests** | **100% Pass Rate** |
 
 - **Oxlint**: Verified with 99 rules across all `.ts` and `.tsx` files (0 warnings, 0 errors).
 - **TypeScript**: Configured with `strict: true`, `noUnusedLocals: true`, and `noUnusedParameters: true`.

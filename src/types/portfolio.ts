@@ -146,6 +146,26 @@ export type License = {
   url: string | null;
 };
 
+export type SectionVisibility = {
+  stats?: boolean;
+  heatmap?: boolean;
+  projects?: boolean;
+  experience?: boolean;
+  education?: boolean;
+  honors?: boolean;
+  licenses?: boolean;
+  contact?: boolean;
+};
+
+export type SeoConfig = {
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
+  ogImage?: string;
+  twitterHandle?: string;
+  canonicalUrl?: string;
+};
+
 export type Portfolio = {
   profile: Profile | null;
   stats: Stat[];
@@ -154,6 +174,8 @@ export type Portfolio = {
   education: Education[];
   honors: Honor[];
   licenses: License[];
+  sectionVisibility?: SectionVisibility;
+  seo?: SeoConfig;
 };
 
 export type ContributionDay = {

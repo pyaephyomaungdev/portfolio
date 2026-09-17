@@ -21,18 +21,20 @@ export function generateSeo() {
   const portfolio = JSON.parse(fs.readFileSync(dataPath, "utf8"));
   const profile = portfolio.profile || {};
   const projects = portfolio.projects || [];
+  const seo = portfolio.seo || {};
 
   const name = profile.name || "Pyae Phyo Maung";
   const headline = profile.headline || "Software Engineer & Full-Stack Developer";
   const bio =
+    seo.metaDescription ||
     profile.bio ||
     "Full-stack software engineer building reliable web platforms, local-first tools, and scalable systems across Thailand and remote teams.";
-  const siteUrl = "https://pyaephyomaung.dev";
-  const avatarUrl = `${siteUrl}/avatar.jpg`;
+  const siteUrl = seo.canonicalUrl || "https://pyaephyomaung.dev";
+  const avatarUrl = seo.ogImage || `${siteUrl}/avatar.jpg`;
   const githubUrl = profile.githubUrl || "https://github.com/pyaephyomaungdev";
   const linkedinUrl = "https://www.linkedin.com/in/pyae-phyo-maung-052445217/";
 
-  const title = `${name} — ${headline}`;
+  const title = seo.metaTitle || `${name} — ${headline}`;
 
   // 1. Generate Sitemap
   const today = new Date().toISOString().split("T")[0];

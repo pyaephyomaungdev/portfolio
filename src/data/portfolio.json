@@ -771,5 +771,33 @@
       "credentialId": "8QW C4J Z2B",
       "url": null
     }
-  ]
+  ],
+  "sectionVisibility": {
+    "stats": true,
+    "heatmap": true,
+    "projects": true,
+    "experience": true,
+    "education": true,
+    "honors": true,
+    "licenses": true,
+    "contact": true
+  },
+  "seo": {
+    "metaTitle": "Pyae Phyo Maung — Full-Stack Systems Engineer",
+    "metaDescription": "Full-stack software engineer building web platforms, clinic systems, and privacy-minded developer tools across Thailand and remote teams.",
+    "keywords": [
+      "Software Engineer",
+      "Full-Stack Developer",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Vite",
+      "Cloudflare Pages",
+      "Systems Architecture",
+      "Local-First"
+    ],
+    "ogImage": "https://pyaephyomaung.dev/avatar.jpg",
+    "twitterHandle": "@pyaephyomaung",
+    "canonicalUrl": "https://pyaephyomaung.dev"
+  }
 }

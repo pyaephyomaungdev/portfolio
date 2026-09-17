@@ -4,7 +4,7 @@ import { ArrowRight, ExternalLink, Heart, Printer } from "lucide-react";
 import { scrollToId } from "../lib/scrollToId";
 import { initialPortfolioData } from "../data/portfolioData";
 import { ThemeToggle } from "./ThemeToggle";
-import type { Profile } from "../types/portfolio";
+import type { Profile, SectionVisibility } from "../types/portfolio";
 
 const NAV = [
   {
@@ -33,15 +33,25 @@ interface SiteHeaderProps {
   name?: string | null;
   profile?: Profile | null;
   onOpenContact?: () => void;
+  sectionVisibility?: SectionVisibility;
 }
 
-export function SiteHeader({ name, profile, onOpenContact }: SiteHeaderProps) {
+export function SiteHeader({ name, profile, onOpenContact, sectionVisibility }: SiteHeaderProps) {
   const p = profile ?? initialPortfolioData.profile;
   const displayName = name || p?.name || "Portfolio";
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const navItems = NAV.filter((item) => {
+    if (!sectionVisibility) return true;
+    if (item.id === "projects" && sectionVisibility.projects === false) return false;
+    if (item.id === "experience" && sectionVisibility.experience === false) return false;
+    if (item.id === "education" && sectionVisibility.education === false) return false;
+    if (item.id === "contact" && sectionVisibility.contact === false) return false;
+    return true;
+  });
 
   useEffect(() => {
     if (!open) return;
@@ -100,7 +110,7 @@ export function SiteHeader({ name, profile, onOpenContact }: SiteHeaderProps) {
           </Link>
 
           <nav className="hidden items-center gap-5 text-sm text-muted sm:flex">
-            {NAV.map((item) => (
+            {navItems.map((item) => (
               <button
                 key={item.id}
                 type="button"
@@ -167,7 +177,7 @@ export function SiteHeader({ name, profile, onOpenContact }: SiteHeaderProps) {
       >
         {/* Navigation items with Apple-style staggered slide-in */}
         <nav className="mt-4 flex flex-col divide-y divide-rule">
-          {NAV.map((item, idx) => (
+          {navItems.map((item, idx) => (
             <button
               key={item.id}
               type="button"
