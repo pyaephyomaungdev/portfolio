@@ -28,6 +28,7 @@
     <a href="#design-tokens--typography">Design System</a> •
     <a href="#community--contributing">Contributing</a> •
     <a href="#security-policy">Security</a> •
+    <a href="#support-the-creator">Support</a> •
     <a href="#verification--quality">Quality Assurance</a>
   </p>
 </div>
@@ -363,6 +364,22 @@ We welcome community feedback, bug reports, and architectural contributions!
 Security vulnerabilities can be reported privately according to our **[Security Policy](SECURITY.md)** or via **[contact@pyaephyomaung.dev](mailto:contact@pyaephyomaung.dev)**.
 
 RFC 9116 Vulnerability Disclosure metadata is published at `https://pyaephyomaung.dev/.well-known/security.txt`.
+
+---
+
+## Support the Creator
+
+If this architectural portfolio system, zero-FOUC circular theme engine, or local visual CMS tooling has inspired your own engineering presence, consider keeping me caffeinated:
+
+<p align="center">
+  <a href="https://www.buymeacoffee.com/pyaephyomaa" target="_blank" rel="noopener noreferrer">
+    <img src="public/buy-me-a-coffee-icon.svg" width="48" height="48" align="absmiddle" alt="BMC Logo" />
+    <br /><br />
+    <img src="https://img.shields.io/badge/Buy_Me_A_Coffee-Support_the_Creator-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black&labelColor=black" alt="Buy Me A Coffee" />
+  </a>
+</p>
+
+Every cup fuels late-night open-source craftsmanship, design token polish, and zero-backend developer tools. 🙏
 
 ---
 
