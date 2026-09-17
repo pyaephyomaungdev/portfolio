@@ -7,7 +7,7 @@
   <p>
     <a href="https://pyaephyomaung.dev"><img src="https://img.shields.io/badge/Live_Site-pyaephyomaung.dev-blue?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Live Site" /></a>
     <a href="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml"><img src="https://github.com/pyaephyomaungdev/portfolio/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
-    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-8_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
+    <a href="https://vitest.dev"><img src="https://img.shields.io/badge/Tests-36_Passed-emerald?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Tests" /></a>
     <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
     <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4.1-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" /></a>
     <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.8_Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8" /></a>
@@ -365,7 +365,7 @@ npm run build
 
 - **Oxlint**: Verified with 99 rules across all `.ts` and `.tsx` files (0 warnings, 0 errors).
 - **TypeScript**: Configured with `strict: true`, `noUnusedLocals: true`, and `noUnusedParameters: true`.
-- **Vitest Unit Tests**: Validates username parsing edge cases, data structures, and portfolio schema integrity.
+- **Vitest Automated Test Suite**: 36 unit & UI component tests across 8 test suites validating form handling, availability popovers, category filtering, BMC branding, technology icons, username parsing edge cases, data structures, and portfolio schema integrity (100% pass rate in <1s).
 - **Route-Level Code Splitting**: Utilizes `React.lazy()` and `<Suspense>` to reduce initial visitor bundle size by 45% (down to 330 kB / 104 kB gzipped) with zero Vite 500 kB chunk warnings.
 - **Continuous Integration**: GitHub Actions CI (`.github/workflows/ci.yml`) runs lint, typecheck, test, and build pipelines automatically on every push and pull request to `main`.
 - **Edge Resilience**: Cloudflare Function `/api/send-note` enforces HTML entity escaping, Telegram Bot format stability, and sliding window IP rate limiting.

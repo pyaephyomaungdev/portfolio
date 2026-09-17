@@ -58,11 +58,13 @@ export function ProjectCategoryFilter({
 
   function handleSelect(name: string, e: React.MouseEvent<HTMLButtonElement>) {
     onSelectCategory(name);
-    e.currentTarget.scrollIntoView({
-      behavior: "smooth",
-      inline: "nearest",
-      block: "nearest",
-    });
+    if (typeof e.currentTarget.scrollIntoView === "function") {
+      e.currentTarget.scrollIntoView({
+        behavior: "smooth",
+        inline: "nearest",
+        block: "nearest",
+      });
+    }
   }
 
   if (categories.length <= 1) return null;
