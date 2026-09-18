@@ -55,7 +55,7 @@ type ActiveModal =
   | "add-stat"
   | null;
 
-const VALID_TABS: AdminTab[] = [
+const VALID_TABS = new Set<AdminTab>([
   "overview",
   "profile",
   "stats",
@@ -70,18 +70,18 @@ const VALID_TABS: AdminTab[] = [
   "theme",
   "deploy",
   "json",
-];
+]);
 
 export function AdminPage() {
   const { tab } = useParams<{ tab?: string }>();
   const navigate = useNavigate();
 
-  const activeTab: AdminTab = tab && VALID_TABS.includes(tab as AdminTab)
+  const activeTab: AdminTab = tab && VALID_TABS.has(tab as AdminTab)
     ? (tab as AdminTab)
     : "overview";
 
   useEffect(() => {
-    if (tab && !VALID_TABS.includes(tab as AdminTab)) {
+    if (tab && !VALID_TABS.has(tab as AdminTab)) {
       navigate("/admin/overview", { replace: true });
     }
   }, [tab, navigate]);
@@ -253,7 +253,7 @@ export function AdminPage() {
 
   function handleImportJson(file: File) {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.addEventListener("load", (e) => {
       try {
         const content = e.target?.result as string;
         const parsed = JSON.parse(content);
@@ -273,7 +273,7 @@ export function AdminPage() {
         const msg = err instanceof Error ? err.message : "Failed to parse JSON";
         setStatusMessage({ type: "error", text: `Import failed: ${msg}` });
       }
-    };
+    });
     reader.readAsText(file);
   }
 
@@ -310,7 +310,7 @@ export function AdminPage() {
     setIsUploadingAvatar(true);
     try {
       const reader = new FileReader();
-      reader.onload = async () => {
+      reader.addEventListener("load", async () => {
         const dataUrl = reader.result as string;
         try {
           const newUrl = await uploadAvatarImage(dataUrl);
@@ -339,7 +339,7 @@ export function AdminPage() {
         } finally {
           setIsUploadingAvatar(false);
         }
-      };
+      });
       reader.readAsDataURL(file);
     } catch {
       setIsUploadingAvatar(false);

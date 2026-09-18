@@ -20,6 +20,8 @@ function hexToHsv(hex: string): { h: number; s: number; v: number } {
   return { h, s: max ? (d / max) * 100 : 0, v: max * 100 };
 }
 
+const toHex = (x: number) => Math.round(x * 255).toString(16).padStart(2, "0");
+
 function hsvToHex(h: number, s: number, v: number): string {
   const sn = s / 100;
   const vn = v / 100;
@@ -27,7 +29,6 @@ function hsvToHex(h: number, s: number, v: number): string {
     const k = (n + h / 60) % 6;
     return vn - vn * sn * Math.max(0, Math.min(k, 4 - k, 1));
   };
-  const toHex = (x: number) => Math.round(x * 255).toString(16).padStart(2, "0");
   return `#${toHex(f(5))}${toHex(f(3))}${toHex(f(1))}`;
 }
 

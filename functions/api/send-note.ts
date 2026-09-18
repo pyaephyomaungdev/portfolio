@@ -11,12 +11,25 @@ interface RequestBody {
 }
 
 // In-memory sliding window rate limiter (max 5 requests per 10 minutes per IP)
-const ipRequestHistory = new Map<string, number[]>();
-const WINDOW_MS = 10 * 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 5;
+export const ipRequestHistory = new Map<string, number[]>();
+export const WINDOW_MS = 10 * 60 * 1000;
+export const MAX_REQUESTS_PER_WINDOW = 5;
 
-function isRateLimited(ip: string): boolean {
+export function isRateLimited(ip: string): boolean {
   const now = Date.now();
+
+  // Prune expired entries to prevent unbounded memory growth
+  if (ipRequestHistory.size > 200) {
+    for (const [key, times] of ipRequestHistory.entries()) {
+      const active = times.filter((t) => now - t < WINDOW_MS);
+      if (active.length === 0) {
+        ipRequestHistory.delete(key);
+      } else {
+        ipRequestHistory.set(key, active);
+      }
+    }
+  }
+
   const timestamps = (ipRequestHistory.get(ip) || []).filter((t) => now - t < WINDOW_MS);
   if (timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
     ipRequestHistory.set(ip, timestamps);
@@ -27,7 +40,61 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
-function escapeHtml(str: string): string {
+export function isAllowedOrigin(
+  originHeader: string | null,
+  requestUrl?: string,
+  hostHeader?: string | null
+): boolean {
+  if (!originHeader) return true; // Direct / same-origin navigation without Origin header
+  try {
+    const origin = new URL(originHeader);
+    const originHost = origin.hostname.toLowerCase();
+
+    // 1. Same-origin check against current request Host header (supports any custom domain / fork)
+    if (hostHeader) {
+      const cleanHost = hostHeader.split(":")[0].toLowerCase();
+      if (originHost === cleanHost) {
+        return true;
+      }
+    }
+
+    // 2. Same-origin check against current request URL (supports any custom domain / fork)
+    if (requestUrl) {
+      try {
+        const reqUrl = new URL(requestUrl);
+        if (
+          origin.origin.toLowerCase() === reqUrl.origin.toLowerCase() ||
+          originHost === reqUrl.hostname.toLowerCase()
+        ) {
+          return true;
+        }
+      } catch {
+        // invalid requestUrl fallback
+      }
+    }
+
+    // 3. Always allow local development
+    if (originHost === "localhost" || originHost === "127.0.0.1") {
+      return true;
+    }
+
+    // 4. Always allow Cloudflare Pages deployments (*.pages.dev)
+    if (originHost.endsWith(".pages.dev")) {
+      return true;
+    }
+
+    // 5. Default author domain fallback
+    if (originHost === "pyaephyomaung.dev" || originHost === "www.pyaephyomaung.dev") {
+      return true;
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+export function escapeHtml(str: string): string {
   return str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -41,6 +108,18 @@ export async function onRequestPost(context: {
   env: Env;
 }): Promise<Response> {
   try {
+    const origin = context.request.headers.get("origin");
+    const host = context.request.headers.get("host");
+    if (!isAllowedOrigin(origin, context.request.url, host)) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden: cross-origin requests not allowed" }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
     const clientIp =
       context.request.headers.get("cf-connecting-ip") ||
       context.request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||

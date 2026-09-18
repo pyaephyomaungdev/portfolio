@@ -12,33 +12,53 @@ export * from "../types/portfolio";
 const API_BASE = (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/$/, "") || "";
 const GITHUB_USERNAME = (import.meta.env.VITE_GITHUB_USERNAME as string | undefined) || "pyaephyomaungdev";
 
+let inFlightPortfolioPromise: Promise<Portfolio> | null = null;
+
+export function clearPortfolioCache(): void {
+  inFlightPortfolioPromise = null;
+}
+
 export async function fetchPortfolio(): Promise<Portfolio> {
-  // In dev environment, check local admin API first if available
-  if (import.meta.env.DEV) {
-    try {
-      const res = await fetch("/api/admin/portfolio");
-      if (res.ok) {
-        return (await res.json()) as Portfolio;
-      }
-    } catch {
-      // Fall through
-    }
+  if (inFlightPortfolioPromise) {
+    return inFlightPortfolioPromise;
   }
 
-  if (API_BASE) {
-    try {
-      const res = await fetch(`${API_BASE}/api/public/portfolio`, { credentials: "include" });
-      if (res.ok) {
-        return (await res.json()) as Portfolio;
+  inFlightPortfolioPromise = (async () => {
+    // In dev environment, check local admin API first if available
+    if (import.meta.env.DEV) {
+      try {
+        const res = await fetch("/api/admin/portfolio");
+        if (res.ok) {
+          return (await res.json()) as Portfolio;
+        }
+      } catch {
+        // Fall through
       }
-    } catch {
-      // Fall through to static data on failure
     }
-  }
-  return initialPortfolioData;
+
+    if (API_BASE) {
+      try {
+        const res = await fetch(`${API_BASE}/api/public/portfolio`, { credentials: "include" });
+        if (res.ok) {
+          return (await res.json()) as Portfolio;
+        }
+      } catch {
+        // Fall through to static data on failure
+      }
+    }
+    return initialPortfolioData;
+  })().finally(() => {
+    // Keep in cache briefly to coalesce simultaneous component mounts
+    setTimeout(() => {
+      inFlightPortfolioPromise = null;
+    }, 300);
+  });
+
+  return inFlightPortfolioPromise;
 }
 
 export async function savePortfolioJson(data: Portfolio): Promise<{ success: boolean; message: string }> {
+  inFlightPortfolioPromise = null;
   const res = await fetch("/api/admin/portfolio", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -6,7 +6,6 @@ import { MarkdownRenderer } from "../components/MarkdownRenderer";
 import { ReadingProgressBar } from "../components/ReadingProgressBar";
 import { calculateReadingTime } from "../lib/readingTime";
 import {
-  fetchCustomItem,
   fetchPortfolio,
   type CustomSection,
   type CustomSectionItem,
@@ -46,26 +45,29 @@ export function CustomItemDetailPage() {
     setItem(null);
     setSection(null);
 
-    void fetchCustomItem(sectionId, slug)
-      .then((res) => {
-        if (!cancelled) {
-          setSection(res.section);
-          setItem(res.item);
+    void fetchPortfolio()
+      .then((d) => {
+        if (cancelled) return;
+        setProfile(d.profile ?? null);
+        setSiteName(d.profile?.name ?? null);
+        setWebsiteUrl(d.profile?.websiteUrl ?? null);
+
+        const sec = d.customSections?.find((s) => s.id === sectionId);
+        if (!sec) {
+          setError("Section not found");
+          return;
         }
+        const it = sec.items?.find((entry) => entry.slug === slug);
+        if (!it) {
+          setError("Article not found");
+          return;
+        }
+        setSection(sec);
+        setItem(it);
       })
       .catch(() => {
         if (!cancelled) setError("Article not found");
       });
-
-    void fetchPortfolio()
-      .then((d) => {
-        if (!cancelled) {
-          setProfile(d.profile ?? null);
-          setSiteName(d.profile?.name ?? null);
-          setWebsiteUrl(d.profile?.websiteUrl ?? null);
-        }
-      })
-      .catch(() => undefined);
 
     return () => {
       cancelled = true;

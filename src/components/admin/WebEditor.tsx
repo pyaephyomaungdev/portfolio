@@ -169,7 +169,7 @@ export function WebEditor({
 
     try {
       const reader = new FileReader();
-      reader.onload = async (event) => {
+      reader.addEventListener("load", async (event) => {
         try {
           const dataUrl = event.target?.result as string;
           const result = await uploadAssetImage({
@@ -193,7 +193,7 @@ export function WebEditor({
         } finally {
           setUploadingImage(false);
         }
-      };
+      });
       reader.readAsDataURL(file);
     } catch {
       setUploadingImage(false);

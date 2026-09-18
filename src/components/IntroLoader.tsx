@@ -107,7 +107,7 @@ export function IntroLoader() {
   const headline = profile?.headline || "Software Engineer & Full-Stack";
 
   const subtitle =
-    profile?.bio?.split("\n").map((s) => s.trim()).filter(Boolean)[0] ||
+    profile?.bio?.split("\n").map((s) => s.trim()).find(Boolean) ||
     headline ||
     "Building reliable web infrastructure, local-first tools & systems";
 

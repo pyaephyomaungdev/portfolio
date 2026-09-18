@@ -6,6 +6,47 @@ import path from "node:path";
 import { execSync } from "node:child_process";
 import { generateSeo } from "./scripts/generate-seo.js";
 
+// Helper to read gitignored .env.local secrets
+function getTelegramSecrets() {
+  let botToken = process.env.TELEGRAM_BOT_TOKEN || "";
+  let chatId = process.env.TELEGRAM_CHAT_ID || "";
+
+  const envLocalPath = path.resolve(process.cwd(), ".env.local");
+  if (fs.existsSync(envLocalPath)) {
+    const content = fs.readFileSync(envLocalPath, "utf8");
+    for (const line of content.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const [key, ...valParts] = trimmed.split("=");
+      const val = valParts.join("=").trim().replace(/^["']|["']$/g, "");
+      if (key?.trim() === "TELEGRAM_BOT_TOKEN") botToken = val;
+      if (key?.trim() === "TELEGRAM_CHAT_ID") chatId = val;
+    }
+  }
+  return { botToken, chatId };
+}
+
+function saveTelegramSecrets(token: string, chat: string) {
+  const envLocalPath = path.resolve(process.cwd(), ".env.local");
+  let existing = "";
+  if (fs.existsSync(envLocalPath)) {
+    existing = fs.readFileSync(envLocalPath, "utf8");
+  }
+
+  const lines = existing.split("\n").filter((l) => {
+    const k = l.split("=")[0]?.trim();
+    return k !== "TELEGRAM_BOT_TOKEN" && k !== "TELEGRAM_CHAT_ID";
+  });
+
+  if (token) lines.push(`TELEGRAM_BOT_TOKEN=${token}`);
+  if (chat) lines.push(`TELEGRAM_CHAT_ID=${chat}`);
+
+  fs.writeFileSync(envLocalPath, lines.filter(Boolean).join("\n") + "\n", "utf8");
+}
+
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+
 function portfolioAdminPlugin(): Plugin {
   return {
     name: "portfolio-admin-api",
@@ -179,44 +220,6 @@ function portfolioAdminPlugin(): Plugin {
         res.end("Method Not Allowed");
       });
 
-      // Helper to read gitignored .env.local secrets
-      function getTelegramSecrets() {
-        let botToken = process.env.TELEGRAM_BOT_TOKEN || "";
-        let chatId = process.env.TELEGRAM_CHAT_ID || "";
-
-        const envLocalPath = path.resolve(process.cwd(), ".env.local");
-        if (fs.existsSync(envLocalPath)) {
-          const content = fs.readFileSync(envLocalPath, "utf8");
-          for (const line of content.split("\n")) {
-            const trimmed = line.trim();
-            if (!trimmed || trimmed.startsWith("#")) continue;
-            const [key, ...valParts] = trimmed.split("=");
-            const val = valParts.join("=").trim().replace(/^["']|["']$/g, "");
-            if (key?.trim() === "TELEGRAM_BOT_TOKEN") botToken = val;
-            if (key?.trim() === "TELEGRAM_CHAT_ID") chatId = val;
-          }
-        }
-        return { botToken, chatId };
-      }
-
-      function saveTelegramSecrets(token: string, chat: string) {
-        const envLocalPath = path.resolve(process.cwd(), ".env.local");
-        let existing = "";
-        if (fs.existsSync(envLocalPath)) {
-          existing = fs.readFileSync(envLocalPath, "utf8");
-        }
-
-        const lines = existing.split("\n").filter((l) => {
-          const k = l.split("=")[0]?.trim();
-          return k !== "TELEGRAM_BOT_TOKEN" && k !== "TELEGRAM_CHAT_ID";
-        });
-
-        if (token) lines.push(`TELEGRAM_BOT_TOKEN=${token}`);
-        if (chat) lines.push(`TELEGRAM_CHAT_ID=${chat}`);
-
-        fs.writeFileSync(envLocalPath, lines.filter(Boolean).join("\n") + "\n", "utf8");
-      }
-
       // Public endpoint for submitting contact notes securely
       server.middlewares.use("/api/send-note", (req, res) => {
         if (req.method === "POST") {
@@ -251,8 +254,6 @@ function portfolioAdminPlugin(): Plugin {
               }
 
               const timestamp = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
-              const escapeHtml = (s: string) =>
-                s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
               const safeName = escapeHtml(name?.trim() || "Anonymous");
               const safeEmail = escapeHtml(email?.trim() || "N/A");
               const safeMessage = escapeHtml(message.trim());
@@ -417,4 +418,27 @@ export default defineConfig({
     "process.env.IS_PREACT": JSON.stringify("true"),
   },
   server: { port: 5173 },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("@excalidraw/excalidraw")) {
+              return "vendor-excalidraw";
+            }
+            if (id.includes("katex")) {
+              return "vendor-katex";
+            }
+            if (id.includes("react-router-dom") || id.includes("react-router")) {
+              return "vendor-router";
+            }
+            if (id.includes("react/") || id.includes("react-dom/")) {
+              return "vendor-react";
+            }
+          }
+        },
+      },
+    },
+  },
 });

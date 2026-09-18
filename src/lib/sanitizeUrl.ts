@@ -8,6 +8,7 @@ export function sanitizeUrl(url: string | null | undefined, fallback = ""): stri
   if (!trimmed) return fallback;
 
   // Strictly reject javascript: and other executable pseudo-protocols
+  // eslint-disable-next-line no-control-regex
   const lower = trimmed.toLowerCase().replace(/[\u0000-\u001f\s]/g, "");
   if (
     lower.startsWith("javascript:") ||

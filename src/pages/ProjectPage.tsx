@@ -48,13 +48,12 @@ export function ProjectPage() {
 
     void fetchPortfolio()
       .then((d) => {
-        if (!cancelled) {
-          setProfile(d.profile ?? null);
-          setSiteName(d.profile?.name ?? null);
-          setBuyMeACoffeeUrl(d.profile?.buyMeACoffeeUrl ?? null);
-          setWebsiteUrl(d.profile?.websiteUrl ?? null);
-          setAllProjects(d.projects ?? []);
-        }
+        if (cancelled) return;
+        setProfile(d.profile ?? null);
+        setSiteName(d.profile?.name ?? null);
+        setBuyMeACoffeeUrl(d.profile?.buyMeACoffeeUrl ?? null);
+        setWebsiteUrl(d.profile?.websiteUrl ?? null);
+        setAllProjects(d.projects ?? []);
       })
       .catch(() => undefined);
 
@@ -62,6 +61,39 @@ export function ProjectPage() {
       cancelled = true;
     };
   }, [slug]);
+
+  // Inject dynamic Schema.org JSON-LD for Technical Case Study
+  useEffect(() => {
+    if (!project) return;
+    const scriptId = "project-json-ld";
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "application/ld+json";
+      document.head.appendChild(script);
+    }
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: project.title,
+      description: project.summary || project.title,
+      author: {
+        "@type": "Person",
+        name: profile?.name || "Pyae Phyo Maung",
+        url: "https://pyaephyomaung.dev",
+      },
+      url: `https://pyaephyomaung.dev/projects/${project.slug}`,
+      ...(project.repoUrl ? { codeRepository: project.repoUrl } : {}),
+      ...(project.techStack?.length ? { keywords: project.techStack.join(", ") } : {}),
+    };
+    script.textContent = JSON.stringify(schemaData);
+
+    return () => {
+      const existing = document.getElementById(scriptId);
+      if (existing) existing.remove();
+    };
+  }, [project, profile]);
 
   useEffect(() => {
     if (!project) return;

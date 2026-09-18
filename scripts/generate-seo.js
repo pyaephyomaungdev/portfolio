@@ -3,9 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, "..");
+const rootDir = fileURLToPath(new URL("..", import.meta.url));
 
 export function generateSeo() {
   const dataPath = path.join(rootDir, "src/data/portfolio.json");
@@ -77,7 +75,7 @@ export function generateSeo() {
   fs.writeFileSync(sitemapPath, sitemapXml, "utf8");
 
   // 2. Generate robots.txt
-  const robotsTxt = `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+  const robotsTxt = `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
   fs.writeFileSync(robotsPath, robotsTxt, "utf8");
 
   // 3. Update index.html meta tags and JSON-LD

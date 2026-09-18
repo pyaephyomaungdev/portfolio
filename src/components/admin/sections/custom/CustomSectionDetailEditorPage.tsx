@@ -73,10 +73,11 @@ export function CustomSectionDetailEditorPage({
   }
 
   function handleUpdateItem(index: number, updates: Partial<CustomSectionItem>) {
-    const updatedItems = (draft.items || []).map((it, idx) =>
-      idx === index ? { ...it, ...updates } : it
-    );
-    setDraft({ ...draft, items: updatedItems });
+    const items = [...(draft.items || [])];
+    if (items[index]) {
+      items[index] = { ...items[index], ...updates };
+      setDraft({ ...draft, items });
+    }
   }
 
   function handleDeleteItem(index: number) {

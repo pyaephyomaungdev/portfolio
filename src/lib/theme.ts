@@ -53,6 +53,11 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number } {
   return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 
+const toHex = (x: number) =>
+  Math.round(x * 255)
+    .toString(16)
+    .padStart(2, "0");
+
 export function hslToHex(h: number, s: number, l: number): string {
   s /= 100;
   l /= 100;
@@ -60,10 +65,6 @@ export function hslToHex(h: number, s: number, l: number): string {
   const a = s * Math.min(l, 1 - l);
   const f = (n: number) =>
     l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-  const toHex = (x: number) =>
-    Math.round(x * 255)
-      .toString(16)
-      .padStart(2, "0");
   return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
 }
 
